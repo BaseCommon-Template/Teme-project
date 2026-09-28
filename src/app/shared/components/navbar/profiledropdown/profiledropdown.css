@@ -1,0 +1,7 @@
+input[type="password"],
+input[type="text"] {
+  color: #1e293b !important;
+  -webkit-text-fill-color: #1e293b !important;
+  caret-color: #1e293b !important;
+  font-size: 16px;
+}

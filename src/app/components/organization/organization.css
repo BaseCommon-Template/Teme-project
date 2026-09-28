@@ -1,0 +1,1276 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* =========================================================
+   MAIN PAGE
+========================================================= */
+
+.organization-page {
+  background: #ffffff;
+  color: #222;
+  box-sizing: border-box;
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
+.organization-page .page-title {
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+
+  padding-left: 20px;
+
+  background: #eeeeee;
+
+  border-left: 7px solid #4aa5df;
+  border-bottom: 1px solid #d4d4d4;
+
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+
+  box-sizing: border-box;
+
+  margin-top: 20px;
+}
+
+.organization-page .page-title h2 {
+  margin: 0;
+
+  color: #6879d9;
+
+  font-size: 24px;
+  font-weight: 700;
+
+  line-height: 44px;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.organization-page .main-content {
+  width: 80%;
+
+  padding: 0 16px 20px;
+
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.organization-page .breadcrumb {
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 12px;
+
+  color: #333;
+}
+
+.organization-page .breadcrumb span:first-child {
+  color: #2275b7;
+
+  font-weight: 600;
+}
+
+.organization-page .breadcrumb .separator {
+  color: #777;
+
+  font-weight: 400;
+}
+
+.organization-page .breadcrumb strong {
+  color: #222;
+
+  font-weight: 600;
+}
+
+.dashboard-link {
+  color: #1474bb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dashboard-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.organization-page .toolbar {
+  min-height: 45px;
+
+  display: flex;
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  box-sizing: border-box;
+
+  padding: 0 0 8px;
+}
+
+.organization-page .toolbar-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.organization-page .toolbar-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 22px;
+}
+
+/* =========================================================
+   TOOLBAR LINKS
+========================================================= */
+
+.organization-page .toolbar-link {
+  padding: 0;
+  margin: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #2779ba;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.organization-page .toolbar-link:hover {
+  text-decoration: underline;
+}
+
+.organization-page .toolbar-link.excel {
+  color: #4b9255;
+}
+
+/* =========================================================
+   ROW SELECT
+========================================================= */
+
+.organization-page .rows-select {
+  display: flex;
+
+  align-items: center;
+
+  gap: 3px;
+
+  font-size: 12px;
+
+  color: #222;
+
+  white-space: nowrap;
+}
+
+.organization-page .rows-select select {
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: #222;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  padding: 0;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   STATUS FILTER
+========================================================= */
+
+.organization-page .status-filter {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #333;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TOGGLE
+========================================================= */
+
+.organization-page .toggle {
+  position: relative;
+
+  width: 40px;
+  height: 20px;
+
+  display: inline-block;
+
+  flex-shrink: 0;
+}
+
+.organization-page .toggle input {
+  position: absolute;
+
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+.organization-page .toggle-slider {
+  position: absolute;
+
+  inset: 0;
+
+  background: #bcbcbc;
+
+  border-radius: 20px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.organization-page .toggle-slider::before {
+  content: '';
+
+  position: absolute;
+
+  width: 16px;
+  height: 16px;
+
+  top: 2px;
+  left: 2px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+  transition: all 0.2s ease;
+}
+
+.organization-page .toggle input:checked + .toggle-slider {
+  background: #4caf50;
+}
+
+.organization-page .toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
+
+.organization-page .search-box {
+  position: relative;
+
+  width: 160px;
+
+  height: 34px;
+}
+
+.organization-page .search-box svg {
+  position: absolute;
+
+  left: 10px;
+
+  top: 9px;
+
+  color: #777;
+
+  pointer-events: none;
+}
+
+.organization-page .search-box input {
+  width: 100%;
+
+  height: 100%;
+
+  box-sizing: border-box;
+
+  padding: 0 28px 0 31px;
+
+  border: 1px solid #a9ccef;
+
+  border-radius: 5px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 12px;
+
+  box-shadow: 0 0 4px rgba(60, 130, 200, 0.18);
+}
+
+.organization-page .search-box input:focus {
+  border-color: #4285d4;
+
+  box-shadow: 0 0 5px rgba(66, 133, 212, 0.35);
+}
+
+.organization-page .search-box input::placeholder {
+  color: #999;
+}
+
+/* =========================================================
+   CLEAR SEARCH
+========================================================= */
+
+.organization-page .clear-search {
+  position: absolute;
+
+  right: 5px;
+
+  top: 5px;
+
+  width: 22px;
+
+  height: 22px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #777;
+
+  font-size: 17px;
+
+  line-height: 20px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.organization-page .publish-btn {
+  height: 34px;
+
+  padding: 0 15px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  background: #355f2d;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.organization-page .publish-btn:hover {
+  background: #46584b;
+
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.organization-page .table-container {
+  width: 100%;
+  height: 448px;
+
+  border: 1px solid #b9b9b9;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================================================
+   AG GRID
+========================================================= */
+
+.organization-page .organization-grid {
+  width: 100%;
+
+  height: calc(100% - 48px);
+
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CUSTOM PAGINATION
+========================================================= */
+
+.organization-page .server-pagination {
+  width: 100%;
+
+  height: 48px;
+  min-height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-top: 1px solid #c7c7c7;
+
+  flex-shrink: 0;
+
+  font-size: 12px;
+
+  color: #475569;
+}
+
+/* LEFT */
+
+.organization-page .pagination-left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.organization-page .pagination-left select {
+  height: 28px;
+
+  min-width: 52px;
+
+  padding: 0 5px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 4px;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 12px;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.organization-page .record-info {
+  margin-left: 8px;
+
+  color: #475569;
+}
+
+/* RIGHT */
+
+.organization-page .pagination-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.organization-page .pagination-right button {
+  width: 28px;
+
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 0;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 4px;
+
+  background: #ffffff;
+
+  color: #64748b;
+
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+.organization-page .pagination-right button:hover:not(:disabled) {
+  background: #f1f5f9;
+
+  border-color: #b8c0cc;
+}
+
+.organization-page .pagination-right button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.organization-page .page-text {
+  min-width: 90px;
+
+  text-align: center;
+
+  font-size: 12px;
+
+  color: #334155;
+}
+
+/* =========================================================
+   AG GRID HEADER
+========================================================= */
+
+:host ::ng-deep .organization-grid .ag-header {
+  background: #4285d4 !important;
+
+  color: #ffffff !important;
+
+  border-bottom: 1px solid #286bb7 !important;
+
+  height: 30px !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-row {
+  height: 30px !important;
+
+  background: #4285d4 !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-cell {
+  background: #4285d4 !important;
+
+  color: #ffffff !important;
+
+  border-right: 1px solid #76a5d6 !important;
+
+  padding-left: 7px !important;
+
+  padding-right: 7px !important;
+
+  height: 30px !important;
+
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .organization-grid .ag-header-cell-label {
+  color: #ffffff !important;
+
+  font-size: 14px !important;
+
+  font-weight: 700 !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-cell-text {
+  color: #ffffff !important;
+
+  font-weight: 700 !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-icon {
+  color: #ffffff !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-cell-menu-button {
+  color: #ffffff !important;
+}
+
+:host ::ng-deep .organization-grid .ag-header-cell-menu-button:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* =========================================================
+   AG GRID ROWS
+========================================================= */
+
+:host ::ng-deep .organization-grid .ag-row {
+  height: 38px !important;
+
+  min-height: 38px !important;
+
+  background: #ffffff !important;
+
+  border-bottom: 1px solid #d8d8d8 !important;
+}
+
+:host ::ng-deep .organization-grid .ag-row:hover {
+  background: #f5f9fd !important;
+}
+
+/* =========================================================
+   AG GRID CELLS
+========================================================= */
+
+:host ::ng-deep .organization-grid .ag-cell {
+  height: 38px !important;
+
+  line-height: 38px !important;
+
+  display: flex;
+
+  align-items: center;
+
+  box-sizing: border-box;
+
+  padding-left: 8px !important;
+
+  padding-right: 8px !important;
+
+  border-right: 1px solid #d8d8d8 !important;
+
+  color: #222;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+:host ::ng-deep .organization-grid .ag-paging-panel {
+  height: 38px !important;
+
+  min-height: 38px !important;
+
+  box-sizing: border-box;
+
+  background: #f8f8f8 !important;
+
+  border-top: 1px solid #c7c7c7 !important;
+
+  color: #333 !important;
+
+  font-size: 11px !important;
+}
+
+:host ::ng-deep .organization-grid .ag-paging-button {
+  color: #555 !important;
+}
+
+:host ::ng-deep .organization-grid .ag-paging-page-size {
+  font-size: 11px !important;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+:host ::ng-deep .organization-grid ::-webkit-scrollbar {
+  width: 8px;
+
+  height: 8px;
+}
+
+:host ::ng-deep .organization-grid ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+:host ::ng-deep .organization-grid ::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+
+  border-radius: 4px;
+}
+
+:host ::ng-deep .organization-grid ::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* =========================================================
+   MODAL OVERLAY
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  animation: fadeIn 0.18s ease;
+}
+
+/* =========================================================
+   ORGANIZATION MODAL
+========================================================= */
+
+.organization-modal {
+  width: 100%;
+
+  max-width: 650px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 5px;
+
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.organization-modal .modal-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 13px 18px;
+
+  background: #355f2d;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   MODAL HEADING
+========================================================= */
+
+.organization-modal .modal-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.organization-modal .modal-title h3 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   MODAL CLOSE
+========================================================= */
+
+.organization-modal .modal-close {
+  width: 28px;
+
+  height: 28px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  color: #ffffff;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   MODAL BODY
+========================================================= */
+
+.organization-modal .modal-body {
+  padding: 20px;
+}
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.organization-modal .form-group {
+  margin-bottom: 14px;
+}
+
+.organization-modal .form-group label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #333;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.organization-modal .form-group label span {
+  color: #dc2626;
+}
+
+/* =========================================================
+   INPUT / SELECT / TEXTAREA
+========================================================= */
+
+.organization-modal .form-group input,
+.organization-modal .form-group select,
+.organization-modal .form-group textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 9px 11px;
+
+  border: 1px solid #c7c7c7;
+
+  border-radius: 4px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 12px;
+}
+
+.organization-modal .form-group input:focus,
+.organization-modal .form-group select:focus,
+.organization-modal .form-group textarea:focus {
+  border-color: #4285d4;
+
+  box-shadow: 0 0 4px rgba(66, 133, 212, 0.3);
+}
+
+.organization-modal .form-group select {
+  height: 36px;
+
+  cursor: pointer;
+}
+
+.organization-modal .form-group textarea {
+  resize: vertical;
+}
+
+/* =========================================================
+   FORM ROW
+========================================================= */
+
+.organization-modal .form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+}
+
+.organization-modal .form-row.three-columns {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.organization-modal .full-width {
+  width: 100%;
+}
+
+/* =========================================================
+   FORM SECTION TITLE
+========================================================= */
+
+.organization-modal .form-section-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 16px 0 10px;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  color: #355f2d;
+
+  letter-spacing: 0.5px;
+}
+
+.organization-modal .section-icon {
+  font-size: 10px;
+}
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.organization-modal .modal-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  padding-top: 8px;
+}
+
+/* =========================================================
+   CANCEL + SAVE
+========================================================= */
+
+.organization-modal .cancel-btn,
+.organization-modal .save-btn {
+  padding: 8px 16px;
+
+  border-radius: 4px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.organization-modal .cancel-btn {
+  border: 1px solid #bbb;
+
+  background: #ffffff;
+
+  color: #444;
+}
+
+.organization-modal .cancel-btn:hover {
+  background: #f2f2f2;
+}
+
+.organization-modal .save-btn {
+  border: 1px solid #355f2d;
+
+  background: #355f2d;
+
+  color: #ffffff;
+}
+
+.organization-modal .save-btn:hover {
+  background: #46584b;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (max-width: 1399px) {
+  .organization-page .main-content {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991px) {
+  .organization-page .main-content {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+  .organization-page .toolbar {
+    flex-wrap: wrap;
+
+    height: auto;
+  }
+
+  .organization-page .toolbar-right {
+    margin-left: auto;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 850px) {
+  .organization-page .toolbar-left,
+  .organization-page .toolbar-right {
+    width: 100%;
+  }
+
+  .organization-page .toolbar-right {
+    margin-left: 0;
+
+    justify-content: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .organization-page .table-container {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .organization-page {
+    margin: 10px;
+  }
+
+  .organization-page .main-content {
+    width: 100%;
+  }
+
+  .organization-page .search-box {
+    width: 160px;
+  }
+
+  .organization-modal {
+    max-height: 95vh;
+  }
+
+  .organization-modal .modal-body {
+    padding: 15px;
+  }
+}
+
+/* =========================================================
+   LOADING OVERLAY & SPINNER
+   ========================================================= */
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  gap: 12px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3.5px solid #cbd5e1;
+  border-top-color: #355f2d;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loading-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #355f2d;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-form-row {
+  margin-top: 4px;
+}
+
+.status-group {
+  width: 100%;
+}
+
+.status-control {
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 14px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot.active {
+  background: #16a34a;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.10);
+}
+
+.status-dot.inactive {
+  background: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.10);
+}
+
+.status-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.active-text {
+  color: #15803d;
+}
+
+.inactive-text {
+  color: #dc2626;
+}
+
+.status-description {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.status-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.status-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.status-slider {
+  position: absolute;
+  inset: 0;
+  background: #cbd5e1;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.status-slider-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+  transition: transform 0.2s ease;
+}
+
+.status-switch input:checked + .status-slider {
+  background: #16a34a;
+}
+
+.status-switch input:checked + .status-slider .status-slider-dot {
+  transform: translateX(20px);
+}
+
+.status-switch input:focus-visible + .status-slider {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}

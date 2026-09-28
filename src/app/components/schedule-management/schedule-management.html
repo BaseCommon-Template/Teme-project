@@ -1,0 +1,131 @@
+<div class="schedule-management-page min-h-[calc(100vh-140px)] p-6 sm:p-8 bg-[#f8fafc]">
+  <div class="max-w-[1600px] mx-auto space-y-4">
+    <!-- Header Bar -->
+    <div class="flex items-center justify-between">
+      <!-- Title with Blue vertical accent bar -->
+      <div class="flex items-center gap-2.5">
+        <span class="w-[5px] h-6 bg-[#005a9c] rounded-xs inline-block"></span>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight m-0">
+          Schedules
+        </h1>
+      </div>
+
+      <!-- Create New Schedule Action Button -->
+      <button
+        type="button"
+        (click)="openCreateModal()"
+        [disabled]="hasActiveSchedule()"
+        [title]="
+          hasActiveSchedule()
+            ? 'An active schedule already exists. Deactivate it to create a new one.'
+            : 'Create New Schedule'
+        "
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold uppercase tracking-wider border rounded-md shadow-2xs transition-all"
+        [ngClass]="
+          hasActiveSchedule()
+            ? 'opacity-40 bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed pointer-events-none'
+            : 'text-slate-600 hover:text-slate-800 bg-[#f1f5f9] hover:bg-slate-200 border-slate-200/90 cursor-pointer'
+        "
+      >
+        <span class="text-sm font-bold leading-none">+</span>
+        <span>CREATE NEW SCHEDULE</span>
+      </button>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE CONTAINER (Exact style matching role-management) -->
+    <!-- ================================================= -->
+    <div class="table-container" style="position: relative;">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Schedules...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz schedule-management-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 412px;"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SERVER-LIKE PAGINATION (Exact style from role-management) -->
+      <!-- ================================================= -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button
+            type="button"
+            [disabled]="currentPage === 1"
+            (click)="goToPage(1)"
+            title="First Page"
+          >
+            «
+          </button>
+          <button
+            type="button"
+            [disabled]="currentPage === 1"
+            (click)="goToPage(currentPage - 1)"
+            title="Previous Page"
+          >
+            ‹
+          </button>
+
+          <span class="page-text">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages"
+            (click)="goToPage(currentPage + 1)"
+            title="Next Page"
+          >
+            ›
+          </button>
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages"
+            (click)="goToPage(totalPages)"
+            title="Last Page"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create / Edit Schedule Modal Component -->
+  <app-schedule-edit
+    [isOpen]="isModalOpen()"
+    [scheduleData]="selectedSchedule()"
+    (close)="closeModal()"
+    (update)="onScheduleUpdated($event)"
+  />
+</div>

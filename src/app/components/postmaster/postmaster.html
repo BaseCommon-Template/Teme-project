@@ -1,0 +1,297 @@
+<div class="postmaster-page">
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h2>Posts</h2>
+  </div>
+
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+      <span class="separator">›</span>
+      <strong>Posts</strong>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input
+            #searchInput
+            type="text"
+            [ngModel]="searchText()"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search post name or post code..."
+            autocomplete="off"
+          />
+
+          @if (searchText()) {
+            <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="status-filter">
+          <span> Active Posts </span>
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <button type="button" class="publish-btn" (click)="openAddModal()">ADD POST</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Posts...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz postmaster-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          [rowData]="filteredRowData()"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        >
+        </ag-grid-angular>
+      </div>
+
+      <!-- SERVER-SIDE PAGINATION FOOTER -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize()" (change)="changePageSize($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize() + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize(), totalRecords) : 0 }}
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToFirstPage()"
+            title="First Page"
+          >
+            «
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToPreviousPage()"
+            title="Previous Page"
+          >
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToNextPage()"
+            title="Next Page"
+          >
+            ›
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToLastPage()"
+            title="Last Page"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE / EDIT POST MODAL -->
+@if (isModalOpen()) {
+  <div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="postmaster-modal">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div class="modal-icon">▣</div>
+
+          <div>
+            <h3>
+              {{ isEditMode() ? 'Edit Post' : 'Create New Post' }}
+            </h3>
+
+            <p>{{ isEditMode() ? 'Update post details' : 'Add a new post to the system' }}</p>
+          </div>
+        </div>
+
+        <button type="button" class="modal-close" (click)="closeModal()">×</button>
+      </div>
+
+      <!-- FORM -->
+      <form #postForm="ngForm" class="modal-body" (ngSubmit)="savePost()">
+        <div class="form-group">
+          <label>
+            POST NAME
+            <span>*</span>
+          </label>
+
+          <input
+            #firstFormInput
+            type="text"
+            [ngModel]="formData.post_name"
+            (ngModelChange)="onPostNameChange($event)"
+            (keydown)="preventPostNameInvalidCharacters($event)"
+            (input)="sanitizePostName()"
+            name="post_name"
+            #postNameCtrl="ngModel"
+            required
+            minlength="2"
+            maxlength="100"
+            pattern="^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
+            placeholder="e.g., Constable Head"
+            autocomplete="off"
+            [class.is-invalid]="
+              (postNameCtrl.touched || postForm.submitted) && postNameCtrl.invalid
+            "
+          />
+
+          @if ((postNameCtrl.touched || postForm.submitted) && postNameCtrl.invalid) {
+            <div class="field-error-alert">
+              @if (postNameCtrl.errors?.['required']) {
+                <span>⚠ Post Name is required.</span>
+              } @else if (postNameCtrl.errors?.['minlength']) {
+                <span>⚠ Post Name must be at least 2 characters.</span>
+              } @else if (postNameCtrl.errors?.['pattern']) {
+                <span>⚠ Only letters, spaces and hyphen (-) are allowed.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>
+            POST CODE
+            <span>*</span>
+          </label>
+
+          <input
+            type="text"
+            [ngModel]="formData.post_code"
+            (ngModelChange)="onPostCodeChange($event)"
+            (keydown)="preventPostCodeSpace($event)"
+            (input)="sanitizePostCode()"
+            name="post_code"
+            #postCodeCtrl="ngModel"
+            required
+            minlength="2"
+            maxlength="50"
+            pattern="^\S+$"
+            placeholder="e.g., CONSTABLE_HEAD"
+            autocomplete="off"
+            [class.is-invalid]="
+              (postCodeCtrl.touched || postForm.submitted) && postCodeCtrl.invalid
+            "
+          />
+
+          @if ((postCodeCtrl.touched || postForm.submitted) && postCodeCtrl.invalid) {
+            <div class="field-error-alert">
+              @if (postCodeCtrl.errors?.['required']) {
+                <span>⚠ Post Code is required.</span>
+              } @else if (postCodeCtrl.errors?.['minlength']) {
+                <span>⚠ Post Code must be at least 2 characters.</span>
+              } @else if (postCodeCtrl.errors?.['pattern']) {
+                <span>⚠ Post Code cannot contain spaces.</span>
+              }
+            </div>
+          }
+        </div>
+
+        @if (isEditMode()) {
+          <div class="form-row status-form-row">
+            <div class="form-group status-group">
+              <label>STATUS</label>
+
+              <div class="status-control">
+                <div class="status-info">
+                  <div
+                    class="status-dot"
+                    [class.active]="formData.is_active"
+                    [class.inactive]="!formData.is_active"
+                  ></div>
+
+                  <div class="status-text">
+                    <span
+                      class="status-title"
+                      [class.active-text]="formData.is_active"
+                      [class.inactive-text]="!formData.is_active"
+                    >
+                      {{ formData.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                </div>
+
+                <label class="status-switch">
+                  <input type="checkbox" [(ngModel)]="formData.is_active" name="is_active" />
+
+                  <span class="status-slider">
+                    <span class="status-slider-dot"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="closeModal()">CANCEL</button>
+
+          <button type="submit" class="save-btn" [disabled]="isLoading()">
+            {{ isEditMode() ? 'UPDATE' : 'CREATE' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

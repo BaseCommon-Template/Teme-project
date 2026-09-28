@@ -1,0 +1,195 @@
+@if (isOpen) {
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+        (click)="onBackdropClick($event)"
+      >
+        <div class="w-full max-w-2xl bg-white border border-slate-100 rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+          <!-- Header -->
+          <div class="px-6 py-4 bg-gradient-to-r from-[#46584b] to-[#355f2d] text-white flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">👥</span>
+              <div>
+                <h3 class="text-base font-bold m-0 leading-tight">
+                  {{ editingUser ? 'Edit User / Official' : 'Add New User / Official' }}
+                </h3>
+                <p class="text-[11px] text-blue-200 m-0">Government nodal officer & security role mapping</p>
+              </div>
+            </div>
+            <button
+              (click)="onClose()"
+              class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border-none"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Form Body -->
+          <form (ngSubmit)="onSubmit()" class="p-6 overflow-y-auto space-y-4 flex-1">
+            @if (error()) {
+              <div class="p-3 bg-red-50 text-red-600 rounded-xl text-xs font-semibold">
+                {{ error() }}
+              </div>
+            }
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Officer Name -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Officer Name *
+                </label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.officer_name"
+                  name="officer_name"
+                  required
+                  placeholder="e.g. Rajesh Kumar"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <!-- Designation / Rank -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Designation / Rank *
+                </label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.designation"
+                  name="designation"
+                  required
+                  placeholder="e.g. Deputy Commandant / Under Secretary"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Email -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Email Address (Govt Domain preferred) *
+                </label>
+                <input
+                  type="email"
+                  [(ngModel)]="formData.email"
+                  name="email"
+                  required
+                  placeholder="rajesh.kumar@gov.in"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <!-- Phone -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Mobile Number (10 Digits) *
+                </label>
+                <input
+                  type="tel"
+                  [(ngModel)]="formData.phone"
+                  name="phone"
+                  required
+                  placeholder="9876543210"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Entity (Parent Org) -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Organization (Entity) *
+                </label>
+                <select
+                  [(ngModel)]="formData.entity_id"
+                  name="entity_id"
+                  required
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                >
+                  <option value="" disabled>Select Organization</option>
+                  @for (entity of entities; track entity._id) {
+                    <option [value]="entity._id">{{ entity.entity_name }} ({{ entity.short_name }})</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Sub Entity (Force Unit) -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Sub-Entity / Force Unit
+                </label>
+                <select
+                  [(ngModel)]="formData.sub_entity_id"
+                  name="sub_entity_id"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                >
+                  <option [ngValue]="null">None / Direct Entity HQ</option>
+                  @for (sub of filteredSubEntities(); track sub._id) {
+                    <option [value]="sub._id">{{ sub.sub_entity_name }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+
+            <!-- Password (only for new users) -->
+            @if (!editingUser) {
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Initial Password *
+                </label>
+                <input
+                  type="password"
+                  [(ngModel)]="password"
+                  name="password"
+                  required
+                  placeholder="Minimum 8 characters with symbols"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+            }
+
+            <!-- Role Assignment Checkboxes -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                Assigned Security Roles *
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl max-h-40 overflow-y-auto">
+                @for (role of roles; track role.role_id) {
+                  <label class="flex items-center gap-2 p-2 rounded-lg bg-white border border-slate-200 text-xs cursor-pointer hover:bg-blue-50/50 transition-colors">
+                    <input
+                      type="checkbox"
+                      [checked]="isRoleSelected(role.role_id)"
+                      (change)="toggleRole(role)"
+                      class="rounded text-blue-600 focus:ring-blue-500"
+                    />
+                    <div class="flex-1">
+                      <span class="font-bold text-slate-800">{{ role.role_name }}</span>
+                      <span class="text-[10px] text-slate-400 block">ID: {{ role.role_id }}</span>
+                    </div>
+                  </label>
+                }
+              </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                (click)="onClose()"
+                class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                [disabled]="submitting()"
+                class="px-5 py-2 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs font-bold shadow-sm transition-all cursor-pointer border-none disabled:opacity-50"
+              >
+                {{ submitting() ? 'Saving...' : (editingUser ? 'Update Official' : 'Create Official') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }

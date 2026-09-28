@@ -1,0 +1,45 @@
+<header class="w-full bg-white border-b border-slate-200">
+  <div class="main-header">
+    <!-- Emblem and Ministry Title -->
+    <div class="header-left">
+      <img src="images/emblem-dark.png" alt="National Emblem of India" class="logo" />
+      <div>
+        <h3 class="hindi-title">Government of India</h3>
+        <span class="home-affairs">Ministry of Home Affairs</span>
+      </div>
+    </div>
+
+    <!-- Portal Central Title -->
+    <div class="portal-title-wrapper">
+      <a routerLink="/" class="no-underline hover:opacity-90 transition-opacity">
+        <h1 class="center-title">Theme Project</h1>
+      </a>
+    </div>
+
+    <!-- Right Accessibility & Language Controls -->
+    <div class="right-icons">
+      <!-- Skip to main content icon -->
+      <button (click)="skipToContent()"
+        class="p-0 border-none bg-transparent cursor-pointer flex items-center justify-center hover:opacity-80 transition-opacity"
+        title="Skip to main content">
+        <img src="skip-content.svg" alt="Skip to main content" class="w-6 h-6 cursor-pointer" />
+      </button>
+
+      <!-- <span class="separator">|</span> -->
+
+      <!-- Bhashini Language Selector Placeholder / Icon -->
+      <!-- <div id="bhashini-placeholder" class="relative inline-block">
+        <button (click)="openBhashini()" type="button"
+          class="static-lang-btn flex cursor-pointer items-center p-1 bg-white border-none hover:opacity-80 transition-opacity"
+          title="Language Options">
+          <img src="language-icon.svg" alt="Language" class="h-7 w-7" />
+        </button>
+      </div> -->
+
+      <span class="separator">|</span>
+
+      <!-- Accessibility Control Widget -->
+      <app-accessibility-widget />
+    </div>
+  </div>
+</header>

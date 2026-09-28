@@ -1,0 +1,41 @@
+<div class="unauth-container">
+  <div class="unauth-card">
+    <!-- Top badge & icon -->
+    <div class="unauth-icon-wrapper">
+      <div class="unauth-icon-pulse"></div>
+      <div class="unauth-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-red-600" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+    </div>
+
+
+
+    <!-- Heading -->
+    <div class="unauth-header">
+      <h1 class="unauth-title">Access Denied</h1>
+      <p class="unauth-subtitle">
+        You do not have the required permissions or authorization to access this page or resource.
+      </p>
+    </div>
+
+
+    <!-- Actions -->
+    <div class="unauth-actions">
+      <button type="button" (click)="goToLogin()" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+        </svg>
+        Back to Login
+      </button>
+
+      <button type="button" (click)="goToHome()" class="link-action">
+        Return to Home Page
+      </button>
+    </div>
+  </div>
+</div>

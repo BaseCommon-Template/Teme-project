@@ -1,0 +1,91 @@
+<aside
+      [class.w-16]="isCollapsed"
+      [class.w-64]="!isCollapsed"
+      class="bg-white border-r border-slate-200 flex flex-col pt-2 transition-all duration-300 overflow-x-hidden shrink-0 shadow-xs relative z-30 min-h-[calc(100vh-3.5rem)]"
+    >
+      <!-- Navigation Links -->
+      <nav class="flex-1 p-3 space-y-1.5">
+        <a
+          routerLink="/dashboard/mis"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="MIS & Statistics"
+        >
+          <span class="text-base shrink-0">📊</span>
+          @if (!isCollapsed) {
+            <span class="truncate">MIS & Statistics</span>
+          }
+        </a>
+
+        <a
+          routerLink="/dashboard/entities"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="Organization Types"
+        >
+          <span class="text-base shrink-0">🏢</span>
+          @if (!isCollapsed) {
+            <span class="truncate">Organization Types</span>
+          }
+        </a>
+
+        <a
+          routerLink="/dashboard/sub-entities"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="Organization Units"
+        >
+          <span class="text-base shrink-0">🏛️</span>
+          @if (!isCollapsed) {
+            <span class="truncate">Organization Units</span>
+          }
+        </a>
+
+        <a
+          routerLink="/dashboard/officers"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="Users / Officials"
+        >
+          <span class="text-base shrink-0">👥</span>
+          @if (!isCollapsed) {
+            <span class="truncate">Users / Officials</span>
+          }
+        </a>
+
+        <a
+          routerLink="/dashboard/roles"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="Security Roles"
+        >
+          <span class="text-base shrink-0">🛡️</span>
+          @if (!isCollapsed) {
+            <span class="truncate">Roles</span>
+          }
+        </a>
+
+        <a
+          routerLink="/dashboard/menus"
+          routerLinkActive="bg-[#355f2d] text-white shadow-md font-bold"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 hover:text-[#355f2d] transition-all no-underline"
+          title="Menu & Permissions"
+        >
+          <span class="text-base shrink-0">📑</span>
+          @if (!isCollapsed) {
+            <span class="truncate">Menu Management</span>
+          }
+        </a>
+      </nav>
+
+      <!-- Collapse Toggle Button at Bottom -->
+      <div class="p-3 border-t border-slate-200">
+        <button
+          (click)="toggle.emit()"
+          class="w-full py-2 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 text-xs font-bold cursor-pointer border-none"
+          [title]="isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'"
+        >
+          <span>{{ isCollapsed ? '▶' : '◀ Collapse' }}</span>
+        </button>
+      </div>
+    </aside>

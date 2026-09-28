@@ -1,0 +1,103 @@
+@if (notificationId) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs"
+    (click)="onBackdropClick($event)"
+  >
+    <div class="w-full max-w-4xl bg-white border border-slate-100 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-[#46584b] to-[#355f2d] text-white flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🔔</span>
+          <div>
+            <h3 class="text-base font-bold m-0 leading-tight">
+              {{ loading() ? 'Loading details...' : notification()?.notification_title || 'Notification Details' }}
+            </h3>
+            <p class="text-xs text-blue-200 m-0 mt-0.5">{{ getEntityName() }}</p>
+          </div>
+        </div>
+        <button
+          (click)="onClose()"
+          class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border-none"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6 text-slate-800">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400">Loading notification details...</div>
+        } @else if (error()) {
+          <div class="text-center py-8 text-red-500 bg-red-50 rounded-xl p-4">{{ error() }}</div>
+        } @else if (notification()) {
+          <!-- Summary Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs">
+            <div>
+              <span class="text-slate-400 font-medium block">Advt. Number</span>
+              <span class="font-bold text-slate-800">{{ notification()?.advertisement_number || '—' }}</span>
+            </div>
+            <div>
+              <span class="text-slate-400 font-medium block">Opening Date</span>
+              <span class="font-bold text-slate-800">{{ formatDate(notification()?.application_opening_date) }}</span>
+            </div>
+            <div>
+              <span class="text-slate-400 font-medium block">Closing Date</span>
+              <span class="font-bold text-slate-800">{{ formatDate(notification()?.application_closing_date) }}</span>
+            </div>
+            <div>
+              <span class="text-slate-400 font-medium block">Organization</span>
+              <span class="font-bold text-slate-800">{{ getSubEntityName() }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Description & Criteria</h4>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+              {{ notification()?.description || 'No detailed description provided.' }}
+            </div>
+          </div>
+
+          <!-- Post Preferences -->
+          @if (notification()?.post_preference && notification()!.post_preference!.length > 0) {
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Available Posts / Trades</h4>
+              <div class="flex flex-wrap gap-2">
+                @for (post of notification()!.post_preference!; track post) {
+                  <span class="px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-full text-xs font-semibold">
+                    {{ post }}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- External URL -->
+          @if (notification()?.job_link_url) {
+            <div class="pt-2">
+              <a
+                [href]="notification()?.job_link_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#355f2d] text-white text-xs font-bold hover:bg-[#46584b] transition-all no-underline"
+              >
+                <span>View Official Notification Document</span>
+                <span>↗</span>
+              </a>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <button
+          (click)="onClose()"
+          class="px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold cursor-pointer border-none"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}

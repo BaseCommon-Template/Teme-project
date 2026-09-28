@@ -1,0 +1,165 @@
+/* =========================================================
+   NOTIFICATIONS COMPONENT STYLES
+   ========================================================= */
+:host {
+  display: contents;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* =========================================================
+   AG GRID TABLE CONTAINER
+   ========================================================= */
+
+.table-container {
+  width: 100%;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.notifications-grid {
+  width: 100%;
+  min-height: 330px;
+}
+
+/* =========================================================
+   AG GRID HEADER (Matching other components in the project)
+   ========================================================= */
+
+:host ::ng-deep .notifications-grid .ag-header {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #286bb7 !important;
+  height: 36px !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-row {
+  height: 36px !important;
+  background: #4285d4 !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-cell {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-right: 1px solid #76a5d6 !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  height: 36px !important;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-cell-label {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-cell-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-icon,
+:host ::ng-deep .notifications-grid .ag-header-cell-menu-button {
+  color: #ffffff !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-header-cell-menu-button:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* =========================================================
+   AG GRID ROWS & CELLS (Matching other components)
+   ========================================================= */
+
+:host ::ng-deep .notifications-grid .ag-row {
+  height: 44px !important;
+  min-height: 44px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #d8d8d8 !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-row:hover {
+  background: #f5f9fd !important;
+}
+
+:host ::ng-deep .notifications-grid .ag-cell {
+  height: 44px !important;
+  line-height: 44px !important;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  border-right: 1px solid #d8d8d8 !important;
+  color: #222;
+  font-size: 12px;
+}
+
+/* =========================================================
+   ACTION BUTTONS INSIDE CELL
+   ========================================================= */
+
+:host ::ng-deep .notifications-grid .action-buttons-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+:host ::ng-deep .notifications-grid .btn-action {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background: #355f2d;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .notifications-grid .btn-action:hover:not(:disabled) {
+  background: #18324d;
+  transform: translateY(-1px);
+}
+
+:host ::ng-deep .notifications-grid .btn-action.btn-publish {
+  background: #16a34a;
+}
+
+:host ::ng-deep .notifications-grid .btn-action.btn-publish:hover:not(:disabled) {
+  background: #15803d;
+}
+
+:host ::ng-deep .notifications-grid .btn-action:disabled,
+:host ::ng-deep .notifications-grid .btn-action.is-freezed,
+:host ::ng-deep .notifications-grid .btn-action.is-published {
+  background: #8fa0b5 !important;
+  color: #ffffff !important;
+  cursor: not-allowed !important;
+  opacity: 0.9;
+  transform: none !important;
+}

@@ -1,0 +1,81 @@
+/* Custom component styles for user-login */
+
+.login-visual-panel {
+  background: #46584b;
+  isolation: isolate;
+}
+
+.login-visual-image,
+.login-visual-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.login-visual-image {
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+}
+
+.login-visual-overlay {
+  background: rgba(25, 58, 29, 0.76);
+  z-index: -1;
+}
+
+.login-visual-content {
+  max-width: 24rem;
+}
+
+.login-emblem {
+  width: 4.25rem;
+  height: 4.25rem;
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 0.85rem;
+  backdrop-filter: blur(4px);
+}
+
+.login-emblem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 767px) {
+  .login-visual-panel {
+    min-height: 300px;
+  }
+}
+
+/* OR Divider matching Extradition */
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.divider span {
+  background: white;
+  padding: 0 10px;
+  font-weight: bold;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #cbd5e1;
+  z-index: -1;
+}

@@ -1,0 +1,130 @@
+/* Lightweight government portal header */
+.main-header {
+  background: #f7f0e9;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 30px;
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.header-left {
+  align-items: center;
+  gap: 15px;
+  display: flex;
+}
+
+.logo {
+  width: auto;
+  height: 100px;
+  object-fit: contain;
+}
+
+.hindi-title {
+  color: #333333;
+  margin: 30px 0px 0px 0px;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.home-affairs {
+  color: #172554;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+}
+
+.portal-title-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+}
+
+.center-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: #000;
+  white-space: nowrap;
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Roboto', sans-serif;
+}
+
+.right-icons {
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+#bhashini-placeholder {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#bhashini-placeholder #bhashini-translation {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 99999 !important;
+}
+
+.separator {
+  color: #0056b3;
+  font-size: 18px;
+  font-weight: 400;
+  user-select: none;
+}
+
+@media (max-width: 1024px) {
+  .logo {
+    height: 75px;
+  }
+
+  .hindi-title,
+  .home-affairs {
+    font-size: 22px;
+  }
+
+  .center-title {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-header {
+    flex-direction: column;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .portal-title-wrapper {
+    position: static;
+    transform: none;
+  }
+
+  .header-left {
+    text-align: center;
+  }
+
+  .logo {
+    height: 65px;
+  }
+
+  .hindi-title,
+  .home-affairs {
+    font-size: 20px;
+  }
+
+  .center-title {
+    font-size: 20px;
+  }
+}

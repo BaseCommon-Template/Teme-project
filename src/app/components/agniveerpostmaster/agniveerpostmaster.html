@@ -1,0 +1,99 @@
+<div class="postmapping-page">
+  <div class="page-title">
+    <h2>Agniveer Post Master</h2>
+  </div>
+
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+      <span class="separator">›</span>
+      <strong>Agniveer Post Master</strong>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input #searchInput type="text" [ngModel]="searchText()" (ngModelChange)="onSearchChange($event)"
+            placeholder="Search post name, branch..." autocomplete="off" />
+
+          @if (searchText()) {
+          <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="status-filter">
+          <span> Active Agniveer Posts </span>
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+      </div>
+    </div>
+
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading Agniveer Posts...</span>
+      </div>
+      }
+
+      <div class="ag-theme-quartz postmapping-grid">
+        <ag-grid-angular style="width: 100%; height: 100%" [rowData]="filteredRowData()" [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef" [rowHeight]="rowHeight" [headerHeight]="headerHeight" [pagination]="false"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+      </div>
+
+      <!-- SERVER-SIDE PAGINATION FOOTER -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize()" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize() + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize(), totalRecords) : 0 }}
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToFirstPage()" title="First Page">
+            «
+          </button>
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToPreviousPage()" title="Previous Page">
+            ‹
+          </button>
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+          <button type="button" [disabled]="currentPage >= totalPages || totalPages === 0" (click)="goToNextPage()"
+            title="Next Page">
+            ›
+          </button>
+          <button type="button" [disabled]="currentPage >= totalPages || totalPages === 0" (click)="goToLastPage()"
+            title="Last Page">
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

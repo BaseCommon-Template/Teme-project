@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Rajesh Kumar Singh",
+    "rank": "Inspector General",
+    "designation": "IG",
+    "subEntityId": 2,
+    "email": "rajesh.singh@crpf.gov.in",
+    "phone": "+91-9876543210",
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "Priya Sharma",
+    "rank": "Deputy Inspector General",
+    "designation": "DIG",
+    "subEntityId": 1,
+    "email": "priya.sharma@cisf.gov.in",
+    "phone": "+91-9876543211",
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "Vikram Patel",
+    "rank": "Senior Superintendent of Police",
+    "designation": "SSP",
+    "subEntityId": 3,
+    "email": "vikram.patel@bsf.gov.in",
+    "phone": "+91-9876543212",
+    "createdAt": "2024-01-15T10:00:00Z"
+  }
+]

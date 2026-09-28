@@ -1,0 +1,69 @@
+.coming-soon-page {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #eef4f9, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f2937;
+  padding: 20px;
+}
+
+.coming-soon-container {
+  width: 90%;
+  max-width: 720px;
+  text-align: center;
+  background: #ffffff;
+  padding: 60px 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+}
+
+.coming-soon-logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+  background: #eaf2f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #12395a;
+  font-weight: bold;
+}
+
+.coming-soon-logo span {
+  font-size: 40px;
+}
+
+.coming-soon-container h1 {
+  font-size: 48px;
+  color: #12395a;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.coming-soon-footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #98a2b3;
+}
+
+@media (max-width: 600px) {
+  .coming-soon-container {
+    padding: 45px 25px;
+  }
+
+  .coming-soon-container h1 {
+    font-size: 36px;
+  }
+
+  .coming-soon-logo {
+    width: 75px;
+    height: 75px;
+  }
+
+  .coming-soon-logo span {
+    font-size: 32px;
+  }
+}

@@ -1,0 +1,145 @@
+<!-- Top White Government Partner Logos Strip -->
+<div class="w-full bg-white border-t border-b border-gray-200 py-4 mt-auto">
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center sm:justify-between gap-6 sm:gap-8"
+  >
+    <a
+      href="https://www.digitalindia.gov.in/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:opacity-80 transition-opacity flex items-center"
+    >
+      <img
+        src="images/digital-logo.png"
+        alt="Digital India"
+        class="h-[100px] w-auto object-contain"
+        style="height: 100px"
+      />
+    </a>
+    <a
+      href="https://www.india.gov.in/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:opacity-80 transition-opacity flex items-center"
+    >
+      <img
+        src="images/india-gov-logo.png"
+        alt="National Portal of India"
+        class="h-[100px] w-auto object-contain"
+        style="height: 100px"
+      />
+    </a>
+    <a
+      href="https://pmnrf.gov.in/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:opacity-80 transition-opacity flex items-center"
+    >
+      <img
+        src="images/pmnrf-logo.png"
+        alt="PMNRF"
+        class="h-[100px] w-auto object-contain"
+        style="height: 100px"
+      />
+    </a>
+    <a
+      href="https://www.mygov.in/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:opacity-80 transition-opacity flex items-center"
+    >
+      <img
+        src="images/mygov-logo.png"
+        alt="MyGov"
+        class="h-[100px] w-auto object-contain"
+        style="height: 100px"
+      />
+    </a>
+    <a
+      href="https://data.gov.in/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hover:opacity-80 transition-opacity flex items-center"
+    >
+      <img
+        src="images/data-gov-logo.png"
+        alt="Data Gov"
+        class="h-[100px] w-auto object-contain"
+        style="height: 100px"
+      />
+    </a>
+  </div>
+</div>
+
+<footer
+  class="relative w-full bg-[#252525] text-white py-3 sm:py-2 px-6 sm:px-10 lg:px-16 text-[20px]"
+>
+  <div
+    class="w-[98%] max-w-[98%] mx-auto flex flex-col md:flex-row justify-between items-start gap-2"
+  >
+    <!-- Left Section: Useful Links -->
+    <div class="flex flex-col max-w-3xl">
+      <h3 class="text-[15px] font-bold uppercase tracking-wider text-white mb-4">USEFUL LINKS</h3>
+
+      <!-- Links Grid (2 Columns with exact horizontal spacing) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-20 sm:gap-x-32 gap-y-2 text-[15px]">
+        <a
+          routerLink="/website-policies"
+          class="text-white hover:text-blue-200 no-underline flex items-center gap-2 transition-colors font-normal"
+        >
+          <span class="text-white/80">›</span> <span>Website Policies</span>
+        </a>
+        <a
+          routerLink="/contact-us"
+          class="text-white hover:text-blue-200 no-underline flex items-center gap-2 transition-colors font-normal"
+        >
+          <span class="text-white/80">›</span> <span>Contact Us</span>
+        </a>
+        <a
+          routerLink="/faq"
+          class="text-white hover:text-blue-200 no-underline flex items-center gap-2 transition-colors font-normal"
+        >
+          <span class="text-white/80">›</span> <span>FAQ</span>
+        </a>
+        <a
+          routerLink="/terms-conditions"
+          class="text-white hover:text-blue-200 no-underline flex items-center gap-2 transition-colors font-normal"
+        >
+          <span class="text-white/80">›</span> <span>Terms & Conditions</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right Section: Portal Metrics & NIC Logo -->
+    <div
+      class="flex flex-col items-start md:items-end text-left md:text-right gap-3 self-stretch md:self-auto justify-between md:justify-start"
+    >
+      <div class="flex flex-col text-[15px] text-white space-y-1">
+        <div>
+          Total Visitors:
+          <span class="font-normal text-white">
+            {{ visitorCount() }}
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-1">
+        <div class="bg-white rounded px-2 py-1 inline-block shadow-xs">
+          <img
+            src="niclogo.svg"
+            alt="National Informatics Centre"
+            class="h-9 sm:h-10 w-auto object-contain cursor-pointer"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Section: Copyright & Ownership Text -->
+  <div class="w-[98%] max-w-[98%] mx-auto mt-2 sm:mt-2 pt-2 border-t border-white/20 text-center">
+    <p class="text-[15px] text-white/90 leading-relaxed m-0 text-center">
+      Website content owned & provided by Ministry of Home Affairs, Govt. of India. Designed,
+      Developed and Hosted by National Informatics Centre (NIC) ©2026
+    </p>
+  </div>
+</footer>

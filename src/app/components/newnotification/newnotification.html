@@ -1,0 +1,204 @@
+<div class="newnotification-page">
+  <div class="page-title">
+    <h2>Notification</h2>
+  </div>
+
+  <div class="main-content">
+    <div class="breadcrumb">
+      <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+      <span class="separator">›</span>
+      <strong>Notification</strong>
+    </div>
+
+    <div class="toolbar">
+      <!-- LEFT: SEARCH -->
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input #searchInput type="text" [ngModel]="searchText()" (ngModelChange)="onSearchChange($event)"
+            placeholder="Search Notification..." autocomplete="off" />
+
+          @if (searchText()) {
+          <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <!-- RIGHT: STATUS FILTER & ADD BUTTON -->
+      <div class="toolbar-right">
+        <div class="status-filter">
+          <span> Active Notifications </span>
+
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <button type="button" class="publish-btn" (click)="openAddModal()">ADD NOTIFICATION</button>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE CONTAINER -->
+    <!-- ================================================= -->
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading Notifications...</span>
+      </div>
+      }
+
+      <!-- AG GRID -->
+      <div class="ag-theme-quartz newnotification-grid">
+        <ag-grid-angular style="width: 100%; height: 100%" [rowData]="rowData" [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef" [rowHeight]="rowHeight" [headerHeight]="headerHeight" [pagination]="false"
+          (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)" />
+      </div>
+
+      <!-- PAGINATION BAR -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+            of
+            {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToFirstPage()">«</button>
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToPreviousPage()">
+            ‹
+          </button>
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages }} </span>
+          <button type="button" [disabled]="currentPage >= totalPages" (click)="goToNextPage()">
+            ›
+          </button>
+          <button type="button" [disabled]="currentPage >= totalPages" (click)="goToLastPage()">
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ADD / EDIT MODAL -->
+<!-- ===================================================== -->
+@if (isModalOpen()) {
+<div class="modal-overlay">
+  <div class="newnotification-modal">
+    <div class="modal-header">
+      <div class="modal-title">
+        <h3>
+          {{ isEditMode() ? 'Edit Notification' : 'Add Notification' }}
+        </h3>
+      </div>
+      <button type="button" class="modal-close" (click)="closeModal()">×</button>
+    </div>
+
+    <form (ngSubmit)="saveNotification()" class="modal-body">
+      <!-- Title -->
+      <div class="form-group">
+        <label for="notification_title"> Title <span>*</span> </label>
+        <input #titleInput #title="ngModel" id="notification_title" type="text"
+          [(ngModel)]="formData.notification_title" name="notification_title" required minlength="2" maxlength="200"
+          placeholder="e.g. Recruitment Notification 2026" autocomplete="off"
+          [class.is-invalid]="title.invalid && (title.touched || submitted)" />
+
+        @if (title.invalid && (title.touched || submitted)) {
+        <div class="validation-error">
+          @if (title.errors?.['required']) {
+          <span>Title is required.</span>
+          } @else if (title.errors?.['minlength']) {
+          <span>Title must be at least 2 characters.</span>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" [(ngModel)]="formData.description" name="description" rows="3"
+          placeholder="Enter notification description..."></textarea>
+      </div>
+
+      <!-- Notification Document Upload -->
+      <div class="form-group">
+        <label>Document</label>
+        <div class="attachment-upload-box" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <input #fileInput type="file" accept=".pdf,application/pdf" (change)="onFileSelected($event)"
+            style="display: none;" />
+          <button type="button" (click)="fileInput.click()" [disabled]="isUploadingDocument()" class="upload-doc-btn"
+            style="padding: 6px 14px; background: #edf4ff; border: 1px solid #c6dcfe; border-radius: 6px; color: #2563eb; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <span>{{ isUploadingDocument() ? '⏳ Uploading...' : '📎 Choose Document (PDF)' }}</span>
+          </button>
+
+          @if (selectedFileName()) {
+          <div class="selected-file-badge"
+            style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; color: #334155;">
+            <span
+              style="font-weight: 500; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{
+              selectedFileName() }}</span>
+            <button type="button" (click)="removeFile()" [disabled]="isUploadingDocument()"
+              style="background: transparent; border: none; color: #ef4444; font-weight: bold; cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px;"
+              title="Remove File">×</button>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Status Toggle -->
+      <div class="form-row status-form-row">
+        <div class="form-group status-group">
+          <label>STATUS</label>
+          <div class="status-control">
+            <div class="status-info">
+              <div class="status-dot" [class.active]="formData.is_active" [class.inactive]="!formData.is_active"></div>
+              <div class="status-text">
+                <span class="status-title" [class.active-text]="formData.is_active"
+                  [class.inactive-text]="!formData.is_active">
+                  {{ formData.is_active ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+            </div>
+
+            <label class="status-switch">
+              <input type="checkbox" [(ngModel)]="formData.is_active" name="is_active" />
+              <span class="status-slider">
+                <span class="status-slider-dot"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="save-btn">
+          {{ isEditMode() ? 'Update Notification' : 'Save Notification' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

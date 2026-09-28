@@ -1,0 +1,291 @@
+<nav class="bg-[#252525] text-white shadow-md sticky top-0 z-40">
+  <div class="mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-stretch justify-between h-14 sm:h-16">
+      <!-- Mobile Menu Button -->
+      <div class="flex lg:hidden items-center">
+        <button
+          (click)="toggleMobileMenu()"
+          class="p-2 rounded-lg hover:bg-white/10 text-white focus:outline-none cursor-pointer border-none bg-transparent"
+          aria-label="Toggle Menu"
+        >
+          <span class="text-xl">{{ isMobileMenuOpen() ? '✕' : '☰' }}</span>
+        </button>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <div class="hidden lg:flex items-stretch space-x-1 flex-1 overflow-visible h-full">
+        @for (menu of menuService.menuTree(); track menu.menu_id) {
+          <div class="relative group flex items-stretch h-full">
+            @if (!menu.children || menu.children.length === 0) {
+              <a
+                [routerLink]="menu.app_router_path || '/'"
+                (click)="onNavigate(menu.app_router_path, $event)"
+                routerLinkActive="navbar-active-border"
+                [routerLinkActiveOptions]="{ exact: menu.app_router_path === '/' }"
+                class="h-full px-3.5 flex items-center text-sm font-medium hover:bg-white/10 transition-all text-white/90 hover:text-white no-underline border-b-4 border-transparent gap-1 cursor-pointer"
+              >
+                <span>{{ menu.menu_name }}</span>
+              </a>
+            } @else {
+              <a
+                [routerLink]="
+                  menu.app_router_path && menu.app_router_path !== '/' ? menu.app_router_path : null
+                "
+                (click)="onNavigate(menu.app_router_path, $event)"
+                routerLinkActive="navbar-active-border"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="h-full px-3.5 flex items-center text-sm font-medium hover:bg-white/10 transition-all text-white/90 hover:text-white no-underline border-b-4 border-transparent gap-1.5 cursor-pointer bg-transparent"
+              >
+                <span>{{ menu.menu_name }}</span>
+                <span class="text-[10px] text-white/70 group-hover:rotate-180 transition-transform"
+                  >▼</span
+                >
+              </a>
+
+              <!-- Level 1 Dropdown -->
+              <div
+                class="absolute left-0 top-full hidden group-hover:flex flex-col min-w-56 bg-[#252525] shadow-2xl rounded-lg py-2 z-50 border border-white/15"
+              >
+                @for (child of menu.children; track child.menu_id) {
+                  <div class="relative group/sub">
+                    @if (!child.children || child.children.length === 0) {
+                      <a
+                        [routerLink]="child.app_router_path || '/'"
+                        (click)="onNavigate(child.app_router_path, $event)"
+                        routerLinkActive="dropdown-active-item"
+                        class="px-4 py-2 text-xs hover:bg-white/10 text-white/80 hover:text-white transition-colors flex items-center justify-between no-underline cursor-pointer"
+                      >
+                        <span>{{ child.menu_name }}</span>
+                      </a>
+                    } @else {
+                      <a
+                        [routerLink]="
+                          child.app_router_path && child.app_router_path !== '/'
+                            ? child.app_router_path
+                            : null
+                        "
+                        (click)="onNavigate(child.app_router_path, $event)"
+                        class="px-4 py-2 text-xs hover:bg-white/10 text-white/80 hover:text-white transition-colors flex items-center justify-between cursor-pointer no-underline"
+                      >
+                        <span>{{ child.menu_name }}</span>
+                        <span class="text-[9px] text-white/60">▶</span>
+                      </a>
+
+                      <!-- Level 2 Dropdown -->
+                      <div
+                        class="absolute left-full top-0 hidden group-hover/sub:flex flex-col min-w-56 bg-[#142538] shadow-2xl rounded-lg py-2 z-50 border border-white/15"
+                      >
+                        @for (grandChild of child.children; track grandChild.menu_id) {
+                          <a
+                            [routerLink]="grandChild.app_router_path || '/'"
+                            (click)="onNavigate(grandChild.app_router_path, $event)"
+                            routerLinkActive="dropdown-active-item"
+                            class="px-4 py-2 text-xs hover:bg-white/10 text-white/80 hover:text-white transition-colors no-underline cursor-pointer"
+                          >
+                            {{ grandChild.menu_name }}
+                          </a>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Right Profile / Login Actions -->
+      <div class="flex items-center gap-2 sm:gap-3 relative">
+        @if (isLoggedIn()) {
+          <!-- Role Switcher with Icon (Outside Profile) -->
+          @if (userRoles().length > 0) {
+            <div
+              class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 transition-all text-white shadow-xs"
+              title="Active Role"
+            >
+              <!-- Role Icon in place of "Active Role:" text -->
+              <span class="flex items-center justify-center text-[#FF9933]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-3.5 h-3.5 text-[#FF9933] shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              </span>
+
+              @if (userRoles().length > 1) {
+                <select
+                  id="activeRoleNavbar"
+                  [value]="activeRoleId()"
+                  (change)="onChangeRole($event)"
+                  class="text-xs px-2 py-0.5 rounded-lg border border-white/20 bg-[#1a2f45] text-white font-medium focus:outline-none focus:ring-1 focus:ring-[#FF9933] cursor-pointer"
+                  aria-label="Select Active Role"
+                >
+                  @for (item of userRoles(); track item.roleId) {
+                    <option
+                      [value]="item.roleId"
+                      [selected]="item.roleId === activeRoleId()"
+                      class="bg-[#1a2f45] text-white"
+                    >
+                      {{ item.roleName || item.RoleName }}
+                    </option>
+                  }
+                </select>
+              } @else {
+                <span class="text-xs font-semibold text-white/90">
+                  {{ userRoles()[0].roleName || userRoles()[0]?.RoleName }}
+                </span>
+              }
+            </div>
+          }
+
+          <div class="relative">
+            <button
+              (click)="toggleProfileDropdown()"
+              class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 transition-all text-white cursor-pointer"
+            >
+              <div
+                class="w-7 h-7 rounded-full bg-[#FF9933] flex items-center justify-center font-bold text-xs text-white"
+              >
+                {{ getUserInitials() }}
+              </div>
+              <div class="hidden sm:flex flex-col text-left">
+                @if (
+                  currentUser()?.name ||
+                  currentUser()?.fullName ||
+                  currentUser()?.userName ||
+                  currentUser()?.username ||
+                  currentUser()?.userId
+                ) {
+                  <span class="text-xs font-bold leading-none text-white">
+                    {{
+                      currentUser()?.name ||
+                        currentUser()?.fullName ||
+                        currentUser()?.userName ||
+                        currentUser()?.username ||
+                        currentUser()?.userId
+                    }}
+                  </span>
+                }
+                @if (roleName() || currentUser()?.designation || currentUser()?.rank) {
+                  <span class="text-[10px] text-slate-300 leading-none mt-1">
+                    {{ roleName() || currentUser()?.designation || currentUser()?.rank }}
+                  </span>
+                }
+              </div>
+              <span class="text-[10px] text-white/70">▼</span>
+            </button>
+
+            <!-- Profile Dropdown -->
+            <app-profile-dropdown
+              [isOpen]="isProfileDropdownOpen()"
+              [userName]="
+                currentUser()?.name ||
+                currentUser()?.fullName ||
+                currentUser()?.userName ||
+                currentUser()?.username ||
+                currentUser()?.userId ||
+                ''
+              "
+              [userEmail]="currentUser()?.email || currentUser()?.emailID || ''"
+              [userPhone]="
+                currentUser()?.phone || currentUser()?.mobileNo || currentUser()?.mobile || ''
+              "
+              [userDesignation]="
+                currentUser()?.designation || currentUser()?.rank || roleName() || ''
+              "
+              [roleName]="roleName()"
+              [currentRoleId]="currentRoleId()"
+              [user]="currentUser()"
+              (closeDropdown)="isProfileDropdownOpen.set(false)"
+              (passwordChange)="onChangePassword($event)"
+              (logout)="onLogout()"
+            />
+          </div>
+        } @else {
+          <a
+            routerLink="/auth/userlogin"
+            (click)="onNavigate('/auth/userlogin', $event)"
+            class="navbar-login-btn px-4 py-1.5 rounded-md text-white text-xs sm:text-sm font-semibold transition-all shadow-sm flex items-center gap-1.5 no-underline cursor-pointer border-none"
+          >
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-3.5 h-3.5 text-white"
+                aria-hidden="true"
+              >
+                <path d="M19 11v6"></path>
+                <path d="M19 13h2"></path>
+                <path d="M2 21a8 8 0 0 1 12.868-6.349"></path>
+                <circle cx="10" cy="8" r="5"></circle>
+                <circle cx="19" cy="19" r="2"></circle>
+              </svg>
+            </span>
+            <span>Login</span>
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Drawer -->
+  @if (isMobileMenuOpen()) {
+    <div
+      class="lg:hidden bg-[#252525] border-t border-white/10 px-4 py-3 flex flex-col gap-1 max-h-[80vh] overflow-y-auto"
+    >
+      @for (menu of menuService.menuTree(); track menu.menu_id) {
+        <div>
+          @if (!menu.children || menu.children.length === 0) {
+            <a
+              [routerLink]="menu.app_router_path || '/'"
+              (click)="onNavigate(menu.app_router_path, $event)"
+              class="block px-3 py-2 rounded-md text-xs font-semibold hover:bg-white/10 text-white/90 no-underline cursor-pointer"
+            >
+              {{ menu.menu_name }}
+            </a>
+          } @else {
+            <a
+              [routerLink]="
+                menu.app_router_path && menu.app_router_path !== '/' ? menu.app_router_path : null
+              "
+              (click)="onNavigate(menu.app_router_path, $event)"
+              class="block px-3 py-2 text-xs font-bold text-[#447a3a] uppercase tracking-wider no-underline cursor-pointer hover:bg-white/5 rounded-md"
+            >
+              {{ menu.menu_name }}
+            </a>
+            <div class="pl-3 flex flex-col gap-1 border-l border-white/10 ml-2 mt-1">
+              @for (child of menu.children; track child.menu_id) {
+                <a
+                  [routerLink]="child.app_router_path || '/'"
+                  (click)="onNavigate(child.app_router_path, $event)"
+                  class="block px-3 py-1.5 rounded-md text-xs text-slate-300 hover:text-white hover:bg-white/10 no-underline cursor-pointer"
+                >
+                  {{ child.menu_name }}
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</nav>

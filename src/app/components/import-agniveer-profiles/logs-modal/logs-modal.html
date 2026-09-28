@@ -1,0 +1,194 @@
+@if (isOpen && batch) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200 font-['Poppins',sans-serif]"
+    (click)="onClose()"
+  >
+    <div
+      class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Log Modal Header with Solid Color (No Gradient) -->
+      <div
+        class="px-6 py-4.5 bg-[#355f2d] text-white flex items-center justify-between shrink-0 shadow-sm"
+      >
+        <div class="flex items-center gap-3.5">
+          <div
+            class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/20 flex items-center justify-center text-xl shadow-inner shrink-0"
+          >
+            📑
+          </div>
+          <div>
+            <h3
+              class="text-base font-bold m-0 leading-tight tracking-tight text-white drop-shadow-2xs"
+            >
+              Batch Audit Log — {{ batch.fileName }}
+            </h3>
+            <p class="text-xs text-blue-100 font-medium m-0 mt-0.5 opacity-90">
+              Uploaded by {{ batch.profileName }} on {{ batch.dateTime }}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button
+            (click)="exportBatchLogs()"
+            class="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer border border-white/20 shadow-xs transition-all"
+          >
+            <span>📊</span>
+            <span>Export Log</span>
+          </button>
+          <button
+            (click)="onClose()"
+            class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 text-white flex items-center justify-center cursor-pointer border border-white/20 transition-all text-sm font-bold shadow-xs"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Log Modal Stats Bar -->
+      <div
+        class="bg-slate-50 px-6 py-3 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3 shrink-0"
+      >
+        <!-- Mini Metrics -->
+        <div class="flex items-center gap-4 text-xs font-semibold">
+          <div class="flex items-center gap-1.5 text-slate-700">
+            <span class="text-slate-400 font-normal">Branch:</span>
+            <span class="font-bold text-[#355f2d]">{{ batch.branch }}</span>
+          </div>
+          <div class="flex items-center gap-1.5 text-emerald-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span
+              >Passed: <strong>{{ batch.pass }}</strong></span
+            >
+          </div>
+          <div class="flex items-center gap-1.5 text-rose-700">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span
+              >Failed: <strong>{{ batch.fail }}</strong></span
+            >
+          </div>
+          <div class="flex items-center gap-1.5 text-amber-700">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span
+              >Skipped: <strong>{{ batch.skip }}</strong></span
+            >
+          </div>
+        </div>
+
+        <!-- Log Search & Status Filter -->
+        <div class="flex items-center gap-2">
+          <input
+            type="text"
+            [ngModel]="logSearchText()"
+            (ngModelChange)="logSearchText.set($event)"
+            placeholder="Filter logs..."
+            class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#355f2d] w-40 sm:w-52"
+          />
+          <select
+            [ngModel]="logStatusFilter()"
+            (ngModelChange)="logStatusFilter.set($event)"
+            class="px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white text-slate-700 font-bold focus:outline-none cursor-pointer"
+          >
+            <option value="ALL">All Status</option>
+            <option value="INSERTED">Inserted</option>
+            <option value="UPDATED">Updated</option>
+            <option value="FAILED">Failed</option>
+            <option value="SKIPPED">Skipped</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Log Modal Content (Scrollable Table) -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-3">
+        @if (filteredLogs().length === 0) {
+          <div class="text-center py-12 text-slate-400 space-y-2">
+            <div class="text-3xl">🔍</div>
+            <p class="text-xs sm:text-sm font-semibold">No audit logs matching the current filter</p>
+          </div>
+        } @else {
+          <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-[#355f2d] text-white font-semibold">
+                <tr>
+                  <th class="py-2.5 px-3 font-semibold text-white">#</th>
+                  <th class="py-2.5 px-3 font-semibold text-white">Service ID</th>
+                  <th class="py-2.5 px-3 font-semibold text-white">Candidate Name</th>
+                  <th class="py-2.5 px-3 font-semibold text-white">Status</th>
+                  <th class="py-2.5 px-3 font-semibold text-white">Audit Details / Reason</th>
+                  <th class="py-2.5 px-3 text-right font-semibold text-white">Time</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 font-medium">
+                @for (log of filteredLogs(); track $index) {
+                  <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-2.5 px-3 text-slate-400 text-xs">{{ $index + 1 }}</td>
+                    <td class="py-2.5 px-3 font-bold text-[#355f2d]">{{ log.serviceId }}</td>
+                    <td class="py-2.5 px-3 text-slate-800 font-semibold">
+                      {{ log.candidateName }}
+                    </td>
+                    <td class="py-2.5 px-3">
+                      @if (log.status === 'INSERTED') {
+                        <span
+                          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        >
+                          ✓ Inserted
+                        </span>
+                      } @else if (log.status === 'UPDATED') {
+                        <span
+                          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200"
+                        >
+                          🔄 Updated
+                        </span>
+                      } @else if (log.status === 'FAILED') {
+                        <span
+                          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200"
+                        >
+                          ⊘ Failed
+                        </span>
+                      } @else {
+                        <span
+                          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200"
+                        >
+                          ⚠️ {{ log.status }}
+                        </span>
+                      }
+                    </td>
+                    <td class="py-2.5 px-3 text-slate-600 text-xs sm:text-sm">
+                      <span>{{ log.message }}</span>
+                      @if (log.affectedField) {
+                        <span
+                          class="ml-1.5 px-1.5 py-0.5 rounded bg-rose-100/70 text-rose-800 font-mono text-[10px]"
+                        >
+                          field: {{ log.affectedField }}
+                        </span>
+                      }
+                    </td>
+                    <td class="py-2.5 px-3 text-right text-slate-400 text-xs font-mono">
+                      {{ log.timestamp }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+      <!-- Log Modal Footer -->
+      <div
+        class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0"
+      >
+        <span class="text-xs sm:text-sm text-slate-500 font-semibold">
+          Showing {{ filteredLogs().length }} of {{ batch.logs?.length || 0 }} log entries
+        </span>
+        <button
+          (click)="onClose()"
+          class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-bold cursor-pointer border-none transition-all"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}

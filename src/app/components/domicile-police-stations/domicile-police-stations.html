@@ -1,0 +1,465 @@
+<div class="domicile-police-stations-page">
+  <!-- ================================================= -->
+  <!-- PAGE TITLE -->
+  <!-- ================================================= -->
+  <div class="page-title">
+    <h2>Domicile Police Stations</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- ================================================= -->
+    <!-- BREADCRUMB & SELECTORS -->
+    <!-- ================================================= -->
+    <div
+      class="breadcrumb-bar"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+      "
+    >
+      <div class="breadcrumb">
+        <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+        <span class="separator">›</span>
+        <strong>Domicile Police Stations</strong>
+      </div>
+
+      <!-- TOP STATE & DISTRICT SELECTORS -->
+      <div
+        class="selectors-wrapper"
+        style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap"
+      >
+        <!-- STATE SELECTOR -->
+        <div style="display: flex; align-items: center; gap: 6px">
+          <label
+            for="topStateSelect"
+            style="font-size: 12px; font-weight: 700; color: #355f2d; white-space: nowrap"
+          >
+            SELECT STATE:
+          </label>
+          <select
+            id="topStateSelect"
+            class="top-select"
+            [ngModel]="selectedStateCd"
+            (change)="onStateChange($event)"
+            style="
+              height: 32px;
+              padding: 0 10px;
+              border: 1px solid #93c5fd;
+              border-radius: 5px;
+              background: #ffffff;
+              color: #355f2d;
+              font-size: 12px;
+              font-weight: 600;
+              outline: none;
+              cursor: pointer;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            "
+          >
+            @for (st of statesList; track st.state_cd) {
+              <option [value]="st.state_cd">
+                {{ st.state_name }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- DISTRICT SELECTOR -->
+        <div style="display: flex; align-items: center; gap: 6px">
+          <label
+            for="topDistrictSelect"
+            style="font-size: 12px; font-weight: 700; color: #355f2d; white-space: nowrap"
+          >
+            SELECT DISTRICT:
+          </label>
+          <select
+            id="topDistrictSelect"
+            class="top-select"
+            [ngModel]="selectedDistrictCd"
+            (change)="onDistrictChange($event)"
+            style="
+              height: 32px;
+              padding: 0 10px;
+              border: 1px solid #93c5fd;
+              border-radius: 5px;
+              background: #ffffff;
+              color: #355f2d;
+              font-size: 12px;
+              font-weight: 600;
+              outline: none;
+              cursor: pointer;
+              box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            "
+          >
+            @for (d of districtsList; track d.district_cd) {
+              <option [value]="d.district_cd">
+                {{ d.district_name }}
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ================================================= -->
+    <div class="toolbar">
+      <!-- LEFT TOOLBAR -->
+      <div class="toolbar-left">
+        <!-- SEARCH -->
+        <div class="search-box">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input
+            #searchInput
+            type="text"
+            [ngModel]="searchText()"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search station..."
+            autocomplete="off"
+          />
+
+          @if (searchText()) {
+            <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <!-- RIGHT TOOLBAR -->
+      <div class="toolbar-right">
+        <!-- ACTIVE TOGGLE -->
+        <div class="status-filter">
+          <span> Active Police Stations </span>
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <!-- ADD POLICE STATION BUTTON -->
+        <button type="button" class="publish-btn" (click)="openAddModal()">
+          ADD POLICE STATION
+        </button>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE CONTAINER WITH LOADER -->
+    <!-- ================================================= -->
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Police Stations...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz domicile-police-stations-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- SERVER SIDE PAGINATION FOOTER -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToFirstPage()"
+            title="First Page"
+          >
+            «
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToPreviousPage()"
+            title="Previous Page"
+          >
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToNextPage()"
+            title="Next Page"
+          >
+            ›
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToLastPage()"
+            title="Last Page"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ADD / EDIT POLICE STATION MODAL -->
+<!-- ===================================================== -->
+@if (isModalOpen()) {
+  <div class="modal-overlay">
+    <div class="domicile-modal">
+      <!-- MODAL HEADER -->
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div class="modal-icon">◫</div>
+          <div>
+            <h3>
+              {{ isEditMode() ? 'Edit Domicile Police Station' : 'Add Domicile Police Station' }}
+            </h3>
+            <p>
+              {{
+                isEditMode()
+                  ? 'Update police station details'
+                  : 'Add a new police station to the selected district'
+              }}
+            </p>
+          </div>
+        </div>
+        <button type="button" class="modal-close" (click)="closeModal()">×</button>
+      </div>
+
+      <!-- MODAL FORM -->
+      <form #psForm="ngForm" class="modal-body" (ngSubmit)="savePoliceStation()" novalidate>
+        <!-- STATE & DISTRICT SELECTORS IN MODAL -->
+        <div class="form-row" style="display: flex; gap: 12px; margin-bottom: 14px">
+          <div class="form-group" style="flex: 1; margin-bottom: 0">
+            <label>
+              STATE
+              <span>*</span>
+            </label>
+            <select
+              [ngModel]="formData.state_cd"
+              (ngModelChange)="onModalStateChange($event)"
+              name="modal_state_cd"
+              required
+              style="
+                width: 100%;
+                box-sizing: border-box;
+                padding: 9px 11px;
+                border: 1px solid #c7c7c7;
+                border-radius: 4px;
+                outline: none;
+                background: #ffffff;
+                color: #333;
+                font-size: 12px;
+              "
+            >
+              @for (st of statesList; track st.state_cd) {
+                <option [value]="st.state_cd">
+                  {{ st.state_name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group" style="flex: 1; margin-bottom: 0">
+            <label>
+              DISTRICT
+              <span>*</span>
+            </label>
+            <select
+              [(ngModel)]="formData.district_cd"
+              name="modal_district_cd"
+              required
+              style="
+                width: 100%;
+                box-sizing: border-box;
+                padding: 9px 11px;
+                border: 1px solid #c7c7c7;
+                border-radius: 4px;
+                outline: none;
+                background: #ffffff;
+                color: #333;
+                font-size: 12px;
+              "
+            >
+              @for (d of modalDistrictsList; track d.district_cd) {
+                <option [value]="d.district_cd">
+                  {{ d.district_name }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 12px; margin-bottom: 14px">
+          <div class="form-group" style="flex: 1; margin-bottom: 0">
+            <label>
+              POLICE STATION NAME
+              <span>*</span>
+            </label>
+            <input
+              #firstFormInput
+              type="text"
+              [(ngModel)]="formData.ps_name"
+              name="ps_name"
+              #psNameCtrl="ngModel"
+              required
+              minlength="2"
+              maxlength="100"
+              pattern="^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
+              (keydown)="preventPoliceStationNameInvalidCharacters($event)"
+              (input)="sanitizePoliceStationName()"
+              placeholder="e.g., Delhi_Zonal Unit"
+              [class.input-invalid]="psNameCtrl.invalid && (psNameCtrl.touched || submitted)"
+            />
+            @if (psNameCtrl.invalid && (psNameCtrl.touched || submitted)) {
+              <div
+                class="validation-error"
+                style="color: #dc2626; font-size: 11px; margin-top: 4px"
+              >
+                Police Station Name is required.
+              </div>
+            }
+          </div>
+
+          <div class="form-group" style="width: 140px; margin-bottom: 0">
+            <label>
+              PS CODE
+              <span>*</span>
+            </label>
+            <input
+              type="text"
+              [(ngModel)]="formData.ps_cd"
+              name="ps_cd"
+              #psCodeCtrl="ngModel"
+              required
+              minlength="1"
+              maxlength="8"
+              inputmode="numeric"
+              pattern="[0-9]{1,8}"
+              placeholder="e.g., 3900101"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)"
+            />
+          </div>
+        </div>
+
+        @if (isEditMode()) {
+          <div class="form-row status-form-row">
+            <div class="form-group status-group">
+              <label>STATUS</label>
+
+              <div class="status-control">
+                <div class="status-info">
+                  <div
+                    class="status-dot"
+                    [class.active]="formData.is_active"
+                    [class.inactive]="!formData.is_active"
+                  ></div>
+
+                  <div class="status-text">
+                    <span
+                      class="status-title"
+                      [class.active-text]="formData.is_active"
+                      [class.inactive-text]="!formData.is_active"
+                    >
+                      {{ formData.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+
+                    <span class="status-description">
+                      {{
+                        formData.is_active
+                          ? 'Police station is active and available in the system'
+                          : 'Police station is inactive and unavailable in the system'
+                      }}
+                    </span>
+                  </div>
+                </div>
+
+                <label class="status-switch">
+                  <input type="checkbox" [(ngModel)]="formData.is_active" name="is_active" />
+
+                  <span class="status-slider">
+                    <span class="status-slider-dot"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="formData.is_draft" name="is_draft" />
+            <span>Save as Draft</span>
+          </label>
+        </div>
+
+        <!-- MODAL FOOTER -->
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="closeModal()">CANCEL</button>
+          <button type="submit" class="save-btn" [disabled]="isLoading()">
+            @if (isLoading()) {
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                UPDATE POLICE STATION
+              } @else {
+                ADD POLICE STATION
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

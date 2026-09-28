@@ -1,0 +1,539 @@
+<div class="min-h-screen bg-slate-50/70 font-['Poppins',sans-serif]">
+  <!-- TOP HEADER BAR MATCHING SCREENSHOT -->
+  <div
+    class="bg-[#355f2d] text-white px-6 py-3.5 shadow-sm flex items-center gap-3.5 border-b border-blue-900/30"
+  >
+    <!-- Back button -->
+    <button
+      type="button"
+      (click)="goBack()"
+      class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 transition-all border-none cursor-pointer flex items-center justify-center text-white shrink-0 shadow-2xs"
+      title="Back to Notifications"
+    >
+      <svg
+        class="w-4.5 h-4.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        stroke-width="2.2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+        />
+      </svg>
+    </button>
+
+    <!-- Bell Icon Badge -->
+    <div
+      class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white shrink-0 shadow-2xs"
+    >
+      <svg
+        class="w-4.5 h-4.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+        />
+      </svg>
+    </div>
+
+    <!-- Title & Subtitle -->
+    <div>
+      <h1 class="text-base sm:text-lg font-bold text-white m-0 leading-snug">Create New Opening</h1>
+      <p class="text-xs text-blue-200/90 m-0 mt-0.5 font-normal">
+        Fill the details to post a new opening
+      </p>
+    </div>
+  </div>
+
+  <!-- MAIN FORM CONTAINER -->
+  <div class="p-4 sm:p-6 max-w-4xl mx-auto space-y-5">
+    <!-- MAIN FORM CARD -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+      <!-- CARD HEADER WITH THEME NAVY BLUE HEADER FILL -->
+      <div class="px-6 py-4 border-b border-blue-900/30 bg-[#355f2d] text-white">
+        <div class="flex items-center gap-2.5">
+          <div class="w-1.5 h-5 bg-[#447a3a] rounded-full"></div>
+          <h2 class="text-base sm:text-lg font-bold text-white m-0 leading-tight">
+            Job Notification Details
+          </h2>
+        </div>
+        <p class="text-xs text-blue-200/90 m-0 mt-1 pl-4 font-normal">
+          Enter all details for the new opening.
+        </p>
+      </div>
+
+      <!-- FORM BODY -->
+      <form (ngSubmit)="createNotification()" class="p-5 sm:p-6 space-y-5">
+        <!-- ADVERTISEMENT NO. -->
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase">
+            ADVERTISEMENT NO. <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="advertisementNo"
+            name="advertisementNo"
+            required
+            placeholder="e.g. ITBP/REC/2026/45"
+            class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all h-9"
+          />
+        </div>
+
+        <!-- NOTIFICATION TITLE -->
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase">
+            NOTIFICATION TITLE <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          <input
+            type="text"
+            [(ngModel)]="notificationTitle"
+            name="notificationTitle"
+            required
+            placeholder="e.g. Agniveer Recruitment 2026"
+            class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all h-9"
+          />
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="space-y-1">
+          <label class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase">
+            DESCRIPTION <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          <textarea
+            [(ngModel)]="description"
+            name="description"
+            rows="3"
+            placeholder="Enter full notification details..."
+            class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all resize-y"
+          ></textarea>
+        </div>
+
+        <!-- NOTIFICATION DOCUMENT -->
+        <div class="space-y-1.5">
+          <label class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase">
+            NOTIFICATION DOCUMENT <span class="text-red-500 ml-0.5">*</span>
+          </label>
+
+          <div class="flex items-center gap-2.5">
+            <input
+              #fileInput
+              type="file"
+              accept=".pdf,application/pdf"
+              (change)="onFileSelected($event)"
+              class="hidden"
+            />
+
+            <button
+              type="button"
+              (click)="fileInput.click()"
+              [disabled]="isUploadingDocument()"
+              class="px-3 py-1.5 rounded-lg bg-[#edf4ff] hover:bg-[#dbeafe] text-[#2563eb] text-xs font-semibold border border-[#c6dcfe] transition-colors inline-flex items-center gap-1 cursor-pointer shadow-2xs disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span class="text-xs font-bold">{{ isUploadingDocument() ? '⏳' : '+' }}</span>
+              <span>{{ isUploadingDocument() ? 'Uploading...' : 'Choose Document' }}</span>
+            </button>
+
+            @if (selectedFileName()) {
+              <div
+                class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs text-slate-700"
+              >
+                <span class="truncate max-w-xs font-medium text-[11px]">{{
+                  selectedFileName()
+                }}</span>
+                <button
+                  type="button"
+                  (click)="removeFile()"
+                  [disabled]="isUploadingDocument()"
+                  class="text-slate-400 hover:text-red-600 bg-transparent border-none cursor-pointer p-0 font-bold text-xs disabled:opacity-50"
+                  title="Remove document"
+                >
+                  ×
+                </button>
+              </div>
+            }
+          </div>
+
+          <p class="text-[11px] text-slate-400 m-0">
+            Upload the notification document (PDF only, max 10 MB).
+          </p>
+        </div>
+
+        <!-- ORGANIZATION TYPE (ONLY FOR NON-CAPF OFFICERS) -->
+        @if (!isCapfNodalOfficer) {
+          <div class="space-y-1">
+            <label class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase">
+              ORGANIZATION TYPE <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <select
+              [ngModel]="selectedOrgTypeId"
+              (ngModelChange)="onTopOrgTypeChange($event)"
+              name="selectedOrgTypeId"
+              class="w-full px-3.5 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer h-9"
+            >
+              <option [value]="null" disabled selected>Select Organization Type</option>
+              @for (orgType of organisationTypesList; track orgType.organisation_type_id) {
+                <option [value]="orgType.organisation_type_id">
+                  {{ orgType.organisation_type }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+
+        <!-- VACANCY DETAILS SECTION -->
+        <div class="pt-3.5 border-t border-slate-200 space-y-3.5">
+          <!-- HEADER ROW -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-1.5 h-4.5 bg-[#355f2d] rounded-full"></div>
+              <div>
+                <h3 class="text-xs sm:text-sm font-bold text-slate-900 m-0">
+                  Organisation Details <span class="text-red-500 ml-0.5">*</span>
+                </h3>
+                <p class="text-[11px] text-slate-400 m-0 mt-0.5">
+                  Select organizations and their posts.
+                </p>
+              </div>
+            </div>
+
+            <!-- + Add Vacancy Button -->
+            @if (!isCapfNodalOfficer) {
+              <button
+                type="button"
+                (click)="addVacancyGroup()"
+                class="px-3 py-1.5 rounded-lg bg-[#edf4ff] hover:bg-[#dbeafe] text-[#2563eb] text-xs font-semibold border border-[#c6dcfe] transition-colors inline-flex items-center gap-1 cursor-pointer shadow-2xs"
+              >
+                <span class="text-xs font-bold">+</span>
+                <span>Add Organisation</span>
+              </button>
+            }
+          </div>
+
+          <!-- EMPTY STATE BOX -->
+          @if (vacancyGroups.length === 0) {
+            <div
+              class="border border-dashed border-slate-300 rounded-xl p-6 sm:p-8 text-center bg-slate-50/40"
+            >
+              <span class="text-xs text-slate-500 font-medium">
+                No vacancies added yet.
+                @if (!isCapfNodalOfficer) {
+                  <a
+                    (click)="addVacancyGroup()"
+                    class="text-[#2563eb] font-bold hover:underline cursor-pointer"
+                  >
+                    Add a vacancy
+                  </a>
+                }
+              </span>
+            </div>
+          } @else {
+            <!-- VACANCY GROUPS LIST -->
+            <div class="space-y-3.5">
+              @for (group of vacancyGroups; track group.id; let gIdx = $index) {
+                <div
+                  class="bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden transition-all"
+                >
+                  <!-- GROUP HEADER BAR -->
+                  <div
+                    class="px-4 py-2.5 bg-slate-50/90 border-b border-slate-200/80 flex items-center justify-between"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <!-- Circle Badge Number -->
+                      <div
+                        class="w-5 h-5 rounded-full bg-[#dbeafe] text-[#1d4ed8] text-[11px] font-extrabold flex items-center justify-center shrink-0"
+                      >
+                        {{ gIdx + 1 }}
+                      </div>
+                      <!-- Title: Organization Name or "Group 1" -->
+                      <h4 class="text-xs font-bold text-slate-900 m-0">
+                        {{
+                          isCapfNodalOfficer
+                            ? group.organizationName ||
+                              userRoleInfo.userOrgName ||
+                              'Group ' + (gIdx + 1)
+                            : group.organizationName || 'Group ' + (gIdx + 1)
+                        }}
+                      </h4>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                      <!-- Chevron Collapse Toggle -->
+                      <button
+                        type="button"
+                        (click)="group.isCollapsed = !group.isCollapsed"
+                        class="p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors border-none bg-transparent cursor-pointer"
+                        title="Toggle collapse"
+                      >
+                        <svg
+                          class="w-3.5 h-3.5 transition-transform duration-200"
+                          [class.rotate-180]="group.isCollapsed"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 15.75l7.5-7.5 7.5 7.5"
+                          />
+                        </svg>
+                      </button>
+
+                      <!-- Trash Delete Group Button -->
+                      @if (!isCapfNodalOfficer) {
+                        <button
+                          type="button"
+                          (click)="removeVacancyGroup(gIdx)"
+                          class="w-7 h-7 rounded-md bg-red-50 hover:bg-red-100 text-red-500 transition-colors border-none cursor-pointer flex items-center justify-center"
+                          title="Delete group"
+                        >
+                          <svg
+                            class="w-3.5 h-3.5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                            />
+                          </svg>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- GROUP BODY -->
+                  @if (!group.isCollapsed) {
+                    <div class="p-4 space-y-4">
+                      <!-- ORGANIZATION SELECT DROPDOWN (ONLY FOR NON-CAPF OFFICERS) -->
+                      @if (!isCapfNodalOfficer) {
+                        <div class="space-y-1">
+                          <label
+                            class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase"
+                          >
+                            ORGANIZATION <span class="text-red-500 ml-0.5">*</span>
+                          </label>
+                          <select
+                            [ngModel]="group.selectedOrgId"
+                            (ngModelChange)="onOrganizationChange(group, $event)"
+                            [name]="'group_org_' + group.id"
+                            [disabled]="!selectedOrgTypeId"
+                            class="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer h-9 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <option [value]="null" disabled selected>
+                              {{
+                                !selectedOrgTypeId
+                                  ? 'Select Organization Type first'
+                                  : 'Select Organization'
+                              }}
+                            </option>
+                            @for (
+                              org of getOrganisationsForGroup(group);
+                              track org.organisation_id
+                            ) {
+                              <option [value]="org.organisation_id">{{ org.displayName }}</option>
+                            }
+                          </select>
+                        </div>
+                      }
+
+                      <!-- POSTS SECTION -->
+                      <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                          <label
+                            class="block text-[11px] font-bold text-slate-600 tracking-wider uppercase"
+                          >
+                            POSTS <span class="text-red-500 ml-0.5">*</span>
+                          </label>
+
+                          <!-- Green + Add Post Button -->
+                          <button
+                            type="button"
+                            (click)="addPostToGroup(group)"
+                            [disabled]="!group.selectedOrgId || group.isLoadingPosts"
+                            class="px-2.5 py-1 rounded-lg bg-[#ecfdf5] hover:bg-[#d1fae5] text-[#059669] text-xs font-bold border border-[#a7f3d0] transition-colors inline-flex items-center gap-1 cursor-pointer shadow-2xs disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#ecfdf5]"
+                            [title]="
+                              !group.selectedOrgId
+                                ? 'Please select an Organization first'
+                                : 'Add Post'
+                            "
+                          >
+                            <span class="text-xs font-extrabold">+</span>
+                            <span>Add Post</span>
+                          </button>
+                        </div>
+
+                        <!-- Posts Loading Indicator -->
+                        @if (group.isLoadingPosts) {
+                          <div
+                            class="flex items-center gap-2 text-[11px] text-blue-600 font-medium py-1"
+                          >
+                            <svg
+                              class="animate-spin h-3.5 w-3.5 text-blue-600"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                              ></circle>
+                              <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            <span>Loading posts for {{ group.organizationName }}...</span>
+                          </div>
+                        }
+
+                        <!-- No Posts Warning Indicator -->
+                        @if (group.hasNoPosts && !group.isLoadingPosts) {
+                          <div
+                            class="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-2 text-xs text-amber-800 font-medium"
+                          >
+                            <svg
+                              class="w-4 h-4 text-amber-600 shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              stroke-width="2"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                              />
+                            </svg>
+                            <span>{{
+                              group.noPostsMessage ||
+                                'No posts available for ' + group.organizationName
+                            }}</span>
+                          </div>
+                        }
+
+                        <!-- Empty Posts Message -->
+                        @if (group.posts.length === 0 && !group.isLoadingPosts) {
+                          <p class="text-[11px] text-slate-400 italic m-0 pt-0.5">
+                            No posts yet — select Organization or click "Add Post".
+                          </p>
+                        } @else if (group.posts.length > 0) {
+                          <!-- Post Rows -->
+                          <div class="space-y-2">
+                            @for (postRow of group.posts; track postRow.id; let pIdx = $index) {
+                              <div class="flex items-center gap-2.5">
+                                <select
+                                  [ngModel]="postRow.postName"
+                                  (ngModelChange)="onPostSelectChange(group, postRow, $event)"
+                                  [name]="'group_' + group.id + '_post_' + postRow.id"
+                                  class="flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all cursor-pointer h-9"
+                                  [class.border-amber-300]="group.hasNoPosts"
+                                  [class.bg-amber-50\/30]="group.hasNoPosts"
+                                >
+                                  <option value="" disabled selected>
+                                    {{ group.hasNoPosts ? 'No posts available' : 'Select Post' }}
+                                  </option>
+                                  @for (
+                                    postOption of group.availablePosts;
+                                    track postOption.post_name
+                                  ) {
+                                    <option [value]="postOption.post_name">
+                                      {{ postOption.post_name
+                                      }}{{
+                                        postOption.post_code
+                                          ? ' (' + postOption.post_code + ')'
+                                          : ''
+                                      }}
+                                    </option>
+                                  }
+                                </select>
+
+                                <!-- Trash Delete Post Button -->
+                                <button
+                                  type="button"
+                                  (click)="removePostFromGroup(group, pIdx)"
+                                  [disabled]="group.posts.length <= 1"
+                                  class="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 transition-colors border-none cursor-pointer flex items-center justify-center shrink-0 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-red-50"
+                                  [title]="
+                                    group.posts.length <= 1
+                                      ? 'At least one post is required'
+                                      : 'Remove post'
+                                  "
+                                >
+                                  <svg
+                                    class="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- FOOTER BUTTONS -->
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-2.5">
+          <button
+            type="button"
+            (click)="goBack()"
+            class="px-5 py-2 rounded-lg bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="isSubmitting()"
+            class="px-5 py-2 rounded-lg bg-[#24467d] hover:bg-[#1a345e] text-white font-bold text-xs shadow-md shadow-blue-900/20 transition-all cursor-pointer border-none disabled:opacity-60"
+          >
+            {{ isSubmitting() ? 'Creating...' : 'Create Notification' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING SCROLL TO TOP BUTTON -->
+  <button
+    type="button"
+    (click)="scrollToTop()"
+    class="fixed bottom-6 right-6 w-9 h-9 rounded-full bg-[#1e3463] hover:bg-[#15264a] text-white flex items-center justify-center shadow-lg transition-all cursor-pointer border-none z-40"
+    title="Scroll to top"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+    </svg>
+  </button>
+</div>

@@ -1,0 +1,77 @@
+.jan-parichay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  color: #01137f;
+  border: 2px solid #ff9933;
+  border-radius: 4px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-family: sans-serif;
+  margin-bottom: 20px;
+}
+
+.jan-parichay-btn:hover {
+  background-color: #fffaf5;
+  border-color: #138808;
+  color: #021dbb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jan-parichay-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20px;
+  height: 14px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.flag-stripe {
+  height: 33.33%;
+  width: 100%;
+}
+
+.saffron {
+  background-color: #ff9933;
+}
+
+.white {
+  background-color: #ffffff;
+  position: relative;
+}
+
+.white::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: #000080;
+}
+
+.green {
+  background-color: #138808;
+}
+
+.btn-text {
+  font-family: inherit;
+}

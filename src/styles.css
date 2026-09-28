@@ -1,0 +1,377 @@
+@import 'tailwindcss';
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-quartz.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+@theme {
+  --text-xs: 0.875rem; /* 14px (default 0.75rem / 12px) */
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-sm: 1rem;     /* 16px (default 0.875rem / 14px) */
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: 1.125rem; /* 18px (default 1rem / 16px) */
+  --text-base--line-height: calc(1.5 / 1);
+  --text-lg: 1.25rem;  /* 20px (default 1.125rem / 18px) */
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: 1.375rem; /* 22px (default 1.25rem / 20px) */
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: 1.625rem; /* 26px (default 1.5rem / 24px) */
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 2rem;     /* 32px (default 1.875rem / 30px) */
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: 2.375rem; /* 38px (default 2.25rem / 36px) */
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: 3.125rem; /* 50px (default 3rem / 48px) */
+  --text-5xl--line-height: 1;
+  --text-6xl: 3.875rem; /* 62px (default 3.75rem / 60px) */
+  --text-6xl--line-height: 1;
+  --text-7xl: 4.625rem; /* 74px (default 4.5rem / 72px) */
+  --text-7xl--line-height: 1;
+  --text-8xl: 6.125rem; /* 98px (default 6rem / 96px) */
+  --text-8xl--line-height: 1;
+  --text-9xl: 8.125rem; /* 130px (default 8rem / 128px) */
+  --text-9xl--line-height: 1;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --primary: #355f2d;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #1e293b;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #3b82f6;
+  --radius: 0.625rem;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 18px;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+input, button, select, textarea {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: inherit;
+}
+
+/* AG-Grid global font size +2px */
+.ag-theme-quartz,
+.ag-theme-alpine {
+  --ag-font-size: 16px;
+}
+
+/* Custom Nav/Header colors matching project */
+.navbar-bg-light {
+  background-color: #4f86c5;
+  color: #ffffff;
+}
+
+.navbar-bg {
+  background-color: #2559a4;
+  color: #ffffff;
+}
+
+.navbar-btn-bg {
+  background-color: #355f2d;
+  color: #ffffff;
+}
+
+/* Scroll Animation */
+@keyframes scroll-y {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.animate-scroll-y {
+  animation: scroll-y 30s linear infinite;
+}
+
+.animate-scroll-y:hover {
+  animation-play-state: paused;
+}
+
+/* Accessibility classes */
+.a11y-dark-contrast {
+  filter: contrast(150%) brightness(90%);
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+.a11y-dark-contrast * {
+  border-color: #475569 !important;
+}
+
+.a11y-invert {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+.a11y-invert img,
+.a11y-invert video,
+.a11y-invert svg {
+  filter: invert(100%) hue-rotate(180deg);
+}
+
+.a11y-saturate {
+  filter: saturate(200%);
+}
+
+.a11y-highlight-links a {
+  text-decoration: underline !important;
+  text-decoration-color: #f59e0b !important;
+  text-decoration-thickness: 2px !important;
+  background-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+.a11y-hide-images img,
+.a11y-hide-images svg:not(.lucide),
+.a11y-hide-images video {
+  visibility: hidden !important;
+}
+
+.a11y-default-cursor,
+.a11y-default-cursor * {
+  cursor: default !important;
+}
+
+.a11y-text-sm {
+  font-size: 1rem !important;
+}
+
+.a11y-text-lg {
+  font-size: 1.25rem !important;
+}
+
+.a11y-text-xl {
+  font-size: 1.375rem !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ==========================================================================
+   Bhashini Language Selector Dropdown Custom Integration (from Extradition)
+   ========================================================================== */
+#bhashini-placeholder #bhashini-translation,
+#bhashini-placeholder #bhashini-translation *,
+#bhashini-placeholder .bhashini-translation-widget,
+#bhashini-placeholder .bhashini-dropdown,
+#bhashini-placeholder .bhashini-dropdown-btn {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+#bhashini-placeholder #bhashini-translation {
+  position: relative !important;
+  left: auto !important;
+  bottom: auto !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 99999 !important;
+  display: inline-flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn {
+  background: none !important;
+  border: none !important;
+  color: #46584b !important;
+  padding: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 22px !important;
+  font-weight: bold !important;
+  -webkit-text-stroke: 0.5px currentColor !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  font-family: inherit !important;
+  transition: all 0.2s ease !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn:hover {
+  transform: scale(1.05) !important;
+  background-color: rgba(26, 42, 108, 0.08) !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn-icon img,
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn > svg {
+  display: none !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn-text {
+  font-size: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #46584b !important;
+  overflow: visible !important;
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 2px !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn-text::before {
+  content: "अ" !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  display: inline-block !important;
+  color: #46584b !important;
+  -webkit-text-stroke: 0px !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-btn-text::after {
+  content: "A" !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  opacity: 0.8 !important;
+  display: inline-block !important;
+  color: #46584b !important;
+  -webkit-text-stroke: 0px !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-content {
+  top: 40px !important;
+  right: -50px !important;
+  left: auto !important;
+  bottom: auto !important;
+  width: 250px !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  z-index: 999999 !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-content div {
+  color: #475569 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-dropdown-content div:hover {
+  background-color: #f1f5f9 !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-branding {
+  background-color: #ffffff !important;
+  border-top: 1px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 4px !important;
+}
+
+#bhashini-placeholder #bhashini-translation .bhashini-branding span {
+  color: #64748b !important;
+  font-size: 12px !important;
+}
+
+/* ==========================================================================
+   FORM INPUT REGEX & BORDER ALERT STYLES
+   ========================================================================== */
+
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid,
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+  background-color: #fef2f2 !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field-error-alert {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.field-error-alert::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+.swal2-container {
+  z-index: 999999 !important;
+}
+
+.swal2-popup {
+  z-index: 999999 !important;
+}
+
+/* Arbitrary text utility font sizes (+2px) */
+[class*="text-[9px]"] { font-size: 11px !important; }
+[class*="text-[10px]"] { font-size: 12px !important; }
+[class*="text-[11px]"] { font-size: 13px !important; }
+[class*="text-[12px]"] { font-size: 14px !important; }
+[class*="text-[13px]"] { font-size: 15px !important; }
+[class*="text-[14px]"] { font-size: 16px !important; }
+[class*="text-[15px]"] { font-size: 17px !important; }
+[class*="text-[16px]"] { font-size: 18px !important; }
+[class*="text-[18px]"] { font-size: 20px !important; }
+[class*="text-[20px]"] { font-size: 22px !important; }
+[class*="text-[24px]"] { font-size: 26px !important; }
+
+
+.bg-\[\#46584b\] {
+    background-color: #46584b !important;
+}
+
+.bg-\[\#447a3a\] {
+    background-color: #355f2d !important;
+}
+
+.titleBg {
+    background-color: #ebebeb !important ;
+}

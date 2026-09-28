@@ -1,0 +1,327 @@
+<div class="categories-page">
+  <!-- PAGE TITLE -->
+  <div class="page-title">
+    <h2>Categories</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+
+      <span class="separator">›</span>
+
+      <strong>Categories</strong>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <!-- LEFT -->
+      <div class="toolbar-left">
+        <!-- SEARCH -->
+        <div class="search-box">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input
+            #searchInput
+            type="text"
+            [ngModel]="searchText()"
+            (ngModelChange)="onSearchChange($event)"
+            pattern="^[A-Za-z]+(?:\s[A-Za-z]+)*$"
+            placeholder="Search..."
+            autocomplete="off"
+          />
+
+          @if (searchText()) {
+            <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="toolbar-right">
+        <!-- CATEGORY TYPE -->
+        <div class="category-type-filter">
+          <label class="category-type-option">
+            <input
+              type="radio"
+              name="categoryType"
+              value="central"
+              [checked]="categoryType === 'central'"
+              (change)="onCategoryTypeChange('central')"
+            />
+
+            <span class="radio-custom"></span>
+
+            <span class="category-type-content">
+              <span class="category-type-title">Central</span>
+            </span>
+          </label>
+
+          <label class="category-type-option">
+            <input
+              type="radio"
+              name="categoryType"
+              value="state"
+              [checked]="categoryType === 'state'"
+              (change)="onCategoryTypeChange('state')"
+            />
+
+            <span class="radio-custom"></span>
+
+            <span class="category-type-content">
+              <span class="category-type-title">State</span>
+            </span>
+          </label>
+        </div>
+
+        <!-- EXPORT -->
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <!-- ADD -->
+        <!-- <button type="button" class="publish-btn" (click)="openAddModal()">ADD CATEGORY</button> -->
+      </div>
+    </div>
+
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Categories...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz categories-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- SERVER PAGINATION -->
+      <div class="server-pagination">
+        <!-- LEFT -->
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="rowsPerPage" (change)="onRowsPerPageChange($event)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * rowsPerPage + 1 : 0 }}
+
+            to
+
+            {{ totalRecords > 0 ? Math.min(currentPage * rowsPerPage, totalRecords) : 0 }}
+
+            of
+
+            {{ totalRecords }}
+          </span>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="pagination-right">
+          <!-- FIRST -->
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToFirstPage()">«</button>
+
+          <!-- PREVIOUS -->
+          <button type="button" [disabled]="currentPage <= 1" (click)="previousPage()">‹</button>
+
+          <!-- PAGE -->
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+
+          <!-- NEXT -->
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="nextPage()"
+          >
+            ›
+          </button>
+
+          <!-- LAST -->
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToLastPage()"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ADD / EDIT MODAL -->
+<!-- ===================================================== -->
+
+@if (isModalOpen()) {
+  <div class="modal-overlay">
+    <div class="category-modal">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <div class="modal-title">
+          <h3>
+            {{ isEditMode() ? 'Edit Category' : 'Add New Category' }}
+          </h3>
+        </div>
+
+        <button type="button" class="modal-close" (click)="closeModal()">×</button>
+      </div>
+
+      <!-- FORM -->
+      <form class="modal-body" (ngSubmit)="saveCategory()">
+        <!-- CATEGORY -->
+        <div class="form-group">
+          <label>
+            Category Name
+            <span>*</span>
+          </label>
+
+          <input
+            #firstFormInput
+            type="text"
+            [(ngModel)]="formData.category"
+            name="category"
+            #categoryCtrl="ngModel"
+            required
+            maxlength="100"
+            pattern="^[A-Za-z0-9]+(?:\s[A-Za-z0-9]+)*$"
+            [class.is-invalid]="(categoryCtrl.touched || submitted) && categoryCtrl.invalid"
+            placeholder="e.g. General, OBC, SC, ST"
+          />
+
+          @if ((categoryCtrl.touched || submitted) && categoryCtrl.invalid) {
+            <div class="field-error-alert">
+              @if (categoryCtrl.errors?.['required']) {
+                <span>Category Name is required.</span>
+              } @else if (categoryCtrl.errors?.['pattern']) {
+                <span
+                  >Only alphanumeric characters and single spaces allowed (no special
+                  characters).</span
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <!-- SUB CATEGORIES -->
+        <div class="sub-category-header">
+          <label> Sub Categories </label>
+
+          <button type="button" class="add-sub-category-btn" (click)="addSubCategory()">
+            + Add Sub Category
+          </button>
+        </div>
+
+        <div class="sub-category-list">
+          @for (subCategory of formData.sub_categories; track $index) {
+            <div class="sub-category-row">
+              <input
+                type="text"
+                [(ngModel)]="formData.sub_categories[$index]"
+                [name]="'sub_category_' + $index"
+                #subCtrl="ngModel"
+                pattern="^[A-Za-z0-9]+(?:\s[A-Za-z0-9]+)*$"
+                maxlength="100"
+                [class.is-invalid]="(subCtrl.touched || submitted) && subCtrl.invalid"
+                [placeholder]="'Sub category ' + ($index + 1)"
+              />
+
+              <button
+                type="button"
+                class="delete-sub-category-btn"
+                (click)="removeSubCategory($index)"
+                aria-label="Remove sub category"
+              >
+                ×
+              </button>
+            </div>
+            @if ((subCtrl.touched || submitted) && subCtrl.invalid) {
+              <div class="field-error-alert">
+                <span>Sub Category must contain only letters, numbers and single spaces.</span>
+              </div>
+            }
+          }
+        </div>
+
+        @if (isEditMode()) {
+          <div class="form-row status-form-row">
+            <div class="form-group status-group">
+              <label>STATUS</label>
+
+              <div class="status-control">
+                <div class="status-info">
+                  <div
+                    class="status-dot"
+                    [class.active]="formData.is_active"
+                    [class.inactive]="!formData.is_active"
+                  ></div>
+
+                  <div class="status-text">
+                    <span
+                      class="status-title"
+                      [class.active-text]="formData.is_active"
+                      [class.inactive-text]="!formData.is_active"
+                    >
+                      {{ formData.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                </div>
+
+                <label class="status-switch">
+                  <input type="checkbox" [(ngModel)]="formData.is_active" name="is_active" />
+
+                  <span class="status-slider">
+                    <span class="status-slider-dot"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- FOOTER -->
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+
+          <button type="submit" class="save-btn" [disabled]="isLoading()">
+            @if (isLoading()) {
+              Saving...
+            } @else {
+              {{ isEditMode() ? 'Update Category' : 'Save Category' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

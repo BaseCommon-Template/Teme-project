@@ -1,0 +1,78 @@
+<div class="p-4 sm:p-6 lg:p-8 max-w-[100%] mx-auto bg-slate-50 min-h-screen font-['Poppins',sans-serif]">
+
+  <!-- Top Banner / Header Bar (Matching Dashboard & Update Name) -->
+  <div class="bg-[#46584b] flex items-center">
+    <div class="w-1.5 h-15 bg-[#447a3a] mr-3.5"></div>
+    <h1 class="text-lg sm:text-xl font-bold text-[#fff] m-0 tracking-tight">Update Website Status</h1>
+  </div>
+
+  <!-- Form Screen Container (Matching Dashboard & Update Name) -->
+  <div class="bg-[#fff] border border-gray-200 p-6 sm:p-8 shadow-md space-y-6">
+
+    <!-- Breadcrumb Navigation Below the Strip -->
+    <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 pb-3 border-b border-slate-200/80">
+      <a routerLink="/dashboard" class="text-[#355f2d] hover:underline cursor-pointer">Dashboard</a>
+      <span class="text-slate-400">›</span>
+      <span class="text-slate-800 font-bold">Update Website Status</span>
+    </div>
+
+    <!-- Centered Form Content Wrapper -->
+    <div class="max-w-xl mx-auto space-y-6 pt-2">
+
+      <form (ngSubmit)="onSubmitStatus()" class="space-y-6">
+
+        <!-- ROW: WEBSITE TOGGLE SWITCH -->
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between shadow-xs">
+          <div>
+            <label class="block text-sm sm:text-base font-bold text-slate-800">
+              Website Status
+            </label>
+            <p class="text-xs text-slate-500 m-0 mt-1">
+              Current Status:
+              @if (isWebsiteOpen()) {
+              <span class="font-bold text-emerald-600">OPEN (Active)</span>
+              } @else {
+              <span class="font-bold text-red-600">CLOSED (Inactive)</span>
+              }
+            </p>
+          </div>
+
+          <!-- TOGGLE SWITCH BUTTON -->
+          <button type="button" (click)="toggleWebsiteStatus()" role="switch" [attr.aria-checked]="isWebsiteOpen()"
+            class="relative inline-flex h-8 w-15 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#355f2d] focus:ring-offset-2"
+            [class.bg-emerald-500]="isWebsiteOpen()" [class.bg-slate-300]="!isWebsiteOpen()">
+            <span class="sr-only">Toggle Website Status</span>
+            <span
+              class="pointer-events-none inline-block h-7 w-7 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out"
+              [class.translate-x-7]="isWebsiteOpen()" [class.translate-x-0]="!isWebsiteOpen()"></span>
+          </button>
+        </div>
+
+        <!-- SUBMIT BUTTON BELOW ROW -->
+        <div class="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+          <a routerLink="/dashboard"
+            class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer border-none h-11 flex items-center no-underline">
+            Cancel
+          </a>
+
+          <button type="submit" (click)="onSubmitStatus($event)" [disabled]="isSubmitting()"
+            class="px-7 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer border-none h-11 disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (isSubmitting()) {
+            <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+            <span>Updating Status...</span>
+            } @else {
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+            </svg>
+            <span>Submit</span>
+            }
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+</div>

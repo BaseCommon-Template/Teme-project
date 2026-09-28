@@ -1,0 +1,558 @@
+<div class="space-y-6 font-['Poppins',sans-serif]">
+  <!-- Main Outer Card -->
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-6">
+    <!-- 2-Column Grid: Available Preferences & Fill Preferences -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+      <!-- =========================================================
+           LEFT COLUMN: Available Preferences
+      ========================================================= -->
+      <div
+        class="border border-slate-200 rounded-xl overflow-hidden bg-white flex flex-col min-h-[460px] shadow-2xs"
+      >
+        <!-- Header -->
+        <div
+          class="px-5 py-3.5 bg-slate-50/70 border-b border-slate-200 flex items-center justify-between"
+        >
+          <div>
+            <h3 class="text-sm font-bold text-slate-800 m-0">Available Preferences</h3>
+            <p class="text-xs text-slate-500 m-0 mt-0.5">Click or drag to add.</p>
+          </div>
+          @if (isLoading()) {
+            <div class="flex items-center gap-1.5 text-xs text-[#355f2d] font-semibold">
+              <div
+                class="w-3.5 h-3.5 border-2 border-[#355f2d] border-t-transparent rounded-full animate-spin"
+              ></div>
+              <span>Loading...</span>
+            </div>
+          } @else {
+            <span
+              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200"
+            >
+              {{ availablePosts().length }} available
+            </span>
+          }
+        </div>
+
+        <!-- Body -->
+        <div class="p-5 flex-1 flex flex-col">
+          @if (isLoading() && availablePosts().length === 0) {
+            <!-- Loading State -->
+            <div class="flex-1 flex flex-col items-center justify-center space-y-3 py-10">
+              <div
+                class="w-10 h-10 border-3 border-slate-200 border-t-[#355f2d] rounded-full animate-spin"
+              ></div>
+              <p class="text-xs text-slate-400 font-medium m-0">Fetching organisations...</p>
+            </div>
+          } @else if (availablePosts().length === 0) {
+            <!-- Empty state -->
+            <div
+              class="flex-1 flex flex-col items-center justify-center space-y-3 py-10 text-center"
+            >
+              <div
+                class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shadow-2xs"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div class="space-y-1 max-w-xs">
+                <h4 class="text-sm font-bold text-slate-700 m-0">
+                  @if (selectedPreferences().length > 0) {
+                    All Available Added
+                  } @else {
+                    No Organisations Available
+                  }
+                </h4>
+                <p class="text-xs text-slate-400 font-medium m-0 leading-relaxed">
+                  @if (selectedPreferences().length > 0) {
+                    You have added all available organisations to your preferences.
+                  } @else {
+                    No organisations found for this candidate profile.
+                  }
+                </p>
+              </div>
+            </div>
+          } @else {
+            <!-- Available Organisations List -->
+            <div class="space-y-2.5 w-full">
+              @for (post of availablePosts(); track post.id) {
+                <div
+                  [attr.draggable]="!isDraftSave() ? true : null"
+                  (dragstart)="!isDraftSave() ? onDragStartAvailable($event, post) : $event.preventDefault()"
+                  (dragend)="onDragEnd()"
+                  (dblclick)="!isDraftSave() && addPreference(post)"
+                  class="p-3.5 rounded-xl border border-slate-200 bg-white transition-all flex items-center justify-between group shadow-2xs select-none"
+                  [class.hover:border-[#355f2d]]="!isDraftSave()"
+                  [class.hover:bg-blue-50/30]="!isDraftSave()"
+                  [class.cursor-grab]="!isDraftSave()"
+                  [class.active:cursor-grabbing]="!isDraftSave()"
+                  [title]="!isDraftSave() ? 'Double-click or drag to add to Filled Preferences' : ''"
+                >
+                  <div class="flex items-center gap-3 min-w-0">
+                    @if (!isDraftSave()) {
+                      <!-- Drag Grip Handle -->
+                      <span
+                        class="text-slate-300 group-hover:text-[#355f2d] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
+                        title="Drag to reorder/move"
+                      >
+                        ⋮⋮
+                      </span>
+                    }
+
+                    <!-- Shield Icon -->
+                    <div
+                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#355f2d]/10 text-slate-600 group-hover:text-[#355f2d] flex items-center justify-center shrink-0 transition-colors"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                        />
+                      </svg>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="min-w-0">
+                      <span
+                        class="text-xs font-bold text-slate-800 group-hover:text-[#355f2d] block truncate transition-colors"
+                      >
+                        {{
+                          post.organisationName ||
+                            post.OrganisationName ||
+                            post.organisation_name ||
+                            post.force_name ||
+                            post.name
+                        }}
+                      </span>
+                      <span class="text-[10px] text-slate-400 group-hover:text-slate-500 block">
+                        Click arrow, double-click, or drag to select
+                      </span>
+                    </div>
+                  </div>
+                  @if (!isDraftSave()) {
+                    <!-- Arrow Action Button -->
+                    <button
+                      type="button"
+                      (click)="addPreference(post); $event.stopPropagation()"
+                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#355f2d] text-slate-400 group-hover:text-white flex items-center justify-center shrink-0 transition-all cursor-pointer border border-slate-200/60 group-hover:border-[#355f2d] shadow-2xs ml-2"
+                      title="Add to preferences"
+                      aria-label="Add to preferences"
+                    >
+                      <svg
+                        class="w-4 h-4 transition-transform group-hover:translate-x-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- =========================================================
+           RIGHT COLUMN: Filled Preferences
+      ========================================================= -->
+      <div
+        class="border border-slate-200 rounded-xl overflow-hidden bg-white flex flex-col min-h-[460px] shadow-2xs transition-colors"
+        [class.border-[#355f2d]]="isDraggingOverFilled()"
+        [class.bg-blue-50/20]="isDraggingOverFilled()"
+        (dragover)="onDragOverContainer($event)"
+        (dragleave)="onDragLeaveContainer($event)"
+        (drop)="onDropContainer($event)"
+      >
+        <!-- Header with Badge -->
+        <div
+          class="px-5 py-3.5 bg-slate-50/70 border-b border-slate-200 flex items-center justify-between"
+        >
+          <div>
+            <h3 class="text-sm font-bold text-slate-800 m-0">Filled Preferences</h3>
+            <p class="text-xs text-slate-500 m-0 mt-0.5">
+              Arrange organisations in your preferred order
+            </p>
+          </div>
+          <span
+            class="px-2.5 py-0.5 rounded-full text-xs font-semibold"
+            [ngClass]="
+              selectedPreferences().length > 0
+                ? 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                : 'bg-slate-100 text-slate-500 border border-slate-200'
+            "
+          >
+            {{ selectedPreferences().length }} selected
+          </span>
+        </div>
+
+        <!-- Body -->
+        <div class="p-5 flex-1 flex flex-col justify-center">
+          @if (selectedPreferences().length === 0) {
+            <!-- Dashed Drop Area -->
+            <div
+              class="border-2 border-dashed rounded-2xl p-8 min-h-[320px] flex flex-col items-center justify-center text-center space-y-3 transition-colors select-none"
+              [class.border-[#355f2d]]="isDraggingOverFilled()"
+              [class.bg-blue-50/40]="isDraggingOverFilled()"
+              [class.border-slate-200]="!isDraggingOverFilled()"
+            >
+              <!-- Dots icon in circular blue background -->
+              <div
+                class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shadow-2xs"
+              >
+                <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24">
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <circle cx="15.5" cy="8.5" r="1.5" />
+                  <circle cx="8.5" cy="15.5" r="1.5" />
+                  <circle cx="15.5" cy="15.5" r="1.5" />
+                </svg>
+              </div>
+              <div class="space-y-1 max-w-sm">
+                <h4 class="text-sm font-bold text-slate-800 m-0">No preferences selected</h4>
+                <p class="text-xs text-slate-500 m-0 leading-relaxed">
+                  Drag organisations here or double-click from the left. Which moves first becomes
+                  #1, then #2, etc.
+                </p>
+              </div>
+            </div>
+          } @else {
+            <!-- Filled Preferences Ordered List -->
+            <div class="space-y-2.5 w-full flex-1">
+              @for (pref of selectedPreferences(); track pref.id; let idx = $index) {
+                <div
+                  [attr.draggable]="!isDraftSave() ? true : null"
+                  (dragstart)="!isDraftSave() ? onDragStartFilled($event, idx) : $event.preventDefault()"
+                  (dragover)="!isDraftSave() && onDragOverFilledItem($event, idx)"
+                  (drop)="!isDraftSave() && onDropFilledItem($event, idx)"
+                  (dragend)="onDragEnd()"
+                  (dblclick)="!isDraftSave() && removePreference(idx)"
+                  class="p-3.5 rounded-xl border border-slate-200 bg-white shadow-2xs transition-all flex items-center justify-between gap-3 select-none group"
+                  [class.hover:shadow-xs]="!isDraftSave()"
+                  [class.cursor-grab]="!isDraftSave()"
+                  [class.active:cursor-grabbing]="!isDraftSave()"
+                  [class.border-[#355f2d]]="!isDraftSave() && dragOverFilledIndex === idx"
+                  [class.bg-blue-50/30]="!isDraftSave() && dragOverFilledIndex === idx"
+                  [title]="!isDraftSave() ? 'Drag to reorder, or double-click to remove' : ''"
+                >
+                  <div class="flex items-center gap-3 min-w-0">
+                    @if (!isDraftSave()) {
+                      <!-- Reorder Grip Handle -->
+                      <span
+                        class="text-slate-300 group-hover:text-[#355f2d] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
+                        title="Drag up or down to reorder"
+                      >
+                        ⋮⋮
+                      </span>
+                    }
+
+                    <!-- Preference Order Number (1, then 2, etc.) -->
+                    <span
+                      class="w-7 h-7 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                    >
+                      {{ idx + 1 }}
+                    </span>
+
+                    <!-- Organization Name -->
+                    <div class="min-w-0">
+                      <span class="text-xs font-bold text-slate-900 block truncate">
+                        {{
+                          pref.organisationName ||
+                            pref.OrganisationName ||
+                            pref.organisation_name ||
+                            pref.force_name ||
+                            pref.name
+                        }}
+                      </span>
+                      <span class="text-[10px] text-slate-400"> Preference #{{ idx + 1 }} </span>
+                    </div>
+                  </div>
+                  @if (!isDraftSave()) {
+                    <!-- Actions: Move Up, Move Down, Delete -->
+                    <div class="flex items-center gap-1 shrink-0">
+                      <!-- Move Up Button -->
+                      <button
+                        type="button"
+                        (click)="movePreferenceUp(idx); $event.stopPropagation()"
+                        [disabled]="idx === 0"
+                        class="p-1 rounded-md text-slate-500 hover:text-[#355f2d] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
+                        title="Move Up"
+                      >
+                        ▲
+                      </button>
+
+                      <!-- Move Down Button -->
+                      <button
+                        type="button"
+                        (click)="movePreferenceDown(idx); $event.stopPropagation()"
+                        [disabled]="idx === selectedPreferences().length - 1"
+                        class="p-1 rounded-md text-slate-500 hover:text-[#355f2d] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
+                        title="Move Down"
+                      >
+                        ▼
+                      </button>
+
+                      <!-- Delete / Remove Button -->
+                      <button
+                        type="button"
+                        (click)="removePreference(idx); $event.stopPropagation()"
+                        class="p-1.5 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer ml-1"
+                        title="Remove from preferences"
+                        aria-label="Remove"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         FILLED PREFERENCES SUMMARY ROW (Horizontal Order View)
+    ========================================================= -->
+    <div class="pt-5 border-t border-slate-200 space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+            Filled Preferences Order:
+          </span>
+          <span class="text-xs text-slate-400 font-medium hidden sm:inline">
+            (Drag cards or use arrows to rearrange)
+          </span>
+        </div>
+        <span class="text-xs font-semibold text-slate-600">
+          Total Selected: <strong class="text-[#355f2d]">{{ selectedPreferences().length }}</strong>
+        </span>
+      </div>
+
+      @if (selectedPreferences().length === 0) {
+        <div
+          class="p-4 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-xs text-slate-400 italic text-center"
+        >
+          No preferences selected yet. Click, double-click, or drag organisations from the list
+          above.
+        </div>
+      } @else {
+        <!-- Wrapped Row of Filled Preference Items -->
+        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+          @for (pref of selectedPreferences(); track pref.id; let idx = $index) {
+            @if (!isDraftSave()) {
+              <div
+                draggable="true"
+                (dragstart)="onDragStartFilled($event, idx)"
+                (dragover)="onDragOverFilledItem($event, idx)"
+                (drop)="onDropFilledItem($event, idx)"
+                (dragend)="onDragEnd()"
+                class="flex items-center gap-2.5 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl shadow-2xs hover:border-[#355f2d] hover:shadow-xs transition-all shrink-0 cursor-grab active:cursor-grabbing select-none group"
+                [class.border-[#355f2d]]="dragOverFilledIndex === idx"
+                [class.bg-blue-50/40]="dragOverFilledIndex === idx"
+                title="Drag horizontally to reorder"
+              >
+                <!-- Order Number Badge (1, 2, 3...) -->
+                <span
+                  class="w-6 h-6 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                >
+                  {{ idx + 1 }}
+                </span>
+
+                <!-- Name -->
+                <span class="text-xs font-semibold text-slate-800 whitespace-nowrap">
+                  {{
+                    pref.organisationName ||
+                      pref.OrganisationName ||
+                      pref.organisation_name ||
+                      pref.force_name ||
+                      pref.name
+                  }}
+                </span>
+
+                <!-- Reorder & Remove Controls -->
+                <div class="flex items-center gap-1 border-l border-slate-200 pl-2 ml-1">
+                  <!-- Move Left -->
+                  <button
+                    type="button"
+                    (click)="movePreferenceUp(idx); $event.stopPropagation()"
+                    [disabled]="idx === 0"
+                    class="p-1 text-slate-400 hover:text-[#355f2d] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
+                    title="Move Left"
+                  >
+                    ◀
+                  </button>
+
+                  <!-- Move Right -->
+                  <button
+                    type="button"
+                    (click)="movePreferenceDown(idx); $event.stopPropagation()"
+                    [disabled]="idx === selectedPreferences().length - 1"
+                    class="p-1 text-slate-400 hover:text-[#355f2d] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
+                    title="Move Right"
+                  >
+                    ▶
+                  </button>
+
+                  <!-- Delete -->
+                  <button
+                    type="button"
+                    (click)="removePreference(idx); $event.stopPropagation()"
+                    class="p-1 text-rose-400 hover:text-rose-600 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none ml-0.5"
+                    title="Remove from preferences"
+                    aria-label="Remove"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <div
+                class="flex items-center gap-2.5 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl shadow-2xs shrink-0 select-none"
+              >
+                <!-- Order Number Badge (1, 2, 3...) -->
+                <span
+                  class="w-6 h-6 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                >
+                  {{ idx + 1 }}
+                </span>
+
+                <!-- Name -->
+                <span class="text-xs font-semibold text-slate-800 whitespace-nowrap">
+                  {{
+                    pref.organisationName ||
+                      pref.OrganisationName ||
+                      pref.organisation_name ||
+                      pref.force_name ||
+                      pref.name
+                  }}
+                </span>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Bottom Action Bar (Previous on Left, Action Buttons on Right) -->
+  <div
+    class="bg-white rounded-xl border border-slate-200 p-4 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3"
+  >
+    <!-- Left: Previous Button -->
+    <button
+      type="button"
+      (click)="goToPreviousTab()"
+      class="px-6 py-2.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer bg-white shadow-2xs active:scale-98 flex items-center justify-center gap-2"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span>Previous</span>
+    </button>
+
+    <!-- Right: Cancel, Save Draft, Submit Application (Hidden when isDraftSave is true) -->
+    @if (!isDraftSave()) {
+      <div class="flex items-center justify-end gap-3 flex-wrap">
+        <!-- Cancel Button -->
+        <button
+          type="button"
+          (click)="onCancelPreferences()"
+          class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs sm:text-sm font-semibold border border-slate-300 transition-all cursor-pointer shadow-2xs active:scale-98"
+        >
+          Cancel
+        </button>
+
+        <!-- Save Draft Button -->
+        <button
+          type="button"
+          (click)="onSaveDraft()"
+          [disabled]="isSaving()"
+          class="px-5 py-2.5 bg-slate-600 hover:bg-slate-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98 border-none disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isSaving()) {
+            <div
+              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+            ></div>
+          } @else {
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          }
+          <span>Save Draft</span>
+        </button>
+
+        <!-- Submit Application Button -->
+        <button
+          type="button"
+          (click)="onSubmitApplication()"
+          [disabled]="isSaving()"
+          class="px-6 py-2.5 bg-[#355f2d] hover:bg-[#46584b] text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-98 border-none disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isSaving()) {
+            <div
+              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+            ></div>
+          } @else {
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              />
+            </svg>
+          }
+          <span>Submit Application</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

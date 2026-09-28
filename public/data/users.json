@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "admin123",
+    "name": "Administrator",
+    "email": "admin@agniveer.gov.in",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "username": "manager",
+    "password": "manager123",
+    "name": "Manager",
+    "email": "manager@agniveer.gov.in",
+    "role": "manager"
+  },
+  {
+    "id": 3,
+    "username": "user",
+    "password": "user123",
+    "name": "Regular User",
+    "email": "user@agniveer.gov.in",
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "username": "cisf",
+    "password": "cisf123",
+    "name": "CISF Admin",
+    "email": "cisf@agniveer.gov.in",
+    "role": "entity_admin"
+  }
+]

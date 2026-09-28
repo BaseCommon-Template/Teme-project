@@ -1,0 +1,310 @@
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.schedule-management-page {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* =========================================================
+   TABLE CONTAINER (Matching role-management)
+   ========================================================= */
+
+.table-container {
+  width: 100%;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.schedule-management-grid {
+  width: 100%;
+  height: 412px;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* =========================================================
+   AG GRID HEADER (Matching role-management #4285d4 Blue)
+   ========================================================= */
+
+:host ::ng-deep .schedule-management-grid .ag-header {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #286bb7 !important;
+  height: 30px !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-row {
+  height: 30px !important;
+  background: #4285d4 !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-cell {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-right: 1px solid #76a5d6 !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  height: 30px !important;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-cell-label {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-cell-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-icon,
+:host ::ng-deep .schedule-management-grid .ag-header-cell-menu-button,
+:host ::ng-deep .schedule-management-grid .ag-icon {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-header-cell-menu-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* =========================================================
+   AG GRID ROWS & CELLS (Matching role-management 38px)
+   ========================================================= */
+
+:host ::ng-deep .schedule-management-grid .ag-row {
+  height: 38px !important;
+  min-height: 38px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #d8d8d8 !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-row:hover {
+  background: #f5f9fd !important;
+}
+
+:host ::ng-deep .schedule-management-grid .ag-cell {
+  height: 38px !important;
+  line-height: 38px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  border-right: 1px solid #d8d8d8 !important;
+  color: #222;
+  font-size: 12px;
+}
+
+/* =========================================================
+   ACTIVE / INACTIVE STATUS (Matching role-management)
+   ========================================================= */
+
+:host ::ng-deep .schedule-management-grid .status-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+:host ::ng-deep .schedule-management-grid .user-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  height: 25px;
+  padding: 0 11px;
+  gap: 7px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .schedule-management-grid .user-status-pill.active {
+  color: #059669;
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+}
+
+:host ::ng-deep .schedule-management-grid .user-status-pill.inactive {
+  color: #e11d48;
+  background: #fff1f2;
+  border: 1px solid #fda4af;
+}
+
+:host ::ng-deep .schedule-management-grid .user-status-pill .status-dot {
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* =========================================================
+   ACTION BUTTONS (Matching role-management)
+   ========================================================= */
+
+:host ::ng-deep .schedule-management-grid .action-buttons {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  height: 100%;
+}
+
+:host ::ng-deep .schedule-management-grid .action-buttons button {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+}
+
+:host ::ng-deep .schedule-management-grid .action-buttons svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
+:host ::ng-deep .schedule-management-grid .action-edit {
+  color: #1267e8;
+  background: #eff6ff;
+  border: 1px solid #c9defc;
+}
+
+:host ::ng-deep .schedule-management-grid .action-edit:hover {
+  background: #dbeafe;
+}
+
+/* =========================================================
+   SERVER PAGINATION (Matching role-management)
+   ========================================================= */
+
+.server-pagination {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 12px;
+  background: #ffffff;
+  border-top: 1px solid #c7c7c7;
+  font-size: 12px;
+  color: #475569;
+}
+
+.pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-left select {
+  height: 26px;
+  min-width: 52px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 5px;
+  font-size: 12px;
+}
+
+.record-info {
+  margin-left: 8px;
+}
+
+.pagination-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination-right button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  color: #475569;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pagination-right button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.pagination-right button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-text {
+  min-width: 90px;
+  text-align: center;
+}
+
+/* =========================================================
+   LOADING OVERLAY & SPINNER (Matching role-management)
+   ========================================================= */
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  gap: 12px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3.5px solid #cbd5e1;
+  border-top-color: #355f2d;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loading-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #355f2d;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

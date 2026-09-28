@@ -1,0 +1,27 @@
+/* Custom component styles for navbar matching reference design */
+.navbar-brand-blue {
+  background-color: #46584b;
+}
+
+.navbar-active-border {
+  border-bottom: 4px solid #355f2d !important;
+  color: #46584b !important;
+  font-weight: 700 !important;
+  background-color: #f7f0e9  !important;
+}
+
+.dropdown-active-item {
+  background-color: #838383  !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-left: 4px solid #ffffff !important;
+}
+
+.navbar-login-btn {
+  background-color: #355f2d;
+  color: #ffffff;
+}
+
+.navbar-login-btn:hover {
+  background-color: #447a3a !important;
+}

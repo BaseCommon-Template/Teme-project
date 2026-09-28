@@ -1,0 +1,5 @@
+/* Career Progression Component Styles */
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+}

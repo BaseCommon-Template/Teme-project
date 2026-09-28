@@ -1,0 +1,198 @@
+@if (isOpen) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200 font-['Poppins',sans-serif]"
+    (click)="onClose()"
+  >
+    <div
+      class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden animate-in zoom-in-95 duration-200"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- Modal Header with Solid Color (No Gradient, Matching Import Profiles) -->
+      <div
+        class="px-6 py-4.5 bg-[#355f2d] text-white flex items-center justify-between shrink-0 shadow-sm"
+      >
+        <div class="flex items-center gap-3.5">
+          <div
+            class="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-xs border border-white/20 flex items-center justify-center text-xl shadow-inner shrink-0"
+          >
+            📊
+          </div>
+          <div>
+            <h3 class="text-base font-bold m-0 leading-tight tracking-tight text-white drop-shadow-2xs">
+              Upload Agniveer Merit List
+            </h3>
+            <p class="text-xs text-blue-100 font-medium m-0 mt-0.5 opacity-90">
+              Bulk Merit List Ingestion (Excel .xlsx / .xls format only)
+            </p>
+          </div>
+        </div>
+        <button
+          (click)="onClose()"
+          class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 text-white flex items-center justify-center cursor-pointer border border-white/20 transition-all text-sm font-bold shadow-xs"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-5">
+        @if (uploadResult()) {
+          <!-- Upload Complete Screen -->
+          <div class="text-center space-y-4 py-2">
+            <div
+              class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mx-auto"
+            >
+              🎉
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-800 m-0">Merit List Uploaded Successfully!</h4>
+              <p class="text-xs text-slate-500 m-0 mt-1">
+                {{ uploadResult()?.message || 'Merit records have been parsed and committed successfully.' }}
+              </p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                <span class="text-xl font-bold text-slate-800 block">
+                  {{ uploadResult()?.totalExcelRecords || 0 }}
+                </span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                  Total Excel
+                </span>
+              </div>
+              <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-center">
+                <span class="text-xl font-bold text-emerald-700 block">
+                  {{ uploadResult()?.matchedRecords || 0 }}
+                </span>
+                <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+                  Matched
+                </span>
+              </div>
+              <div class="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-center">
+                <span class="text-xl font-bold text-blue-700 block">
+                  {{ uploadResult()?.updatedRecords || 0 }}
+                </span>
+                <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+                  Updated
+                </span>
+              </div>
+              <div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl text-center">
+                <span class="text-xl font-bold text-rose-700 block">
+                  {{ uploadResult()?.agniveerNotFound || 0 }}
+                </span>
+                <span class="text-[10px] font-bold text-rose-600 uppercase tracking-wider">
+                  Not Found
+                </span>
+              </div>
+            </div>
+
+            <div class="pt-4 flex justify-end">
+              <button
+                (click)="onClose()"
+                class="w-full px-6 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-sm font-bold cursor-pointer border-none shadow-sm transition-all active:scale-98"
+              >
+                Done & Refresh Grid
+              </button>
+            </div>
+          </div>
+        } @else {
+          <!-- Error Banner -->
+          @if (uploadError()) {
+            <div
+              class="p-3 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs font-semibold flex items-center gap-2"
+            >
+              <span>⚠️</span>
+              <span>{{ uploadError() }}</span>
+            </div>
+          }
+
+          <!-- Drag & Drop Dropzone for Excel only -->
+          <div
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)"
+            (click)="excelFileInput.click()"
+            [class.border-[#355f2d]]="isDragging()"
+            [class.bg-blue-50/50]="isDragging()"
+            class="border-2 border-dashed border-slate-300 hover:border-slate-400 rounded-3xl p-7 text-center space-y-3 transition-colors bg-slate-50/60 hover:bg-slate-50 cursor-pointer"
+          >
+            <input
+              #excelFileInput
+              type="file"
+              accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+              class="hidden"
+              (change)="onFileInputChange($event)"
+            />
+
+            <div
+              class="w-14 h-14 bg-white rounded-2xl shadow-xs border border-slate-200 flex items-center justify-center text-3xl mx-auto"
+            >
+              📊
+            </div>
+
+            <div>
+              <p class="text-xs sm:text-sm font-bold text-slate-800 m-0">
+                {{
+                  selectedFile() ? selectedFile()!.name : 'Click or Drag & Drop Agniveer Merit List Excel File'
+                }}
+              </p>
+              <p class="text-xs text-slate-400 font-medium m-0 mt-1">
+                @if (selectedFile()) {
+                  <span class="text-blue-600 font-bold">
+                    {{ (selectedFile()!.size / 1024).toFixed(2) }} KB ready for upload
+                  </span>
+                } @else {
+                  Supports Excel spreadsheets (.xlsx, .xls only, up to 25MB)
+                }
+              </p>
+            </div>
+          </div>
+
+          <!-- Upload Progress Bar -->
+          @if (isUploading()) {
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs sm:text-sm text-slate-600 font-bold">
+                <span>Uploading Excel & processing merit rankings...</span>
+                <span class="text-[#355f2d]">{{ uploadProgress() }}%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div
+                  class="bg-[#355f2d] h-2 rounded-full transition-all duration-300"
+                  [style.width.%]="uploadProgress()"
+                ></div>
+              </div>
+            </div>
+          }
+
+          <!-- Modal Footer -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                (click)="onClose()"
+                class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold cursor-pointer border-none transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                (click)="startUpload()"
+                [disabled]="!selectedFile() || isUploading()"
+                class="px-5 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer border-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 active:scale-98"
+              >
+                @if (isUploading()) {
+                  <span class="animate-spin text-sm">⏳</span>
+                  <span>Uploading...</span>
+                } @else {
+                  <span>Upload Merit List</span>
+                }
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

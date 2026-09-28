@@ -1,0 +1,559 @@
+<div class="menu-management-page">
+  <!-- ================================================= -->
+  <!-- PAGE TITLE -->
+  <!-- ================================================= -->
+
+  <div class="page-title">
+    <h2>Menu Management</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- ================================================= -->
+    <!-- BREADCRUMB -->
+    <!-- ================================================= -->
+
+    <div class="breadcrumb">
+      <span class="dashboard-link" routerLink="/dashboard"> Dashboard </span>
+
+      <span class="separator">›</span>
+
+      <strong>Menu Management</strong>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ================================================= -->
+
+    <div class="toolbar">
+      <!-- LEFT -->
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input #searchInput type="text" [ngModel]="searchText()" (ngModelChange)="onSearchChange($event)"
+            placeholder="Search..." autocomplete="off" />
+
+          @if (searchText()) {
+          <button type="button" class="clear-search" (click)="onSearchChange('')">×</button>
+          }
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="toolbar-right">
+        <!-- ACTIVE MENUS -->
+        <div class="status-filter">
+          <span>Active Menus</span>
+
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- EXPORT -->
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <!-- ADD -->
+        <button type="button" class="publish-btn" (click)="openAddModal()">ADD MENU</button>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE -->
+    <!-- ================================================= -->
+
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading Menus...</span>
+      </div>
+      }
+      <div class="ag-theme-quartz menu-management-grid">
+        <ag-grid-angular style="width: 100%; height: 100%" [rowData]="rowData" [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef" [rowHeight]="rowHeight" [headerHeight]="headerHeight" [pagination]="false"
+          (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)" />
+      </div>
+
+      <!-- SERVER PAGINATION -->
+
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+
+            <option value="20">20</option>
+
+            <option value="25">25</option>
+
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+
+            to
+
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToFirstPage()">«</button>
+
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToPreviousPage()">
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages }} </span>
+
+          <button type="button" [disabled]="currentPage >= totalPages" (click)="goToNextPage()">
+            ›
+          </button>
+
+          <button type="button" [disabled]="currentPage >= totalPages" (click)="goToLastPage()">
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ADD / EDIT MENU MODAL -->
+<!-- ===================================================== -->
+
+@if (isModalOpen()) {
+<div class="modal-overlay">
+  <div class="menu-modal">
+    <!-- ================================================= -->
+    <!-- MODAL HEADER -->
+    <!-- ================================================= -->
+
+    <div class="modal-header">
+      <div class="modal-title">
+        <h3>
+          {{ isEditMode() ? 'Edit Menu' : 'Add New Menu' }}
+        </h3>
+      </div>
+
+      <button type="button" class="modal-close" (click)="closeModal()">×</button>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- FORM -->
+    <!-- ================================================= -->
+
+    <form #menuForm="ngForm" class="modal-body" (ngSubmit)="saveMenu(menuForm)" novalidate>
+      <div class="">
+        <!-- MENU NAME -->
+        <div class="form-group full-width">
+          <label>
+            MENU NAME
+            <span>*</span>
+          </label>
+
+          <input type="text" [(ngModel)]="formData.menuName" name="menuName" #menuNameCtrl="ngModel" required
+            minlength="2" maxlength="100" pattern="^[A-Za-z]+(?:[ _-][A-Za-z]+)*$" placeholder="e.g. User_Management"
+            (keydown)="preventMenuNameInvalidCharacters($event)" (input)="sanitizeMenuName()"
+            [class.input-invalid]="menuNameCtrl.invalid && (menuNameCtrl.touched || submitted)" #firstFormInput />
+
+          @if (menuNameCtrl.invalid && (menuNameCtrl.touched || submitted)) {
+          <div class="validation-error">
+            @if (menuNameCtrl.errors?.['required']) {
+            Menu Name is required.
+            } @else if (menuNameCtrl.errors?.['minlength']) {
+            Menu Name must be at least 2 characters.
+            } @else if (menuNameCtrl.errors?.['pattern']) {
+            Only letters, space, underscore (_) and hyphen (-) are allowed.
+            } @else if (menuNameCtrl.errors?.['maxlength']) {
+            Menu Name cannot exceed 100 characters.
+            }
+          </div>
+          }
+        </div>
+      </div>
+      <div class="form-row">
+        <!-- ================================================= -->
+        <!-- PARENT MENU -->
+        <!-- ================================================= -->
+
+        <div class="form-group parent-menu-group">
+          <label> PARENT MENU </label>
+
+          <div class="parent-menu-dropdown" [class.open]="parentMenuDropdownOpen">
+            <!-- ================================================= -->
+            <!-- SELECTED VALUE / TRIGGER -->
+            <!-- ================================================= -->
+
+            <div class="parent-menu-select" (click)="toggleParentMenuDropdown()">
+              <div class="parent-menu-selected">
+                @if (formData.parentId === 0) {
+                <span class="parent-menu-placeholder"> No Parent Menu </span>
+                } @else {
+                <span class="parent-menu-value">
+                  {{ selectedParentMenuName }}
+                </span>
+                }
+              </div>
+
+              <!-- CLEAR BUTTON -->
+
+              @if (formData.parentId !== 0) {
+              <button type="button" class="parent-menu-clear" title="Clear Parent Menu"
+                (click)="$event.stopPropagation(); clearParentMenu()">
+                ×
+              </button>
+              }
+
+              <!-- ARROW -->
+
+              <span class="parent-menu-arrow" [class.open]="parentMenuDropdownOpen"> ▾ </span>
+            </div>
+
+            <!-- ================================================= -->
+            <!-- DROPDOWN PANEL -->
+            <!-- ================================================= -->
+
+            @if (parentMenuDropdownOpen) {
+            <div class="parent-menu-panel" (click)="$event.stopPropagation()">
+              <!-- SEARCH -->
+
+              <div class="parent-menu-search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+
+                <input type="text" [(ngModel)]="parentMenuSearchText" name="parentMenuSearch"
+                  placeholder="Search parent menu..." autocomplete="off" />
+              </div>
+
+              <!-- ================================================= -->
+              <!-- ROOT / NO PARENT -->
+              <!-- ================================================= -->
+
+              <div class="parent-menu-options">
+                <div class="parent-menu-option root-option" [class.selected]="formData.parentId === 0"
+                  (click)="clearParentMenu()">
+                  <div class="parent-menu-option-content">
+                    <span class="parent-menu-option-name"> No Parent Menu </span>
+
+                    <span class="parent-menu-option-id"> Root Menu </span>
+                  </div>
+                </div>
+
+                <!-- ================================================= -->
+                <!-- MENU LIST -->
+                <!-- ================================================= -->
+
+                @if (filteredParentMenus.length === 0) {
+                <div class="no-parent-menu-found">No parent menu found.</div>
+                } @else {
+                @for (menu of filteredParentMenus; track menu.menu_id) {
+                <!-- Current menu ko parent banne se rokna -->
+                @if (!isEditMode() || menu.menu_id !== selectedItem()?.menu_id) {
+                <div class="parent-menu-option" [class.selected]="formData.parentId === menu.menu_id"
+                  (click)="selectParentMenu(menu.menu_id)">
+                  <div class="parent-menu-option-content">
+                    <span class="parent-menu-option-name">
+                      {{ menu.menu_name }}
+                    </span>
+                  </div>
+                </div>
+                }
+                }
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- CONTROLLER NAME -->
+        <div class="form-group">
+          <label>
+            CONTROLLER NAME
+            <span>*</span>
+          </label>
+
+          <input type="text" [(ngModel)]="formData.controllerName" name="controllerName" #controllerCtrl="ngModel"
+            required maxlength="200" pattern="^[A-Za-z0-9 @#_./-]+$"
+            placeholder="e.g. UserController"
+            (keydown)="preventControllerNameInvalidCharacters($event)"
+            (input)="sanitizeControllerName()"
+            [class.input-invalid]="
+                controllerCtrl.invalid && (controllerCtrl.touched || submitted)
+              " />
+
+          @if (controllerCtrl.invalid && (controllerCtrl.touched || submitted)) {
+          <div class="validation-error">
+            @if (controllerCtrl.errors?.['required']) {
+            Controller Name is required.
+            } @else if (controllerCtrl.errors?.['pattern']) {
+            Only letters, numbers, space, &#64;, #, _, -, / and . are allowed.
+            } @else if (controllerCtrl.errors?.['maxlength']) {
+            Controller Name cannot exceed 200 characters.
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+
+      <div class="form-group">
+        <label>
+          Description
+          <span class="optional"> (optional) </span>
+        </label>
+
+        <textarea [(ngModel)]="formData.description" name="description" #descriptionCtrl="ngModel"
+          maxlength="500" pattern="^[A-Za-z0-9 @#_./\r\n-]*$"
+          placeholder="Short description..."
+          (keydown)="preventDescriptionInvalidCharacters($event)"
+          (input)="sanitizeDescription()"
+          [class.input-invalid]="descriptionCtrl.invalid && (descriptionCtrl.touched || submitted)"></textarea>
+
+        @if (descriptionCtrl.invalid && (descriptionCtrl.touched || submitted)) {
+        <div class="validation-error">
+          @if (descriptionCtrl.errors?.['pattern']) {
+          Only letters, numbers, space, &#64;, #, _, -, / and . are allowed.
+          } @else if (descriptionCtrl.errors?.['maxlength']) {
+          Description cannot exceed 500 characters.
+          }
+        </div>
+        }
+      </div>
+
+      @if (isEditMode()) {
+      <div class="form-row status-form-row">
+        <div class="form-group status-group">
+          <label>MENU STATUS</label>
+
+          <div class="menu-status-control">
+            <div class="menu-status-info">
+              <div class="menu-status-dot" [class.active]="formData.active" [class.inactive]="!formData.active"></div>
+
+              <div class="menu-status-text">
+                <span class="menu-status-title" [class.active-text]="formData.active"
+                  [class.inactive-text]="!formData.active">
+                  {{ formData.active ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+            </div>
+
+            <label class="menu-status-switch">
+              <input type="checkbox" [(ngModel)]="formData.active" name="active" />
+
+              <span class="menu-status-slider">
+                <span class="menu-status-slider-dot"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- ================================================= -->
+      <!-- ROLES -->
+      <!-- ================================================= -->
+
+      <div class="roles-section">
+        <div class="roles-header">
+          <div>
+            <strong>ROLE PERMISSIONS</strong>
+
+            @if (hasRoleValidationError()) {
+            <div class="validation-error role-validation-error">
+              Please select at least one role.
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- ROLE TABLE -->
+
+        <div class="role-table-wrapper">
+          <table class="role-table">
+            <thead>
+              <tr>
+                <th class="select-column">Select</th>
+
+                <th>Role Name</th>
+
+                <th class="priority-column">Priority</th>
+
+                <th class="permission-column">ADD</th>
+
+                <th class="permission-column">DELETE</th>
+
+                <th class="permission-column">EDIT</th>
+
+                <th class="permission-column">VIEW</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- ================================================= -->
+              <!-- PUBLIC ROLE - STATIC -->
+              <!-- ================================================= -->
+
+              <tr>
+                <!-- SELECT -->
+                <td class="select-column">
+                  <input type="checkbox" [checked]="isRoleSelected(0)" (change)="togglePublicRole()" />
+                </td>
+
+                <!-- ROLE NAME -->
+                <td class="role-name-cell">
+                  <span class="role-name"> Public </span>
+                </td>
+
+                <!-- PRIORITY -->
+                <td class="priority-column">
+                  <input type="number" class="priority-input" [value]="getRolePriority(0)" min="1"
+                    [disabled]="!isRoleSelected(0)" (input)="updateRolePriority(0, $any($event.target).value)" />
+                </td>
+
+                <!-- ADD -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(0, 'pAdd') === '1'"
+                    [disabled]="!isRoleSelected(0)"
+                    (change)="updateRolePermission(0, 'pAdd', $any($event.target).checked)" />
+                </td>
+
+                <!-- DELETE -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(0, 'pDelete') === '1'"
+                    [disabled]="!isRoleSelected(0)"
+                    (change)="updateRolePermission(0, 'pDelete', $any($event.target).checked)" />
+                </td>
+
+                <!-- EDIT -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(0, 'pEdit') === '1'"
+                    [disabled]="!isRoleSelected(0)"
+                    (change)="updateRolePermission(0, 'pEdit', $any($event.target).checked)" />
+                </td>
+
+                <!-- VIEW -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(0, 'pView') === '1'"
+                    [disabled]="!isRoleSelected(0)"
+                    (change)="updateRolePermission(0, 'pView', $any($event.target).checked)" />
+                </td>
+              </tr>
+
+              <!-- ================================================= -->
+              <!-- DYNAMIC ROLES -->
+              <!-- ================================================= -->
+
+              @for (roleMaster of rolesList; track roleMaster.roleid) {
+              <tr>
+                <!-- SELECT ROLE -->
+                <td class="select-column">
+                  <input type="checkbox" [checked]="isRoleSelected(roleMaster.roleid)"
+                    (change)="toggleRole(roleMaster)" />
+                </td>
+
+                <!-- ROLE NAME -->
+                <td class="role-name-cell">
+                  <span class="role-name">
+                    {{ roleMaster.rolename }}
+                  </span>
+                </td>
+
+                <!-- PRIORITY -->
+                <td class="priority-column">
+                  <input type="number" class="priority-input" [value]="getRolePriority(roleMaster.roleid)" min="1"
+                    [disabled]="!isRoleSelected(roleMaster.roleid)"
+                    (input)="updateRolePriority(roleMaster.roleid, $any($event.target).value)" />
+                </td>
+
+                <!-- ADD -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(roleMaster.roleid, 'pAdd') === '1'"
+                    [disabled]="!isRoleSelected(roleMaster.roleid)" (change)="
+                          updateRolePermission(
+                            roleMaster.roleid,
+                            'pAdd',
+                            $any($event.target).checked
+                          )
+                        " />
+                </td>
+
+                <!-- DELETE -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(roleMaster.roleid, 'pDelete') === '1'"
+                    [disabled]="!isRoleSelected(roleMaster.roleid)" (change)="
+                          updateRolePermission(
+                            roleMaster.roleid,
+                            'pDelete',
+                            $any($event.target).checked
+                          )
+                        " />
+                </td>
+
+                <!-- EDIT -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(roleMaster.roleid, 'pEdit') === '1'"
+                    [disabled]="!isRoleSelected(roleMaster.roleid)" (change)="
+                          updateRolePermission(
+                            roleMaster.roleid,
+                            'pEdit',
+                            $any($event.target).checked
+                          )
+                        " />
+                </td>
+
+                <!-- VIEW -->
+                <td class="permission-column">
+                  <input type="checkbox" [checked]="getRolePermission(roleMaster.roleid, 'pView') === '1'"
+                    [disabled]="!isRoleSelected(roleMaster.roleid)" (change)="
+                          updateRolePermission(
+                            roleMaster.roleid,
+                            'pView',
+                            $any($event.target).checked
+                          )
+                        " />
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+
+          @if (rolesList.length === 0) {
+          <div class="no-roles">No roles available.</div>
+          }
+        </div>
+      </div>
+
+      <!-- ================================================= -->
+      <!-- MODAL FOOTER -->
+      <!-- ================================================= -->
+
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+
+        <button type="submit" class="save-btn">
+          {{ isEditMode() ? 'Update Menu' : 'Save Menu' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

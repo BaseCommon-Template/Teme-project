@@ -1,0 +1,196 @@
+<div class="role-management-page">
+  <!-- ================================================= -->
+  <!-- PAGE TITLE -->
+  <!-- ================================================= -->
+  <div class="page-title">
+    <h2>Agniveer Candidates</h2>
+
+    <a routerLink="/dashboard" class="back-btn" title="Back to Dashboard"> Back </a>
+  </div>
+
+  <div class="main-content">
+    <!-- ================================================= -->
+    <!-- BREADCRUMB -->
+    <!-- ================================================= -->
+    <div class="breadcrumb">
+      <a routerLink="/dashboard" class="dashboard-link">Dashboard</a>
+      <span class="separator">›</span>
+      <strong>Agniveer Candidates</strong>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ================================================= -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <!-- SEARCH GROUP -->
+        <div class="search-group">
+          <!-- SEARCH -->
+          <div class="search-box">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+
+            <input
+              #searchInput
+              type="text"
+              [ngModel]="searchQuery()"
+              (ngModelChange)="searchQuery.set($event)"
+              (keyup.enter)="onSearchClick()"
+              placeholder="Search candidates..."
+              autocomplete="off"
+            />
+
+            @if (searchQuery()) {
+              <button
+                type="button"
+                class="clear-search"
+                title="Clear Search"
+                (click)="clearSearch()"
+              >
+                ×
+              </button>
+            }
+          </div>
+
+          <!-- SEARCH BUTTON -->
+          <button type="button" class="search-btn" (click)="onSearchClick()" title="Search">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+
+            <span>Search</span>
+          </button>
+
+        
+        </div>
+
+        <!-- FILTER DROPDOWN -->
+        <!-- <div class="status-filter">
+          <span>Filter:</span>
+          <select
+            [value]="activeFilter()"
+            (change)="setFilter($any($event.target).value)"
+            class="filter-select"
+          >
+            <option value="all">All Candidates ({{ counts().all }})</option>
+            <option value="rehabilitated">Rehabilitated ({{ counts().rehabilitated }})</option>
+            <option value="toBeRehab">To Be Rehabilitated ({{ counts().toBeRehab }})</option>
+          </select>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE CONTAINER -->
+    <!-- ================================================= -->
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Agniveers...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz role-management-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 440px"
+          [rowData]="filteredRecords()"
+          [columnDefs]="displayedColDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SERVER-SIDE PAGINATION FOOTER -->
+      <!-- ================================================= -->
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="recordPerPage()" (change)="changePageSize($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords() > 0 ? (pageNumber() - 1) * recordPerPage() + 1 : 0 }}
+            to
+            {{ totalRecords() > 0 ? Math.min(pageNumber() * recordPerPage(), totalRecords()) : 0 }}
+            of {{ totalRecords() }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button
+            type="button"
+            [disabled]="pageNumber() <= 1"
+            (click)="goToFirstPage()"
+            title="First Page"
+          >
+            «
+          </button>
+
+          <button
+            type="button"
+            [disabled]="pageNumber() <= 1"
+            (click)="goToPreviousPage()"
+            title="Previous Page"
+          >
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ pageNumber() }} of {{ totalPages() || 0 }} </span>
+
+          <button
+            type="button"
+            [disabled]="pageNumber() >= totalPages() || totalPages() === 0"
+            (click)="goToNextPage()"
+            title="Next Page"
+          >
+            ›
+          </button>
+
+          <button
+            type="button"
+            [disabled]="pageNumber() >= totalPages() || totalPages() === 0"
+            (click)="goToLastPage()"
+            title="Last Page"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

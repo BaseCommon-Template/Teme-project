@@ -1,0 +1,684 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* =========================================================
+   MAIN PAGE
+   ========================================================= */
+
+.postmapping-page {
+  background: #ffffff;
+  color: #222;
+  box-sizing: border-box;
+  margin: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   PAGE TITLE
+   ========================================================= */
+
+.postmapping-page .page-title {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  background: #eeeeee;
+  border-left: 7px solid #4aa5df;
+  border-bottom: 1px solid #d4d4d4;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.postmapping-page .page-title h2 {
+  margin: 0;
+  color: #6879d9;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 44px;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.postmapping-page .main-content {
+  width: 75%;
+  padding: 0 16px 20px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+.postmapping-page .breadcrumb {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #333;
+}
+
+.postmapping-page .breadcrumb span:first-child {
+  color: #2275b7;
+  font-weight: 600;
+}
+
+.postmapping-page .breadcrumb .separator {
+  color: #777;
+  font-weight: 400;
+}
+
+.postmapping-page .breadcrumb strong {
+  color: #222;
+  font-weight: 600;
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.postmapping-page .toolbar {
+  min-height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  box-sizing: border-box;
+  padding: 0 0 8px;
+}
+
+.postmapping-page .toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.postmapping-page .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+/* =========================================================
+   TOOLBAR LINKS
+   ========================================================= */
+
+.postmapping-page .toolbar-link {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: #2779ba;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.postmapping-page .toolbar-link:hover {
+  text-decoration: underline;
+}
+
+.postmapping-page .toolbar-link.excel {
+  color: #4b9255;
+}
+
+.postmapping-page .publish-btn {
+  height: 34px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 4px;
+  background: #355f2d;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.postmapping-page .publish-btn:hover {
+  background: #46584b;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   ROW SELECT
+   ========================================================= */
+
+.postmapping-page .rows-select {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  color: #222;
+  white-space: nowrap;
+}
+
+.postmapping-page .rows-select select {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #222;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* =========================================================
+   ACTIVE TOGGLE SWITCH
+   ========================================================= */
+
+.dashboard-link {
+  color: #2275b7 !important;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dashboard-link:hover {
+  text-decoration: underline;
+}
+
+.status-filter {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #333;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #bcbcbc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: #4caf50;
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* =========================================================
+   SEARCH BOX
+   ========================================================= */
+
+.postmapping-page .search-box {
+  position: relative;
+  width: 220px;
+  height: 34px;
+}
+
+.postmapping-page .search-box svg {
+  position: absolute;
+  left: 10px;
+  top: 9px;
+  color: #777;
+  pointer-events: none;
+}
+
+.postmapping-page .search-box input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 28px 0 31px;
+  border: 1px solid #a9ccef;
+  border-radius: 5px;
+  outline: none;
+  background: #ffffff;
+  color: #333;
+  font-size: 12px;
+  box-shadow: 0 0 4px rgba(60, 130, 200, 0.18);
+}
+
+.postmapping-page .search-box input:focus {
+  border-color: #4285d4;
+  box-shadow: 0 0 5px rgba(66, 133, 212, 0.35);
+}
+
+.postmapping-page .search-box input::placeholder {
+  color: #999;
+}
+
+/* =========================================================
+   CLEAR SEARCH
+   ========================================================= */
+
+.postmapping-page .clear-search {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  color: #777;
+  font-size: 17px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.postmapping-page .table-container,
+.table-container {
+  width: 100%;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.postmapping-page .postmapping-grid,
+.agniveer-post-master-grid {
+  width: 100%;
+  height: 412px;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.server-pagination {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 12px;
+  background: #ffffff;
+  border-top: 1px solid #c7c7c7;
+  font-size: 12px;
+  color: #475569;
+}
+
+.pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-left select {
+  height: 26px;
+  min-width: 52px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 5px;
+  font-size: 12px;
+}
+
+.record-info {
+  margin-left: 8px;
+}
+
+.pagination-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination-right button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  color: #475569;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pagination-right button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.pagination-right button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-text {
+  min-width: 90px;
+  text-align: center;
+}
+
+/* =========================================================
+   AG GRID CUSTOM STYLES
+   ========================================================= */
+
+:host ::ng-deep .postmapping-grid .ag-header {
+  background: #4285d4 !important;
+  color: #fff !important;
+  border-bottom: 1px solid #286bb7 !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-header-row {
+  background: #4285d4 !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-header-cell {
+  background: #4285d4 !important;
+  color: #fff !important;
+  border-right: 1px solid #76a5d6 !important;
+  padding: 7px !important;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .postmapping-grid .ag-header-cell-label {
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-header-cell-text {
+  color: #fff !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-row {
+  background: #fff !important;
+  border-bottom: 1px solid #d8d8d8 !important;
+  min-height: 44px !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-row:hover {
+  background: #f5f9fd !important;
+}
+
+:host ::ng-deep .postmapping-grid .ag-cell {
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box;
+  padding: 8px 12px !important;
+  border-right: 1px solid #d8d8d8 !important;
+  color: #222;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+/* =========================================================
+   BADGES & CELL CONTENT
+   ========================================================= */
+
+:host ::ng-deep .post-name-badge {
+  display: inline-block;
+  font-weight: 600;
+  color: #355f2d;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
+
+:host ::ng-deep .branch-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: #edf4ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+:host ::ng-deep .created-date {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+:host ::ng-deep .status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+:host ::ng-deep .status-active {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+:host ::ng-deep .status-inactive {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* =========================================================
+   AG GRID PAGINATION PANEL
+   ========================================================= */
+
+:host ::ng-deep .postmapping-grid .ag-paging-panel {
+  min-height: 38px !important;
+  height: 38px !important;
+  background: #f8f8f8 !important;
+  border-top: 1px solid #c7c7c7 !important;
+  font-size: 11px !important;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+:host ::ng-deep .postmapping-grid ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+:host ::ng-deep .postmapping-grid ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+:host ::ng-deep .postmapping-grid ::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .postmapping-grid ::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* =========================================================
+   LOADING OVERLAY & SPINNER
+   ========================================================= */
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  gap: 12px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3.5px solid #cbd5e1;
+  border-top-color: #355f2d;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loading-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #355f2d;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE LAYOUT
+   ========================================================= */
+
+@media (max-width: 1399px) {
+  .postmapping-page .main-content {
+    width: 85%;
+  }
+}
+
+@media (max-width: 991px) {
+  .postmapping-page .main-content {
+    width: 95%;
+  }
+}
+
+@media (max-width: 767px) {
+  .postmapping-page {
+    margin: 10px;
+  }
+
+  .postmapping-page .main-content {
+    width: 100%;
+  }
+
+  .postmapping-page .search-box {
+    width: 160px;
+  }
+}
+
+/* =========================================================
+   SERVER PAGINATION FOOTER
+========================================================= */
+
+.server-pagination {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 14px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top: none;
+  font-size: 12px;
+  color: #475569;
+}
+
+.pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-left select {
+  height: 26px;
+  min-width: 52px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  outline: none;
+}
+
+.record-info {
+  margin-left: 8px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.pagination-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pagination-right button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pagination-right button:hover:not(:disabled) {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.pagination-right button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0 6px;
+}

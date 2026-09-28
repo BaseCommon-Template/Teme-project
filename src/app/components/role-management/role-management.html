@@ -1,0 +1,244 @@
+<div class="role-management-page">
+  <!-- ================================================= -->
+  <!-- PAGE TITLE -->
+  <!-- ================================================= -->
+
+  <div class="page-title">
+    <h2>Role Management</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- ================================================= -->
+    <!-- BREADCRUMB -->
+    <!-- ================================================= -->
+
+    <div class="breadcrumb">
+      <a routerLink="/dashboard" class="dashboard-link">Dashboard</a>
+      <span class="separator">›</span>
+      <strong>Role Management</strong>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ================================================= -->
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input #searchInput type="text" [ngModel]="searchText()" (ngModelChange)="onSearchChange($event)"
+            placeholder="Search roles..." autocomplete="off" />
+
+          @if (searchText()) {
+          <button type="button" class="clear-search" title="Clear Search" (click)="clearSearch()">
+            ×
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="status-filter">
+          <span>Active Roles</span>
+
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <button type="button" class="publish-btn" (click)="openAddModal()">ADD ROLE</button>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE -->
+    <!-- ================================================= -->
+
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span class="loading-text">Loading Roles...</span>
+      </div>
+      }
+      <div class="ag-theme-quartz role-management-grid">
+        <ag-grid-angular style="width: 100%; height: 100%" [rowData]="rowData" [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef" [rowHeight]="rowHeight" [headerHeight]="headerHeight" [pagination]="false"
+          (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)" />
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SERVER-LIKE PAGINATION -->
+      <!-- ================================================= -->
+
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+            to
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToFirstPage()" title="First Page">
+            «
+          </button>
+
+          <button type="button" [disabled]="currentPage <= 1" (click)="goToPreviousPage()" title="Previous Page">
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+
+          <button type="button" [disabled]="currentPage >= totalPages || totalPages === 0" (click)="goToNextPage()"
+            title="Next Page">
+            ›
+          </button>
+
+          <button type="button" [disabled]="currentPage >= totalPages || totalPages === 0" (click)="goToLastPage()"
+            title="Last Page">
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- CREATE / EDIT ROLE MODAL -->
+<!-- ===================================================== -->
+
+@if (isModalOpen()) {
+<div class="modal-overlay">
+  <div class="role-modal">
+    <!-- HEADER -->
+
+    <div class="modal-header">
+      <div class="modal-heading">
+        <div>
+          <h3>
+            {{ isEditMode() ? 'Edit Role' : 'Add New Role' }}
+          </h3>
+
+          <!-- <p>
+              {{ isEditMode() ? 'Update role details' : 'Add new role to the system' }}
+            </p> -->
+        </div>
+      </div>
+
+      <button type="button" class="modal-close" (click)="closeModal()">×</button>
+    </div>
+
+    <!-- FORM -->
+
+    <form #roleForm="ngForm" class="modal-body" (ngSubmit)="saveRole()" novalidate>
+      <!-- ROLE NAME + PRIORITY -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>ROLE NAME <span>*</span></label>
+
+          <input #firstFormInput type="text" [(ngModel)]="formData.role_name" name="role_name" #roleNameCtrl="ngModel"
+            required minlength="2" maxlength="100" pattern="^[A-Za-z]+(?:[ _-][A-Za-z]+)*$" placeholder="e.g. Admin"
+            autocomplete="off" (keydown)="preventRoleNameInvalidCharacters($event)" (input)="sanitizeRoleName()"
+            [class.input-invalid]="roleNameCtrl.invalid && (roleNameCtrl.touched || submitted)" />
+
+          @if (roleNameCtrl.invalid && (roleNameCtrl.touched || submitted)) {
+          <div class="validation-error">
+            @if (roleNameCtrl.errors?.['required']) {
+            Role Name is required.
+            } @else if (roleNameCtrl.errors?.['minlength']) {
+            Role Name must be at least 2 characters.
+            } @else if (roleNameCtrl.errors?.['pattern']) {
+            Only letters, single spaces, underscore (_) and hyphen (-) are allowed.
+            } @else if (roleNameCtrl.errors?.['maxlength']) {
+            Role Name cannot exceed 100 characters.
+            }
+          </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>PRIORITY <span>*</span></label>
+
+          <input type="number" [(ngModel)]="formData.priority" name="priority" #priorityCtrl="ngModel" min="1" required
+            placeholder="1" [class.input-invalid]="priorityCtrl.invalid && (priorityCtrl.touched || submitted)" />
+
+          @if (priorityCtrl.invalid && (priorityCtrl.touched || submitted)) {
+          <div class="validation-error">Valid Priority is required.</div>
+          }
+        </div>
+      </div>
+
+      <!-- TOGGLES BOX -->
+
+      <div class="role-options">
+        <!-- ACTIVE -->
+        <div class="role-option">
+          <label>ACTIVE</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="formData.status" name="status" />
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-value">
+            {{ formData.status ? 'Yes' : 'No' }}
+          </span>
+        </div>
+
+        <!-- OTP -->
+        <div class="role-option">
+          <label>OTP</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="formData.otp" name="otp" />
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-value">
+            {{ formData.otp ? 'Yes' : 'No' }}
+          </span>
+        </div>
+
+        <!-- IP -->
+        <div class="role-option">
+          <label>IP</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="formData.ip" name="ip" />
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-value">
+            {{ formData.ip ? 'Yes' : 'No' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+
+        <button type="submit" class="save-btn">
+          {{ isEditMode() ? 'Update Role' : 'Save Role' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

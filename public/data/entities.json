@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "CAPF",
+    "code": "CAPF",
+    "description": "Central Armed Police Forces",
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "name": "State Police",
+    "code": "SP",
+    "description": "State Police Forces across India",
+    "createdAt": "2024-01-15T10:00:00Z"
+  },
+  {
+    "id": 3,
+    "name": "PSARA",
+    "code": "PSARA",
+    "description": "Private Security Agency Regulation Authority",
+    "createdAt": "2024-01-15T10:00:00Z"
+  }
+]

@@ -1,0 +1,158 @@
+<!-- Trigger Button -->
+    <button
+      (click)="a11y.toggleWidget()"
+      type="button"
+      class="flex h-8 w-8 items-center justify-center rounded-md text-[#46584b] bg-transparent border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
+      title="Accessibility Options"
+      aria-label="Open accessibility options"
+    >
+      <img src="accessibility.svg" alt="Accessibility" class="w-6 h-6 cursor-pointer" />
+    </button>
+
+
+
+    <!-- Side Drawer Modal -->
+    @if (a11y.isWidgetOpen()) {
+      <div class="fixed inset-0 z-[9999] flex justify-end">
+        <!-- Overlay -->
+        <div
+          class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
+          (click)="a11y.closeWidget()"
+        ></div>
+
+        <!-- Drawer Content -->
+        <div class="relative w-full max-w-sm bg-white shadow-2xl h-full flex flex-col z-10 overflow-y-auto">
+          <!-- Drawer Header -->
+          <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#355f2d] text-white">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold">Accessibility Tools</span>
+            </div>
+            <button
+              (click)="a11y.closeWidget()"
+              class="text-white/80 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+
+          <!-- Drawer Body -->
+          <div class="p-6 flex-1 flex flex-col gap-6">
+            <!-- Text Size Controls -->
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Text Size</span>
+              <div class="grid grid-cols-3 gap-2">
+                <button
+                  (click)="fontSize.increase()"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
+                >
+                  <span>A+</span>
+                  <span class="text-[10px] font-normal text-slate-500">Increase</span>
+                </button>
+                <button
+                  (click)="fontSize.reset()"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
+                >
+                  <span>A</span>
+                  <span class="text-[10px] font-normal text-slate-500">Default</span>
+                </button>
+                <button
+                  (click)="fontSize.decrease()"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
+                >
+                  <span>A-</span>
+                  <span class="text-[10px] font-normal text-slate-500">Decrease</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Display Controls Grid -->
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Display & Visual</span>
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  (click)="a11y.toggleDarkContrast()"
+                  [class.bg-blue-50]="a11y.state().darkContrast"
+                  [class.border-blue-700]="a11y.state().darkContrast"
+                  [class.text-blue-900]="a11y.state().darkContrast"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🌓</span>
+                  <span>Dark Contrast</span>
+                </button>
+
+                <button
+                  (click)="a11y.toggleInvert()"
+                  [class.bg-blue-50]="a11y.state().invert"
+                  [class.border-blue-700]="a11y.state().invert"
+                  [class.text-blue-900]="a11y.state().invert"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🔄</span>
+                  <span>Invert Colors</span>
+                </button>
+
+                <button
+                  (click)="a11y.toggleSaturation()"
+                  [class.bg-blue-50]="a11y.state().saturation"
+                  [class.border-blue-700]="a11y.state().saturation"
+                  [class.text-blue-900]="a11y.state().saturation"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🎨</span>
+                  <span>High Saturation</span>
+                </button>
+
+                <button
+                  (click)="a11y.toggleHighlightLinks()"
+                  [class.bg-blue-50]="a11y.state().highlightLinks"
+                  [class.border-blue-700]="a11y.state().highlightLinks"
+                  [class.text-blue-900]="a11y.state().highlightLinks"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🔗</span>
+                  <span>Highlight Links</span>
+                </button>
+
+                <button
+                  (click)="a11y.toggleHideImages()"
+                  [class.bg-blue-50]="a11y.state().hideImages"
+                  [class.border-blue-700]="a11y.state().hideImages"
+                  [class.text-blue-900]="a11y.state().hideImages"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🖼️</span>
+                  <span>Hide Images</span>
+                </button>
+
+                <button
+                  (click)="a11y.toggleDefaultCursor()"
+                  [class.bg-blue-50]="a11y.state().defaultCursor"
+                  [class.border-blue-700]="a11y.state().defaultCursor"
+                  [class.text-blue-900]="a11y.state().defaultCursor"
+                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
+                >
+                  <span class="text-lg">🖱️</span>
+                  <span>Default Cursor</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Drawer Footer -->
+          <div class="p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+            <button
+              (click)="a11y.resetAll(); fontSize.reset()"
+              class="px-4 py-2 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              Reset All
+            </button>
+            <button
+              (click)="a11y.closeWidget()"
+              class="px-4 py-2 bg-[#355f2d] text-white text-xs font-bold rounded-lg hover:bg-[#46584b] transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+    }

@@ -1,0 +1,875 @@
+<div class="users-page">
+  <!-- ================================================= -->
+  <!-- PAGE TITLE -->
+  <!-- ================================================= -->
+
+  <div class="page-title">
+    <h2>Users</h2>
+  </div>
+
+  <div class="main-content">
+    <!-- ================================================= -->
+    <!-- BREADCRUMB -->
+    <!-- ================================================= -->
+
+    <div class="breadcrumb">
+      <a routerLink="/dashboard" class="dashboard-link">Dashboard</a>
+      <span class="separator">›</span>
+      <strong>Users</strong>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ================================================= -->
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+          <input
+            #searchInput
+            type="text"
+            [ngModel]="searchText()"
+            (ngModelChange)="onSearchChange($event)"
+            placeholder="Search users..."
+            autocomplete="off"
+          />
+
+          @if (searchText()) {
+            <button type="button" class="clear-search" title="Clear Search" (click)="clearSearch()">
+              ×
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="status-filter">
+          <span>Active Users</span>
+
+          <label class="toggle">
+            <input type="checkbox" [checked]="showActiveOnly()" (change)="toggleActiveFilter()" />
+
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <!-- <button type="button" class="publish-btn" (click)="exportCsv()">Export in CSV</button> -->
+
+        <button type="button" class="publish-btn" (click)="openAddModal()">ADD USER</button>
+      </div>
+    </div>
+
+    <!-- ================================================= -->
+    <!-- TABLE -->
+    <!-- ================================================= -->
+
+    <div class="table-container" style="position: relative">
+      @if (isLoading()) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading Users...</span>
+        </div>
+      }
+
+      <div class="ag-theme-quartz users-grid">
+        <ag-grid-angular
+          style="width: 100%; height: 100%"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          [defaultColDef]="defaultColDef"
+          [rowHeight]="rowHeight"
+          [headerHeight]="headerHeight"
+          [pagination]="false"
+          (gridReady)="onGridReady($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SERVER-LIKE PAGINATION -->
+      <!-- ================================================= -->
+
+      <div class="server-pagination">
+        <div class="pagination-left">
+          <span>Page Size:</span>
+
+          <select [value]="pageSize" (change)="onPageSizeChange($any($event.target).value)">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+
+          <span class="record-info">
+            {{ totalRecords > 0 ? (currentPage - 1) * pageSize + 1 : 0 }}
+
+            to
+
+            {{ totalRecords > 0 ? Math.min(currentPage * pageSize, totalRecords) : 0 }}
+
+            of {{ totalRecords }}
+          </span>
+        </div>
+
+        <div class="pagination-right">
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToFirstPage()"
+            title="First Page"
+          >
+            «
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage <= 1"
+            (click)="goToPreviousPage()"
+            title="Previous Page"
+          >
+            ‹
+          </button>
+
+          <span class="page-text"> Page {{ currentPage }} of {{ totalPages || 0 }} </span>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToNextPage()"
+            title="Next Page"
+          >
+            ›
+          </button>
+
+          <button
+            type="button"
+            [disabled]="currentPage >= totalPages || totalPages === 0"
+            (click)="goToLastPage()"
+            title="Last Page"
+          >
+            »
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== -->
+<!-- ADD / EDIT USER MODAL -->
+<!-- ===================================================== -->
+
+@if (isModalOpen()) {
+  <div class="modal-overlay">
+    <div class="user-modal">
+      <!-- ================================================= -->
+      <!-- MODAL HEADER -->
+      <!-- ================================================= -->
+
+      <div class="modal-header">
+        <div class="modal-heading">
+          <div>
+            <h3>
+              {{ isEditMode() ? 'Edit User' : 'Add New User' }}
+            </h3>
+
+            <!-- <p>
+              {{
+                isEditMode()
+                  ? 'Update user details'
+                  : 'Add new user to the system'
+              }}
+            </p> -->
+          </div>
+        </div>
+
+        <button type="button" class="modal-close" (click)="closeModal()">×</button>
+      </div>
+
+      <!-- ================================================= -->
+      <!-- FORM -->
+      <!-- ================================================= -->
+
+      <form #userForm="ngForm" class="modal-body" (ngSubmit)="saveUser(userForm)" novalidate>
+        <!-- ================================================= -->
+        <!-- ROW 1 : USER ID + USER NAME -->
+        <!-- ================================================= -->
+
+        <div class="form-row">
+          <!-- USER ID -->
+
+          <div class="form-group">
+            <label> USER ID <span>*</span> </label>
+
+            <input
+              #firstFormInput
+              type="text"
+              [(ngModel)]="formData.userId"
+              name="userId"
+              #userIdCtrl="ngModel"
+              required
+              maxlength="50"
+              pattern="^[A-Za-z0-9@_-]+$"
+              placeholder="e.g. USR_001@NIC"
+              (keydown)="preventUserIdInvalidCharacters($event)"
+              (input)="sanitizeUserId()"
+              [class.input-invalid]="userIdCtrl.invalid && (userIdCtrl.touched || submitted)"
+            />
+
+            @if (userIdCtrl.invalid && (userIdCtrl.touched || submitted)) {
+              <div class="validation-error">
+                @if (userIdCtrl.errors?.['required']) {
+                  User ID is required.
+                } @else if (userIdCtrl.errors?.['pattern']) {
+                  Only letters, numbers, @, underscore (_) and hyphen (-) are allowed.
+                }
+              </div>
+            }
+          </div>
+
+          <!-- USER NAME -->
+
+          <div class="form-group">
+            <label> USER NAME <span>*</span> </label>
+
+            <input
+              type="text"
+              [(ngModel)]="formData.username"
+              name="username"
+              #usernameCtrl="ngModel"
+              required
+              maxlength="100"
+              pattern="^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
+              placeholder="e.g. Rahul_Sharma"
+              (keydown)="preventUserNameInvalidCharacters($event)"
+              (input)="sanitizeUserName()"
+              [class.input-invalid]="usernameCtrl.invalid && (usernameCtrl.touched || submitted)"
+            />
+
+            @if (usernameCtrl.invalid && (usernameCtrl.touched || submitted)) {
+              <div class="validation-error">User Name is required.</div>
+            }
+          </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- ROW 2 : ROLE - FULL WIDTH -->
+        <!-- ================================================= -->
+
+        <div class="form-row">
+          <div class="form-group role-multiselect-group full-width">
+            <label> ROLE <span>*</span> </label>
+
+            <div class="role-multiselect">
+              <div class="role-select-box" (click)="toggleRoleDropdown()">
+                <div class="selected-role-chips">
+                  @if (formData.roleIds.length === 0) {
+                    <span class="role-placeholder"> Select roles </span>
+                  } @else {
+                    @for (roleId of formData.roleIds; track roleId) {
+                      <span class="role-chip">
+                        <span>
+                          {{ getRoleName(roleId) }}
+                        </span>
+
+                        <button
+                          type="button"
+                          class="role-chip-remove"
+                          (click)="$event.stopPropagation(); removeRole(roleId)"
+                          title="Remove role"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    }
+                  }
+                </div>
+
+                <span class="role-dropdown-arrow" [class.open]="roleDropdownOpen"> ▾ </span>
+              </div>
+
+              <!-- ================================================= -->
+              <!-- ROLE DROPDOWN -->
+              <!-- ================================================= -->
+
+              @if (roleDropdownOpen) {
+                <div class="role-dropdown-panel" (click)="$event.stopPropagation()">
+                  <!-- ROLE SEARCH -->
+
+                  <div class="role-search-box">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+
+                    <input
+                      type="text"
+                      [(ngModel)]="roleSearchText"
+                      name="roleSearch"
+                      placeholder="Search roles..."
+                      autocomplete="off"
+                    />
+                  </div>
+
+                  <!-- ROLE LIST -->
+
+                  <div class="role-options-list">
+                    @if (filteredRoleOptions.length === 0) {
+                      <div class="no-role-found">No roles found</div>
+                    } @else {
+                      @for (role of filteredRoleOptions; track role.roleid) {
+                        <label class="role-option">
+                          <input
+                            type="checkbox"
+                            [checked]="isRoleSelected(Number(role.roleid))"
+                            (change)="toggleRole(role)"
+                          />
+
+                          <span class="role-option-name">
+                            {{ role.rolename }}
+                          </span>
+                        </label>
+                      }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- ROW 3 : ORGANIZATION TYPE + ORGANIZATION -->
+        <!-- ================================================= -->
+
+        @if (hasRole12() || hasRole13()) {
+          <div class="form-row">
+            <!-- ORGANIZATION TYPE -->
+
+            <div class="form-group">
+              <label> ORGANIZATION TYPE </label>
+
+              <select
+                [(ngModel)]="formData.organization_type"
+                name="organization_type"
+                #organizationTypeCtrl="ngModel"
+                /* required */
+                (change)="onOrganizationTypeChange($any($event.target).value)"
+                [class.input-invalid]="
+                  organizationTypeCtrl.invalid && (organizationTypeCtrl.touched || submitted)
+                "
+              >
+                <option value="">Select Organization Type</option>
+
+                @for (item of organizationTypes; track item.organization_type_id) {
+                  <option [value]="item.organization_type_id">
+                    {{ item.organization_type }}
+                  </option>
+                }
+              </select>
+              <!-- 
+              @if (organizationTypeCtrl.invalid && (organizationTypeCtrl.touched || submitted)) {
+                <div class="validation-error">Organization Type is required.</div>
+              } -->
+            </div>
+
+            <!-- ORGANIZATION -->
+
+            @if (hasRole13()) {
+              <div class="form-group">
+                <label> ORGANIZATION </label>
+
+                <select
+                  [(ngModel)]="formData.organization"
+                  name="organization"
+                  #organizationCtrl="ngModel"
+                  /* required */
+                  [disabled]="!formData.organization_type"
+                  [class.input-invalid]="
+                    organizationCtrl.invalid && (organizationCtrl.touched || submitted)
+                  "
+                >
+                  <option value="">
+                    {{
+                      formData.organization_type
+                        ? 'Select Organization'
+                        : 'Select Organization Type first'
+                    }}
+                  </option>
+
+                  @for (item of organizations; track item.organisation_id) {
+                    <option [value]="item.organisation_id">
+                      {{ item.organisation_name }}
+                    </option>
+                  }
+                </select>
+
+                <!-- @if (organizationCtrl.invalid && (organizationCtrl.touched || submitted)) {
+                  <div class="validation-error">Organization is required.</div>
+                } -->
+              </div>
+            }
+          </div>
+        }
+
+        <!-- ================================================= -->
+        <!-- ROW 4 : DESIGNATION + RANK -->
+        <!-- ================================================= -->
+
+        <div class="form-row">
+          <!-- DESIGNATION -->
+
+          <div class="form-group">
+            <label> DESIGNATION <span>*</span> </label>
+
+            <input
+              type="text"
+              [(ngModel)]="formData.designation"
+              name="designation"
+              #designationCtrl="ngModel"
+              required
+              maxlength="100"
+              pattern="^[A-Za-z]+(?:[ ._-][A-Za-z]+)*$"
+              placeholder="e.g. Senior.Inspector"
+              (keydown)="preventDesignationInvalidCharacters($event)"
+              (input)="sanitizeDesignation()"
+              [class.input-invalid]="
+                designationCtrl.invalid && (designationCtrl.touched || submitted)
+              "
+            />
+
+            @if (designationCtrl.invalid && (designationCtrl.touched || submitted)) {
+              <div class="validation-error">Designation is required.</div>
+            }
+          </div>
+
+          <!-- RANK -->
+
+          <div class="form-group">
+            <label> RANK </label>
+
+            <input
+              type="text"
+              [(ngModel)]="formData.rank"
+              name="rank"
+              #rankCtrl="ngModel"
+              maxlength="100"
+              pattern="^[A-Za-z]+(?:[ ._-][A-Za-z]+)*$"
+              placeholder="e.g. Sub.Inspector"
+              (keydown)="preventRankInvalidCharacters($event)"
+              (input)="sanitizeRank()"
+              [class.input-invalid]="rankCtrl.invalid && (rankCtrl.touched || submitted)"
+            />
+          </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- ROW 5 : PHONE + EMAIL -->
+        <!-- ================================================= -->
+
+        <div class="form-row">
+          <!-- PHONE -->
+
+          <div class="form-group">
+            <label> PHONE </label>
+
+            <input
+              type="tel"
+              [(ngModel)]="formData.phone"
+              name="phone"
+              #phoneCtrl="ngModel"
+              pattern="^[6-9][0-9]{9}$"
+              maxlength="10"
+              placeholder="e.g. 9876543210"
+              (keypress)="onlyNumbers($event)"
+              [class.input-invalid]="phoneCtrl.invalid && (phoneCtrl.touched || submitted)"
+            />
+
+            @if (phoneCtrl.invalid && (phoneCtrl.touched || submitted)) {
+              <div class="validation-error">
+                @if (phoneCtrl.errors?.['pattern']) {
+                  Please enter a valid 10-digit phone number starting with 6-9.
+                }
+              </div>
+            }
+          </div>
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+            <label> EMAIL <span>*</span> </label>
+
+            <input
+              type="email"
+              [(ngModel)]="formData.email"
+              name="email"
+              #emailCtrl="ngModel"
+              required
+              email
+              pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+              maxlength="150"
+              placeholder="officer@example.com"
+              (keydown)="preventEmailInvalidCharacters($event)"
+              (input)="sanitizeEmail()"
+              [class.input-invalid]="emailCtrl.invalid && (emailCtrl.touched || submitted)"
+            />
+
+            @if (emailCtrl.invalid && (emailCtrl.touched || submitted)) {
+              <div class="validation-error">
+                @if (emailCtrl.errors?.['required']) {
+                  Email is required.
+                } @else if (emailCtrl.errors?.['email'] || emailCtrl.errors?.['pattern']) {
+                  Please enter a valid email address.
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- ROW 6 : PASSWORD -->
+        <!-- ================================================= -->
+
+        @if (!isEditMode()) {
+          <div class="form-group">
+            <label> PASSWORD <span>*</span> </label>
+
+            <div class="password-input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="formData.password"
+                name="password"
+                #passwordCtrl="ngModel"
+                required
+                minlength="6"
+                maxlength="16"
+                placeholder="Password"
+                [class.input-invalid]="passwordCtrl.invalid && (passwordCtrl.touched || submitted)"
+              />
+
+              <!-- EYE BUTTON -->
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                [title]="showPassword ? 'Hide password' : 'Show password'"
+              >
+                @if (showPassword) {
+                  <!-- EYE OFF -->
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+
+                    <path
+                      d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a16.16 16.16 0 0 1-1.67 2.68"
+                    ></path>
+
+                    <path
+                      d="M6.61 6.61C3.5 8.7 2 12 2 12s3 7 10 7a10.43 10.43 0 0 1 4.27-.92"
+                    ></path>
+
+                    <line x1="2" y1="2" x2="22" y2="22"></line>
+                  </svg>
+                } @else {
+                  <!-- EYE -->
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"></path>
+
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                }
+              </button>
+            </div>
+
+            @if (passwordCtrl.invalid && (passwordCtrl.touched || submitted)) {
+              <div class="validation-error">
+                @if (passwordCtrl.errors?.['required']) {
+                  Password is required.
+                } @else if (
+                  passwordCtrl.errors?.['minlength'] || passwordCtrl.errors?.['maxlength']
+                ) {
+                  Password must be between 6 and 16 characters.
+                }
+              </div>
+            }
+          </div>
+        }
+
+        @if (isEditMode()) {
+          <div class="form-row status-form-row">
+            <div class="form-group status-group">
+              <label>USER STATUS</label>
+
+              <div class="status-control">
+                <div class="status-info">
+                  <div
+                    class="status-dot"
+                    [class.active]="formData.is_active"
+                    [class.inactive]="!formData.is_active"
+                  ></div>
+
+                  <div class="status-text">
+                    <span class="status-title">
+                      {{ formData.is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </div>
+                </div>
+
+                <label class="status-switch">
+                  <input type="checkbox" [(ngModel)]="formData.is_active" name="is_active" />
+
+                  <span class="status-slider">
+                    <span class="status-slider-dot"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
+        <div class="modal-footer">
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+
+          <button type="submit" class="save-btn">
+            {{ isEditMode() ? 'Update User' : 'Save User' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- ===================================================== -->
+<!-- USER ACCESS / ROLE CONFIGURATION MODAL -->
+<!-- ===================================================== -->
+
+@if (isAccessModalOpen()) {
+  <div class="access-modal-overlay">
+    <div class="access-modal">
+      <!-- HEADER -->
+      <div class="access-modal-header">
+        <div class="access-header-content">
+          <div>
+            <h3>Access Configuration</h3>
+            <p>Configure IP and authentication access for user</p>
+          </div>
+        </div>
+
+        <button type="button" class="access-modal-close" (click)="closeAccessModal()" title="Close">
+          ×
+        </button>
+      </div>
+
+      <!-- BODY -->
+      <div class="access-modal-body">
+        <!-- USER INFORMATION -->
+        <div class="access-section">
+          <div class="access-form-row">
+            <!-- USER ID -->
+            <div class="access-form-group">
+              <label> USER ID </label>
+
+              <div class="access-input-wrapper readonly-input">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M20 21a8 8 0 0 0-16 0"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+
+                <input type="text" [value]="accessUser()?.userId || ''" readonly />
+              </div>
+            </div>
+
+            <!-- IP ADDRESS -->
+            <div class="access-form-group">
+              <label>
+                IP ADDRESS
+                <span>*</span>
+              </label>
+
+              <div class="access-input-wrapper">
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <path d="M7 8h.01"></path>
+                  <path d="M7 12h.01"></path>
+                  <path d="M7 16h.01"></path>
+                  <path d="M11 8h6"></path>
+                  <path d="M11 12h6"></path>
+                  <path d="M11 16h6"></path>
+                </svg>
+
+                <input
+                  type="text"
+                  [(ngModel)]="accessUserIp"
+                  name="accessUserIp"
+                  placeholder="e.g. 192.168.1.100"
+                  maxlength="15"
+                />
+              </div>
+
+              <small>
+                Enter the IP address from which this user is allowed to access the portal.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- ASSIGNED ROLES -->
+        <div class="access-section">
+          <!-- ROLE TABLE -->
+          <div class="access-role-table">
+            <!-- HEADER -->
+            <div class="access-role-row access-role-header">
+              <div>ROLE NAME</div>
+
+              <div>OTP BASED</div>
+
+              <div>IP BASED</div>
+            </div>
+
+            <!-- ROLE DATA -->
+            @if (accessRoleSettings.length > 0) {
+              @for (role of accessRoleSettings; track role.roleId; let i = $index) {
+                <div class="access-role-row">
+                  <div class="access-role-name">
+                    <div>
+                      <strong>{{ role.roleName }}</strong>
+                    </div>
+                  </div>
+
+                  <!-- OTP -->
+                  <div class="access-role-toggle">
+                    <label class="access-switch">
+                      <input
+                        type="checkbox"
+                        [checked]="role.otpBased"
+                        (change)="toggleOtpBased(i)"
+                      />
+
+                      <span class="access-slider"></span>
+                    </label>
+
+                    <span class="toggle-status" [class.enabled]="role.otpBased">
+                      {{ role.otpBased ? 'Yes' : 'No' }}
+                    </span>
+                  </div>
+
+                  <!-- IP -->
+                  <div class="access-role-toggle">
+                    <label class="access-switch">
+                      <input type="checkbox" [checked]="role.ipBased" (change)="toggleIpBased(i)" />
+
+                      <span class="access-slider"></span>
+                    </label>
+
+                    <span class="toggle-status" [class.enabled]="role.ipBased">
+                      {{ role.ipBased ? 'Yes' : 'No' }}
+                    </span>
+                  </div>
+                </div>
+              }
+            } @else {
+              <div class="access-empty-state">
+                <svg
+                  width="30"
+                  height="30"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                >
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 8v4"></path>
+                  <path d="M12 16h.01"></path>
+                </svg>
+
+                <strong>No roles assigned</strong>
+
+                <span> This user does not have any assigned roles. </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="access-modal-footer">
+        <button type="button" class="access-cancel-btn" (click)="closeAccessModal()">Cancel</button>
+
+        <button type="button" class="access-submit-btn" (click)="submitAccessConfiguration()">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+}

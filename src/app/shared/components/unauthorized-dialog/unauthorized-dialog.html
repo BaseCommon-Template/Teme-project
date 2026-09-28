@@ -1,0 +1,26 @@
+@if (isOpen()) {
+      <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center z-[9999] p-4">
+        <div class="w-full max-w-sm bg-white border border-slate-100 shadow-2xl rounded-3xl text-center overflow-hidden">
+          <div class="p-8">
+            <div class="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-5 text-red-500 text-2xl font-bold">
+              ⚠️
+            </div>
+            <p class="text-sm font-black uppercase tracking-widest text-red-500 mb-2">
+              Access Denied
+            </p>
+            <h2 class="text-xl font-black text-slate-900 tracking-tight mb-3 leading-snug">
+              You are not authorized to perform this operation
+            </h2>
+            <p class="text-sm text-slate-500 mb-7 leading-relaxed">
+              Please contact your administrator to request the necessary permissions.
+            </p>
+            <button
+              (click)="close()"
+              class="w-full bg-red-500 hover:bg-red-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl py-4 transition-all active:scale-95 cursor-pointer"
+            >
+              OK, got it
+            </button>
+          </div>
+        </div>
+      </div>
+    }

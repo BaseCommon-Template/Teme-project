@@ -1,0 +1,121 @@
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* =========================================================
+   TABLE CONTAINER (Matching other project components)
+   ========================================================= */
+
+.table-container {
+  width: 100%;
+  border: 1px solid #b9b9b9;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.vacancies-grid {
+  width: 100%;
+  height: 920px;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* =========================================================
+   AG GRID HEADER (#4285d4 Blue signature header)
+   ========================================================= */
+
+:host ::ng-deep .vacancies-grid .ag-header {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #286bb7 !important;
+  height: 32px !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-row {
+  height: 32px !important;
+  background: #4285d4 !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-cell {
+  background: #4285d4 !important;
+  color: #ffffff !important;
+  border-right: 1px solid #76a5d6 !important;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  height: 32px !important;
+  box-sizing: border-box;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-cell-label {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-cell-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-icon,
+:host ::ng-deep .vacancies-grid .ag-header-cell-menu-button,
+:host ::ng-deep .vacancies-grid .ag-icon {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-header-cell-menu-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* =========================================================
+   AG GRID ROWS & CELLS
+   ========================================================= */
+
+:host ::ng-deep .vacancies-grid .ag-row {
+  height: 40px !important;
+  min-height: 40px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-row:hover {
+  background: #f5f9fd !important;
+}
+
+:host ::ng-deep .vacancies-grid .ag-cell {
+  font-size: 12px !important;
+  color: #1e293b !important;
+  border-right: 1px solid #f1f5f9 !important;
+  padding: 0 10px !important;
+  font-family: 'Poppins', sans-serif !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Hide number arrows/spinners on vacancy inputs */
+:host ::ng-deep .vacancies-grid .vacancy-number-input::-webkit-inner-spin-button,
+:host ::ng-deep .vacancies-grid .vacancy-number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+:host ::ng-deep .vacancies-grid .vacancy-number-input {
+  -moz-appearance: textfield;
+}
+
+:host ::ng-deep .vacancies-grid .vacancy-number-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15) !important;
+}
