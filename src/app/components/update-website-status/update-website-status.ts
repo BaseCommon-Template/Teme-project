@@ -65,7 +65,7 @@ export class UpdateWebsiteStatusComponent {
             </div>
           `,
           confirmButtonText: 'OK',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.reload();
@@ -89,7 +89,7 @@ export class UpdateWebsiteStatusComponent {
           icon: 'error',
           title: 'Update Failed',
           text: errMsg,
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });

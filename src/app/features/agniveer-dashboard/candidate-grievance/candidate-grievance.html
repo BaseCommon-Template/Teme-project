@@ -1,0 +1,136 @@
+<div class="max-w-5xl mx-auto space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#18181b] pl-4">
+          <h1 class="text-2xl font-bold text-slate-900 m-0">
+            Grievances & Helpdesk
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">
+            Lodge grievances regarding military service records, certifications, and track resolution status
+          </p>
+        </div>
+
+        <button
+          (click)="showCreateModal.set(true)"
+          class="px-5 py-2.5 rounded-2xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-sm transition-all cursor-pointer border-none flex items-center gap-2"
+        >
+          <span>➕</span>
+          <span>Lodge New Grievance</span>
+        </button>
+      </div>
+
+      <!-- Grievance List -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            Loading your grievances...
+          </div>
+        } @else if (grievances().length === 0) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            No active grievances found. You have not lodged any issues yet.
+          </div>
+        } @else {
+          <div class="divide-y divide-slate-100">
+            @for (g of grievances(); track g._id) {
+              <div class="p-6 hover:bg-slate-50 transition-colors space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono font-bold text-xs text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
+                      {{ g.grievance_ticket_id || (g._id ? 'TICKET-' + g._id.slice(-6).toUpperCase() : 'TICKET-NEW') }}
+                    </span>
+                    <span class="font-bold text-sm text-slate-800">
+                      {{ g.grievance_type }}
+                    </span>
+                  </div>
+
+                  <span
+                    [class.bg-blue-50]="g.status === 'CREATED' || g.status === 'IN_PROGRESS'"
+                    [class.text-blue-700]="g.status === 'CREATED' || g.status === 'IN_PROGRESS'"
+                    [class.bg-emerald-50]="g.status === 'RESOLVED' || g.status === 'CLOSED'"
+                    [class.text-emerald-700]="g.status === 'RESOLVED' || g.status === 'CLOSED'"
+                    class="px-3 py-1 rounded-full text-[10px] font-bold"
+                  >
+                    {{ g.status }}
+                  </span>
+                </div>
+
+                <p class="text-xs text-slate-600 m-0 leading-relaxed">
+                  {{ g.description }}
+                </p>
+
+                <div class="text-[11px] text-slate-400 flex items-center gap-4 pt-1">
+                  <span>Submitted: {{ formatDate(g.createdAt) }}</span>
+                  @if (g.remarks) {
+                    <span class="text-slate-600">Nodal Remarks: {{ g.remarks }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Create Modal -->
+    @if (showCreateModal()) {
+      <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+        <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div class="px-6 py-4 bg-gradient-to-r from-[#1a2a6c] to-[#1e3a8a] text-white flex items-center justify-between">
+            <h3 class="text-base font-bold m-0">Lodge New Grievance</h3>
+            <button
+              (click)="showCreateModal.set(false)"
+              class="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer border-none"
+            >
+              ✕
+            </button>
+          </div>
+
+          <form (ngSubmit)="onSubmitGrievance()" class="p-6 space-y-4 text-xs">
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Issue Category *</label>
+              <select
+                [(ngModel)]="newForm.grievance_type"
+                name="grievance_type"
+                required
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                <option value="Service Record Discrepancy">Service Record Discrepancy</option>
+                <option value="Kaushal Praman Patra / Skill Mapping">Kaushal Praman Patra / Skill Mapping</option>
+                <option value="Portal Access Issue">Portal Access Issue</option>
+                <option value="Application Status Issue">Application Status Issue</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Describe Issue in Detail *</label>
+              <textarea
+                [(ngModel)]="newForm.description"
+                name="description"
+                required
+                rows="4"
+                placeholder="Explain the issue clearly..."
+                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 resize-none"
+              ></textarea>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+              <button
+                type="button"
+                (click)="showCreateModal.set(false)"
+                class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                [disabled]="submitting()"
+                class="px-5 py-2 rounded-xl bg-[#1C4587] text-white font-bold cursor-pointer border-none"
+              >
+                {{ submitting() ? 'Submitting...' : 'Submit Grievance' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    }

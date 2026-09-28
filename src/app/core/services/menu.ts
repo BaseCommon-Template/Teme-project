@@ -557,139 +557,9 @@ export class MenuService {
   }
 
   loadDefaultMenus(): void {
-    const defaultMenus = [
-      {
-        menu_id: 1,
-        menu_name: 'Dashboard',
-        app_router_path: '/dashboard',
-        is_active: true,
-        is_visible_in_navbar: true,
-        priority: 1,
-        parent_menu_id: null,
-        children: [],
-      },
-      {
-        menu_id: 2,
-        menu_name: 'Import Profiles',
-        app_router_path: '/import',
-        is_active: true,
-        is_visible_in_navbar: true,
-        priority: 2,
-        parent_menu_id: null,
-        children: [],
-      },
-      {
-        menu_id: 3,
-        menu_name: 'Masters Management',
-        app_router_path: '',
-        is_active: true,
-        is_visible_in_navbar: true,
-        priority: 3,
-        parent_menu_id: null,
-        children: [
-          {
-            menu_id: 31,
-            menu_name: 'Users Management',
-            app_router_path: '/masters/usersmanagement',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 1,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 32,
-            menu_name: 'Role Management',
-            app_router_path: '/masters/rolemanagement',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 2,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 33,
-            menu_name: 'Menu Management',
-            app_router_path: '/masters/menumanagement',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 3,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 34,
-            menu_name: 'Nationality',
-            app_router_path: '/masters/nationality',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 4,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 35,
-            menu_name: 'Religion',
-            app_router_path: '/masters/religion',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 5,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 36,
-            menu_name: 'Organization',
-            app_router_path: '/masters/organization',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 6,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 37,
-            menu_name: 'Organization Type',
-            app_router_path: '/masters/organizationtype',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 7,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 38,
-            menu_name: 'Categories',
-            app_router_path: '/masters/categories',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 8,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 39,
-            menu_name: 'Post Master',
-            app_router_path: '/masters/postmaster',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 9,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 40,
-            menu_name: 'Post Mapping',
-            app_router_path: '/masters/postmapping',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 10,
-            parent_menu_id: 3,
-          },
-          {
-            menu_id: 41,
-            menu_name: 'Schedule Management',
-            app_router_path: '/masters/schedulemanagement',
-            is_active: true,
-            is_visible_in_navbar: true,
-            priority: 11,
-            parent_menu_id: 3,
-          },
-        ],
-      },
-    ];
-    this.patchMenus(defaultMenus);
+    this.allMenusSignal.set([]);
+    this.navbarMenusSignal.set([]);
+    this.isLoading.set(false);
   }
 
   refresh(force = false): void {
@@ -759,23 +629,11 @@ export class MenuService {
       },
 
       error: (err) => {
-        console.warn('GetByRole API Error, loading fallback menus:', err);
-        this.error.set(err?.message || 'Failed to load menus');
-        let loadedFromCache = false;
-        if (typeof window !== 'undefined') {
-          const cached = sessionStorage.getItem('menudata') || sessionStorage.getItem('public_menus');
-          if (cached) {
-            try {
-              this.patchMenus(cached);
-              loadedFromCache = this.allMenusSignal().length > 0;
-            } catch (e) {}
-          }
-        }
-        if (!loadedFromCache && this.allMenusSignal().length === 0) {
-          this.loadDefaultMenus();
-        } else {
-          this.isLoading.set(false);
-        }
+        console.error('GetByRole API Error:', err);
+        this.error.set(err.message || 'Failed to load menus');
+        this.allMenusSignal.set([]);
+        this.navbarMenusSignal.set([]);
+        this.isLoading.set(false);
       },
     });
   }

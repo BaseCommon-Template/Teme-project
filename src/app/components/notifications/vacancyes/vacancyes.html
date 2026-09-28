@@ -1,6 +1,6 @@
 <div class="min-h-screen bg-[#f8fafc] flex flex-col font-['Poppins',sans-serif]">
   <!-- Top Navigation Header Bar -->
-  <header class="bg-[#46584b] text-white px-6 py-3.5 flex items-center shadow-xs">
+  <header class="bg-[#12263f] text-white px-6 py-3.5 flex items-center shadow-xs">
     <button type="button" (click)="goBack()"
       class="flex items-center gap-2 text-white/90 hover:text-white text-xs sm:text-sm font-semibold transition-colors bg-transparent border-0 cursor-pointer p-0 select-none">
       <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -115,15 +115,15 @@
 
       @if (!isVacancyAdded()) {
       <button type="button" (click)="saveVacancies(true)" [disabled]="isSaving() || isSavingDraft() || isVacancyAdded()"
-        class="px-5 py-2.5 rounded-xl border border-[#355f2d] bg-white hover:bg-slate-50 text-[#355f2d] font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        class="px-5 py-2.5 rounded-xl border border-[#224263] bg-white hover:bg-slate-50 text-[#224263] font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         @if (isSavingDraft()) {
-        <svg class="animate-spin h-3.5 w-3.5 text-[#355f2d]" viewBox="0 0 24 24" fill="none">
+        <svg class="animate-spin h-3.5 w-3.5 text-[#224263]" viewBox="0 0 24 24" fill="none">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
         </svg>
         <span>Saving Draft...</span>
         } @else {
-        <svg class="w-3.5 h-3.5 text-[#355f2d]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        <svg class="w-3.5 h-3.5 text-[#224263]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
           stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
           <polyline points="17 21 17 13 7 13 7 21"></polyline>
@@ -136,7 +136,7 @@
       @if (!isVacancyAdded()){
       <button type="button" (click)="saveVacancies(false)"
         [disabled]="isSaving() || isSavingDraft() || isVacancyAdded()"
-        class="px-6 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#18324d] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer border-none flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        class="px-6 py-2.5 rounded-xl bg-[#224263] hover:bg-[#18324d] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm cursor-pointer border-none flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
         @if (isSaving()) {
         <svg class="animate-spin h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="none">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

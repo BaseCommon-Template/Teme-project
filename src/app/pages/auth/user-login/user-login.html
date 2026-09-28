@@ -3,11 +3,11 @@
     class="w-full max-w-4xl bg-white rounded-3xl shadow-xl mt-6 mb-6 border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-2"
   >
     <!-- Left Banner Column -->
-    <div class="hidden md:flex flex-col justify-between overflow-hidden bg-slate-900">
+    <div class="relative w-full h-full min-h-[320px] bg-[#18181b] flex items-center justify-center overflow-hidden p-0">
       <img
         src="assets/images/login-banner.png"
         alt="Login Banner"
-        class="w-full h-full object-cover object-center"
+        class="w-full h-full object-cover object-center block"
       />
     </div>
 
@@ -23,12 +23,11 @@
       <!-- 2 Tabs: Login & JanParichay Login -->
       <div class="flex p-1 bg-slate-100 rounded-2xl mb-6 border border-slate-200 gap-1">
         <!-- Tab 1 Button -->
-        <!-- (click)="onJanParichayLogin()" -->
         <button
           (click)="setActiveTab('login')"
           type="button"
-          [class.bg-white]="activeTab === 'login'"
-          [class.text-[#355f2d]]="activeTab === 'login'"
+          [class.bg-[#18181b]]="activeTab === 'login'"
+          [class.text-[#FF9933]]="activeTab === 'login'"
           [class.shadow-sm]="activeTab === 'login'"
           [class.font-bold]="activeTab === 'login'"
           [class.text-slate-500]="activeTab !== 'login'"
@@ -56,7 +55,7 @@
         <button
           type="button"
           (click)="onJanParichayLogin()"
-          [class.bg-white]="activeTab === 'janparichay'"
+          [class.bg-[#18181b]]="activeTab === 'janparichay'"
           [class.text-[#FF9933]]="activeTab === 'janparichay'"
           [class.shadow-sm]="activeTab === 'janparichay'"
           [class.font-bold]="activeTab === 'janparichay'"
@@ -102,7 +101,7 @@
               autofocus
               (keydown)="preventUserIdInvalidCharacters($event)"
               (input)="sanitizeUserId()"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#FF9933] focus:outline-none"
             />
 
             @if (emailInput.invalid && emailInput.touched) {
@@ -133,13 +132,13 @@
                 #passwordInput="ngModel"
                 placeholder="Enter your Password"
                 autocomplete="current-password"
-                class="w-full px-3.5 py-2.5 pr-11 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                class="w-full px-3.5 py-2.5 pr-11 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#FF9933] focus:outline-none"
               />
 
               <button
                 type="button"
                 (click)="togglePassword()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#355f2d] bg-transparent border-none cursor-pointer p-1"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#FF9933] bg-transparent border-none cursor-pointer p-1"
                 [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
                 [title]="showPassword ? 'Hide password' : 'Show password'"
               >
@@ -197,80 +196,72 @@
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1"> CAPTCHA * </label>
-            <div class="flex items-center gap-2 mb-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">
+              Enter the code shown below *
+            </label>
+
+            <div class="flex items-center gap-3 mb-2">
               <div
-                class="flex-1 h-10 bg-slate-100 border border-slate-300 rounded-xl flex items-center justify-center overflow-hidden px-3 select-none"
+                class="h-12 min-w-[130px] px-4 rounded-xl border border-slate-300 bg-slate-100 flex items-center justify-center overflow-hidden"
               >
-                @if (isCaptchaLoading()) {
-                  <span class="text-xs text-slate-400 font-medium">Loading...</span>
-                } @else if (captchaCode) {
-                  @if (captchaCode.startsWith('data:image') || captchaCode.length > 100) {
-                    <img
-                      [src]="captchaCode.startsWith('data:image') ? captchaCode : 'data:image/png;base64,' + captchaCode"
-                      alt="CAPTCHA Code"
-                      class="h-8 max-w-full object-contain"
-                    />
-                  } @else {
-                    <span
-                      class="text-base font-mono font-bold tracking-widest text-slate-800 italic decoration-wavy underline decoration-slate-400"
-                    >
-                      {{ captchaCode }}
-                    </span>
-                  }
-                } @else {
-                  <span class="text-xs text-slate-400 italic">No CAPTCHA</span>
-                }
+                <span
+                  class="text-lg font-bold tracking-[0.35em] italic text-[#FF9933] select-none"
+                  style="
+                    font-family: Georgia, serif;
+                    text-shadow: 1px 1px 2px #94a3b8;
+                    transform: skew(-8deg);
+                  "
+                >
+                  {{ captchaCode }}
+                </span>
               </div>
 
               <button
                 type="button"
                 (click)="generateCaptcha()"
                 [disabled]="isCaptchaLoading()"
-                class="h-10 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl border border-slate-300 cursor-pointer flex items-center justify-center transition-colors disabled:opacity-50"
-                title="Refresh CAPTCHA"
-                aria-label="Refresh CAPTCHA"
+                class="h-10 w-10 rounded-xl border border-slate-300 bg-white text-[#FF9933] hover:bg-slate-50 flex items-center justify-center cursor-pointer disabled:opacity-50 transition-all shadow-sm hover:shadow-md"
+                title="Refresh Captcha"
               >
                 <svg
+                  [class.animate-spin]="isCaptchaLoading()"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  [class.animate-spin]="isCaptchaLoading()"
                 >
-                  <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-                  <path d="M21 3v5h-5" />
+                  <path d="M3 12a9 9 0 0 1 15.6-6"></path>
+                  <path d="M21 12a9 9 0 0 1-15.6 6"></path>
+                  <path d="M18 3v4h-4"></path>
+                  <path d="M6 21v-4h4"></path>
                 </svg>
               </button>
             </div>
-
             <input
               type="text"
               [(ngModel)]="captchaInput"
               name="captchaInput"
               required
-              minlength="6"
-              maxlength="6"
-              #captchaInputCtrl="ngModel"
-              placeholder="Enter 6-digit CAPTCHA code"
+              #captchaField="ngModel"
               autocomplete="off"
-              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              placeholder="Enter the code above (case-sensitive)"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#FF9933] focus:outline-none"
             />
 
-            @if (captchaInputCtrl.invalid && captchaInputCtrl.touched) {
-              <p class="mt-1 text-[11px] text-red-600 font-medium">6-digit CAPTCHA is required.</p>
+            @if (captchaField.invalid && captchaField.touched) {
+              <p class="mt-1 text-[11px] text-red-600 font-medium">CAPTCHA is required.</p>
             }
           </div>
 
           <button
             type="submit"
             [disabled]="loading() || !username || !password || !captchaInput"
-            class="w-full py-3 rounded-2xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer border-none disabled:opacity-50"
+            class="w-full py-3 rounded-2xl bg-[#18181b] hover:bg-[#27272a] text-[#FF9933] text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer border-none disabled:opacity-50"
           >
             {{ loading() ? 'Verifying...' : 'Sign In' }}
           </button>
@@ -300,7 +291,7 @@
       (click)="$event.stopPropagation()"
     >
       <!-- HEADER -->
-      <div class="bg-[#355f2d] px-6 py-4 text-white flex items-center justify-between">
+      <div class="bg-[#1C4587] px-6 py-4 text-white flex items-center justify-between">
         <div>
           <h3 class="text-lg font-bold m-0">Change Password</h3>
 
@@ -346,7 +337,7 @@
             <button
               type="button"
               (click)="toggleOldPassword()"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#355f2d] bg-transparent border-none cursor-pointer p-1"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1C4587] bg-transparent border-none cursor-pointer p-1"
               [attr.aria-label]="showOldPassword ? 'Hide password' : 'Show password'"
               [title]="showOldPassword ? 'Hide password' : 'Show password'"
             >
@@ -431,7 +422,7 @@
             <button
               type="button"
               (click)="toggleNewPassword()"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#355f2d] bg-transparent border-none cursor-pointer p-1"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1C4587] bg-transparent border-none cursor-pointer p-1"
               [attr.aria-label]="showNewPassword ? 'Hide password' : 'Show password'"
               [title]="showNewPassword ? 'Hide password' : 'Show password'"
             >
@@ -525,7 +516,7 @@
             <button
               type="button"
               (click)="toggleConfirmPassword()"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#355f2d] bg-transparent border-none cursor-pointer p-1"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1C4587] bg-transparent border-none cursor-pointer p-1"
               [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
               [title]="showConfirmPassword ? 'Hide password' : 'Show password'"
             >
@@ -609,7 +600,7 @@
           <button
             type="submit"
             [disabled]="changePasswordLoading"
-            class="px-5 py-2.5 rounded-xl bg-[#355f2d] text-white text-xs font-bold border-none hover:bg-[#46584b] cursor-pointer disabled:opacity-50"
+            class="px-5 py-2.5 rounded-xl bg-[#1C4587] text-white text-xs font-bold border-none hover:bg-[#153466] cursor-pointer disabled:opacity-50"
           >
             {{ changePasswordLoading ? 'Changing...' : 'Change Password' }}
           </button>

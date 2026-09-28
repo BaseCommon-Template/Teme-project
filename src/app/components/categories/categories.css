@@ -227,7 +227,7 @@
   padding: 0 15px;
   border: none;
   border-radius: 4px;
-  background: #355f2d;
+  background: #1c4587;
   color: #ffffff;
   font-size: 12px;
   font-weight: 700;
@@ -240,7 +240,7 @@
 }
 
 .publish-btn:hover {
-  background: #46584b;
+  background: #153d78;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 }
 
@@ -491,7 +491,7 @@
 :host ::ng-deep .category-modal .modal-title h3 {
   margin: 0 !important;
 
-  color: #355f2d !important;
+  color: #1c4587 !important;
 
   font-size: 18px !important;
   font-weight: 700 !important;
@@ -839,7 +839,7 @@
 }
 
 :host ::ng-deep .category-modal .toggle input:checked + .toggle-slider {
-  background: #355f2d !important;
+  background: #1c4587 !important;
 }
 
 :host ::ng-deep .category-modal .toggle input:checked + .toggle-slider::before {
@@ -899,7 +899,7 @@
 
   border-radius: 5px !important;
 
-  background: #355f2d !important;
+  background: #1c4587 !important;
 
   color: #ffffff !important;
 
@@ -911,7 +911,7 @@
 }
 
 :host ::ng-deep .category-modal .save-btn:hover:not(:disabled) {
-  background: #46584b !important;
+  background: #153d78 !important;
 }
 
 :host ::ng-deep .category-modal .save-btn:disabled {
@@ -1090,7 +1090,7 @@
   width: 36px;
   height: 36px;
   border: 3.5px solid #cbd5e1;
-  border-top-color: #355f2d;
+  border-top-color: #1c4587;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -1098,7 +1098,7 @@
 .loading-text {
   font-size: 13px;
   font-weight: 600;
-  color: #355f2d;
+  color: #1c4587;
 }
 
 @keyframes spin {

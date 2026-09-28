@@ -1,0 +1,48 @@
+<div class="bg-slate-50 py-8 px-4 sm:px-8 lg:px-16 min-h-[70vh]" id="maincontent">
+      <div class="max-w-5xl mx-auto">
+        <div class="border-l-4 border-blue-600 pl-4 mb-6">
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 m-0">
+            Frequently Asked Questions (FAQs)
+          </h1>
+        </div>
+
+        <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200 divide-y divide-slate-100">
+          @for (faq of faqList(); track $index; let idx = $index) {
+            <div class="py-4 first:pt-0 last:pb-0">
+              <button
+                (click)="toggleFaq(idx)"
+                class="flex justify-between items-center w-full text-left bg-transparent border-none cursor-pointer p-0 group"
+              >
+                <h3
+                  [class.text-blue-700]="openFaqIndex() === idx"
+                  [class.text-slate-800]="openFaqIndex() !== idx"
+                  class="text-base sm:text-lg font-bold transition-colors m-0 pr-4 leading-snug group-hover:text-blue-700"
+                >
+                  {{ faq.title }}
+                </h3>
+                <span
+                  [class.rotate-45]="openFaqIndex() === idx"
+                  [class.text-blue-700]="openFaqIndex() === idx"
+                  class="text-2xl font-bold transition-transform duration-300 text-slate-400 shrink-0"
+                >
+                  +
+                </span>
+              </button>
+
+              @if (openFaqIndex() === idx) {
+                <div class="pt-3 text-slate-600 leading-relaxed text-sm animate-in fade-in duration-200">
+                  <p class="m-0 text-justify">{{ faq.description }}</p>
+                  @if (faq.points && faq.points.length > 0) {
+                    <ul class="mt-2.5 space-y-1 pl-4 list-disc text-slate-700">
+                      @for (pt of faq.points; track pt) {
+                        <li>{{ pt }}</li>
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>

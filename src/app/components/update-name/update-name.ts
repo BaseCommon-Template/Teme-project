@@ -288,7 +288,7 @@ export class UpdateNameComponent implements OnInit {
             icon: 'error',
             title: 'Record Not Found',
             text: errMsg,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -320,7 +320,7 @@ export class UpdateNameComponent implements OnInit {
           icon: 'error',
           title: 'Search Error',
           text: errMsg,
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });
@@ -347,7 +347,7 @@ export class UpdateNameComponent implements OnInit {
         icon: 'warning',
         title: 'Same Name Entered',
         text: 'The new name is identical to the current name. Please enter a different name.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -390,7 +390,7 @@ export class UpdateNameComponent implements OnInit {
             icon: 'error',
             title: 'Update Failed',
             text: errMsg,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -406,7 +406,7 @@ export class UpdateNameComponent implements OnInit {
             </div>
           `,
           confirmButtonText: 'OK',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         }).then(() => {
           // Reset the entire form after successful update
           this.onResetSearch();
@@ -436,7 +436,7 @@ export class UpdateNameComponent implements OnInit {
           icon: 'error',
           title: 'Update Failed',
           text: errMsg,
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });

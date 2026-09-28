@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, HostListener } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header';
 import { NavbarComponent } from './shared/components/navbar/navbar';
@@ -38,6 +38,14 @@ export class App implements OnInit {
 
   readonly isCheckingWebsiteAccess = signal(true);
   readonly hasWebsiteAccess = signal(false);
+
+  /**
+   * Disable right-click globally across the entire application
+   */
+  @HostListener('document:contextmenu', ['$event'])
+  onRightClick(event: MouseEvent): void {
+    event.preventDefault();
+  }
 
   constructor(
     private idleService: IdleService,
@@ -293,20 +301,33 @@ export class App implements OnInit {
   }
 
   private checkWebsiteAccess(): void {
+    const currentUrl = this.router.url;
+
+    // Sirf home page par access check
+    if (currentUrl !== '/') {
+      this.hasWebsiteAccess.set(true);
+      this.isCheckingWebsiteAccess.set(false);
+      return;
+    }
+
     this.isCheckingWebsiteAccess.set(true);
+
     this.publicMenuService.checkWebsiteAccess().subscribe({
-      next: (res: any) => {
-        this.isCheckingWebsiteAccess.set(false);
-        if (res && res.code === 1) {
+      next: (response: any) => {
+        if (response?.code === 1) {
           this.hasWebsiteAccess.set(true);
         } else {
           this.hasWebsiteAccess.set(false);
         }
-      },
-      error: (err: any) => {
-        console.error('Website Access API Error:', err);
+
         this.isCheckingWebsiteAccess.set(false);
+      },
+
+      error: (error) => {
+        console.error('Website Access API Error:', error);
+
         this.hasWebsiteAccess.set(false);
+        this.isCheckingWebsiteAccess.set(false);
       },
     });
   }

@@ -17,6 +17,7 @@ import { CryptoHelper } from '../../../helpers/crypto-helper';
 import { CommonService } from '../../../services/common-service';
 import { Myprofile } from '../../../services/myprofile/myprofile';
 import { JobNotificationService } from '../../../services/notification/notification';
+import Swal from 'sweetalert2';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -69,6 +70,7 @@ export class AgniveerTable implements OnInit {
   readonly stateList = signal<any[]>([]);
   readonly rcategoryList = signal<any[]>([]);
   readonly rawRecords = signal<AgniveerTableItem[]>([]);
+  readonly isInitialLoading = signal<boolean>(true);
   readonly isLoading = signal<boolean>(false);
   readonly selectedFilterType = signal<'' | 'category' | 'state' | 'rcategory'>('');
 
@@ -364,19 +366,16 @@ export class AgniveerTable implements OnInit {
   ];
 
   get displayedColDefs(): ColDef<AgniveerTableItem>[] {
-  const isPartBNotFilled = this.activeFilter() === 'partB_not_filled';
+    const isPartBNotFilled = this.activeFilter() === 'partB_not_filled';
 
-  if (!isPartBNotFilled) {
-    return this.colDefs;
+    if (!isPartBNotFilled) {
+      return this.colDefs;
+    }
+
+    return this.colDefs.filter(
+      (col) => col.field !== 'category' && col.field !== 'state' && col.field !== 'rcategory',
+    );
   }
-
-  return this.colDefs.filter(
-    (col) =>
-      col.field !== 'category' &&
-      col.field !== 'state' &&
-      col.field !== 'rcategory'
-  );
-}
 
   readonly filteredRecords = computed(() => {
     const list = this.rawRecords();
@@ -401,216 +400,6 @@ export class AgniveerTable implements OnInit {
       toBeRehab: all.length - rehab,
     };
   });
-
-  onFilterTypeChange(type: '' | 'category' | 'state' | 'rcategory'): void {
-    this.selectedFilterType.set(type);
-    this.selectedFilterValue.set('');
-
-    // Previous filter clear
-    this.selectedCategory.set('');
-    this.selectedState.set('');
-    this.selectedRCategory.set('');
-
-    // Clear dropdown list first
-    this.filterMasterList.set([]);
-
-    if (!type) {
-      this.pageNumber.set(1);
-      this.fetchAgniveerData();
-      return;
-    }
-
-    switch (type) {
-      case 'category':
-        this.loadCategoryMaster();
-        break;
-
-      case 'state':
-        this.loadStateMaster();
-        break;
-
-      case 'rcategory':
-        this.loadRCategoryMaster();
-        break;
-    }
-  }
-
-  onFilterValueChange(value: string): void {
-    this.selectedFilterValue.set(value);
-    this.pageNumber.set(1);
-
-    const type = this.selectedFilterType();
-
-    // Pehle teeno filters clear
-    this.selectedCategory.set('');
-    this.selectedState.set('');
-    this.selectedRCategory.set('');
-
-    // Jo filter select hua hai uski ID set karo
-    if (type === 'category') {
-      this.selectedCategory.set(value);
-    }
-
-    if (type === 'state') {
-      this.selectedState.set(value);
-    }
-
-    if (type === 'rcategory') {
-      this.selectedRCategory.set(value);
-    }
-
-    console.log('================ FILTER CHANGE ================');
-    console.log('Filter Type:', type);
-    console.log('Selected Value:', value);
-    console.log('Category ID:', this.selectedCategory());
-    console.log('State ID:', this.selectedState());
-    console.log('RCategory ID:', this.selectedRCategory());
-    console.log('================================================');
-
-    this.fetchAgniveerData();
-  }
-
-  loadCategoryMaster(): void {
-    let payload = {StateCd: 0};
-   const encryptPayload = CryptoHelper.encrypt(JSON.stringify(payload))
-
-    this.notificationService.getAllCategories(JSON.stringify(encryptPayload)).subscribe({
-      next: (res: any) => {
-        console.log('CATEGORY MASTER RESPONSE:', res);
-
-        let data = res?.data;
-
-        if (typeof data === 'string') {
-          data = CryptoHelper.decrypt(data);
-
-          try {
-            data = JSON.parse(data);
-          } catch {}
-        }
-
-        const records = data?.records || data?.Table || data || [];
-
-        console.log('CATEGORY MASTER LIST:', records);
-
-        this.categoryList.set(records);
-
-        // Dropdown ke liye common format
-        const dropdownList = records.map((item: any) => ({
-          id: item.id ?? item.autocategory_id ?? item.category_id ?? item.categoryId,
-
-          name:
-            item.name ??
-            item.category ??
-            item.Category ??
-            item.category_name ??
-            item.CategoryName ??
-            '',
-        }));
-
-        console.log('CATEGORY DROPDOWN LIST:', dropdownList);
-
-        this.filterMasterList.set(dropdownList);
-      },
-
-      error: (err: any) => {
-        console.error('CATEGORY MASTER ERROR:', err);
-        this.filterMasterList.set([]);
-      },
-    });
-  }
-
-  loadStateMaster(): void {
-    this.commonService.getState({}).subscribe({
-      next: (res: any) => {
-        console.log('STATE MASTER RESPONSE:', res);
-
-        let data = res?.data;
-
-        if (typeof data === 'string') {
-          data = CryptoHelper.decrypt(data);
-
-          try {
-            data = JSON.parse(data);
-          } catch {}
-        }
-
-        const records = data?.records || data?.Table || data || [];
-
-        console.log('STATE MASTER LIST:', records);
-
-        this.stateList.set(records);
-
-        // Dropdown ke liye common format
-        const dropdownList = records.map((item: any) => ({
-          id: item.id ?? item.StateCd ?? item.state_cd ?? item.stateId ?? item.state_id,
-
-          name:
-            item.name ?? item.StateName ?? item.state_name ?? item.stateName ?? item.state ?? '',
-        }));
-
-        console.log('STATE DROPDOWN LIST:', dropdownList);
-
-        this.filterMasterList.set(dropdownList);
-      },
-
-      error: (err: any) => {
-        console.error('STATE MASTER ERROR:', err);
-        this.filterMasterList.set([]);
-      },
-    });
-  }
-
-  loadRCategoryMaster(): void {
-    this.myProfile.GetReservationCategories({}).subscribe({
-      next: (res: any) => {
-        console.log('DOMICILE CATEGORY MASTER RESPONSE:', res);
-
-        let data = res?.data;
-
-        if (typeof data === 'string') {
-          data = CryptoHelper.decrypt(data);
-
-          try {
-            data = JSON.parse(data);
-          } catch {}
-        }
-
-        const records = data?.records || data?.Table || data || [];
-
-        console.log('DOMICILE CATEGORY MASTER LIST:', records);
-
-        this.rcategoryList.set(records);
-
-        // Dropdown ke liye common format
-        const dropdownList = records.map((item: any) => ({
-          id:
-            item.id ??
-            item.reservation_category_id ??
-            item.reservationCategoryId ??
-            item.rcategory_id ??
-            item.rcategoryId,
-
-          name:
-            item.name ??
-            item.reservation_category ??
-            item.reservationCategory ??
-            item.rcategory ??
-            item.category ??
-            item.category_name ??
-            '',
-        }));
-
-        console.log('DOMICILE CATEGORY DROPDOWN LIST:', dropdownList);
-
-        this.filterMasterList.set(dropdownList);
-      },
-
-      error: (err: any) => {
-        console.error('DOMICILE CATEGORY MASTER ERROR:', err);
-        this.filterMasterList.set([]);
-      },
-    });
-  }
 
   toggleDropdown(type: 'category' | 'state' | 'rcategory'): void {
     if (this.openDropdown() === type) {
@@ -771,9 +560,9 @@ export class AgniveerTable implements OnInit {
         this.tableTitle.set('Agniveer Candidates');
       }
 
-      this.loadCategoryMaster();
-      this.loadStateMaster();
-      this.loadRCategoryMaster();
+      // this.loadCategoryMaster();
+      // this.loadStateMaster();
+      // this.loadRCategoryMaster();
 
       this.fetchAgniveerData();
     });
@@ -827,8 +616,8 @@ export class AgniveerTable implements OnInit {
           try {
             resData = JSON.parse(resData);
 
-            console.log('===== PARSED RESPONSE =====');
-            console.log('PARSED DATA:', resData);
+            // console.log('===== PARSED RESPONSE =====');
+            // console.log('PARSED DATA:', resData);
           } catch {
             // Already parsed
           }
@@ -895,11 +684,17 @@ export class AgniveerTable implements OnInit {
           });
 
           this.rawRecords.set(mapped);
+          this.isInitialLoading.set(false);
           setTimeout(() => this.gridApi?.sizeColumnsToFit(), 50);
+        } else {
+          // this.isInitialLoading.set(false);
+          this.router.navigate(['/']);
         }
       },
       error: (err: any) => {
         this.isLoading.set(false);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
       },
     });
   }
@@ -919,83 +714,92 @@ export class AgniveerTable implements OnInit {
       next: (res: any) => {
         this.isLoading.set(false);
 
-        try {
-          let decryptedData: any = res?.data ?? res;
+        if (res && (res.code === 1 || res.code === '1') && res.data) {
+          try {
+            let decryptedData: any = res?.data ?? res;
 
-          if (typeof decryptedData === 'string') {
-            decryptedData = CryptoHelper.decrypt(decryptedData);
+            if (typeof decryptedData === 'string') {
+              decryptedData = CryptoHelper.decrypt(decryptedData);
+            }
+
+            const data =
+              typeof decryptedData === 'string' ? JSON.parse(decryptedData) : decryptedData;
+
+            const records = Array.isArray(data)
+              ? data
+              : data?.AgniveerPreferences ||
+                data?.Table ||
+                data?.table ||
+                data?.records ||
+                data?.Records ||
+                data?.data ||
+                [];
+
+            const total = Number(data?.total_records ?? data?.total ?? records.length);
+
+            const totalPages = Number(
+              (data?.total_pages ?? Math.ceil(total / this.recordPerPage())) || 1,
+            );
+
+            this.totalRecords.set(total);
+            this.totalPages.set(totalPages);
+
+            const startIdx = (this.pageNumber() - 1) * this.recordPerPage();
+
+            const mapped: AgniveerTableItem[] = records.map((r: any, idx: number) => ({
+              srNo: startIdx + idx + 1,
+
+              agniveer_autoid: r.agniveer_autoid ?? r.AgniveerAutoId ?? r.agniveer_id ?? r.id,
+
+              Agniveer_Id_No:
+                r.AgniveerIdNo ??
+                r.Agniveer_Id_No ??
+                r.agniveer_id_no ??
+                r.AgniveerId ??
+                r.agniveer_id ??
+                '',
+
+              Name: r.Name ?? r.name ?? r.candidate_name ?? '',
+
+              Gender: r.Gender ?? r.gender ?? '',
+
+              Email_ID: r.Email_ID ?? r.email_id ?? r.email ?? '',
+
+              agniveer_force_type_id: r.agniveer_force_type_id ?? r.force_type_id ?? '',
+
+              agniveer_force_type: r.agniveer_force_type ?? r.force_type ?? '',
+
+              rehabilitated: Boolean(r.rehabilitated),
+
+              category: r.Category ?? r.category ?? '',
+
+              state: r.State ?? r.state ?? '',
+
+              rcategory: r.RCategory ?? r.rcategory ?? '',
+
+              raw: r,
+            }));
+
+            this.rawRecords.set(mapped);
+            this.isInitialLoading.set(false);
+
+            setTimeout(() => {
+              this.gridApi?.sizeColumnsToFit();
+            }, 50);
+          } catch (error) {
+            // this.isInitialLoading.set(false);
+            this.router.navigate(['/']);
           }
-
-          const data =
-            typeof decryptedData === 'string' ? JSON.parse(decryptedData) : decryptedData;
-
-          const records = Array.isArray(data)
-            ? data
-            : data?.AgniveerPreferences ||
-              data?.Table ||
-              data?.table ||
-              data?.records ||
-              data?.Records ||
-              data?.data ||
-              [];
-
-          const total = Number(data?.total_records ?? data?.total ?? records.length);
-
-          const totalPages = Number(
-            (data?.total_pages ?? Math.ceil(total / this.recordPerPage())) || 1,
-          );
-
-          this.totalRecords.set(total);
-          this.totalPages.set(totalPages);
-
-          const startIdx = (this.pageNumber() - 1) * this.recordPerPage();
-
-          const mapped: AgniveerTableItem[] = records.map((r: any, idx: number) => ({
-            srNo: startIdx + idx + 1,
-
-            agniveer_autoid: r.agniveer_autoid ?? r.AgniveerAutoId ?? r.agniveer_id ?? r.id,
-
-            Agniveer_Id_No:
-              r.AgniveerIdNo ??
-              r.Agniveer_Id_No ??
-              r.agniveer_id_no ??
-              r.AgniveerId ??
-              r.agniveer_id ??
-              '',
-
-            Name: r.Name ?? r.name ?? r.candidate_name ?? '',
-
-            Gender: r.Gender ?? r.gender ?? '',
-
-            Email_ID: r.Email_ID ?? r.email_id ?? r.email ?? '',
-
-            agniveer_force_type_id: r.agniveer_force_type_id ?? r.force_type_id ?? '',
-
-            agniveer_force_type: r.agniveer_force_type ?? r.force_type ?? '',
-
-            rehabilitated: Boolean(r.rehabilitated),
-
-            raw: r,
-          }));
-
-          this.rawRecords.set(mapped);
-
-          setTimeout(() => {
-            this.gridApi?.sizeColumnsToFit();
-          }, 50);
-        } catch (error) {
-          this.rawRecords.set([]);
-          this.totalRecords.set(0);
-          this.totalPages.set(1);
+        } else {
+          // this.isInitialLoading.set(false);
+          this.router.navigate(['/']);
         }
       },
 
       error: (err: any) => {
         this.isLoading.set(false);
-
-        this.rawRecords.set([]);
-        this.totalRecords.set(0);
-        this.totalPages.set(1);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
       },
     });
   }
@@ -1120,6 +924,28 @@ export class AgniveerTable implements OnInit {
     setTimeout(() => {
       this.gridApi?.sizeColumnsToFit();
     }, 100);
+  }
+
+  // =====================================================
+  // EXPORT CSV
+  // =====================================================
+
+  exportCsv(): void {
+    if (!this.gridApi) {
+      Swal.fire({
+        icon: 'warning',
+
+        title: 'Grid Not Ready',
+
+        text: 'Please wait for the table to load.',
+      });
+
+      return;
+    }
+
+    this.gridApi.exportDataAsCsv({
+      fileName: `categories_${new Date().toISOString().slice(0, 10)}.csv`,
+    });
   }
 
   @HostListener('window:resize')

@@ -1,0 +1,42 @@
+<div class="max-w-5xl mx-auto space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#18181b] pl-4">
+          <h1 class="text-2xl font-bold text-slate-900 m-0">
+            Agniveer Candidate Digital Profile
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">
+            Verified military service credentials, Kaushal Praman Patra, and post-service transition
+          </p>
+        </div>
+
+        <!-- Sub-Tabs -->
+        <div class="flex items-center gap-1.5 p-1 bg-slate-200/70 rounded-2xl">
+          <button
+            (click)="activeTab.set('agniveer')"
+            [class.bg-white]="activeTab() === 'agniveer'"
+            [class.text-[#1C4587]]="activeTab() === 'agniveer'"
+            [class.shadow-xs]="activeTab() === 'agniveer'"
+            class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border-none bg-transparent"
+          >
+            Agniveer Military Record
+          </button>
+          <button
+            (click)="activeTab.set('post_agniveer')"
+            [class.bg-white]="activeTab() === 'post_agniveer'"
+            [class.text-[#1C4587]]="activeTab() === 'post_agniveer'"
+            [class.shadow-xs]="activeTab() === 'post_agniveer'"
+            class="px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border-none bg-transparent"
+          >
+            Civilian Education & Experience
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content -->
+      @if (activeTab() === 'agniveer') {
+        <app-agniveer-section />
+      } @else {
+        <app-post-agniveer-section />
+      }
+    </div>

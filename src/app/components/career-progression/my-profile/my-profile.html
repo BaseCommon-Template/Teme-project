@@ -5,17 +5,17 @@
     ========================================================= -->
     <div class="border-b border-slate-200 pb-2 flex items-center justify-between">
       <div class="relative">
-        <h1 class="text-xl sm:text-2xl font-bold text-[#355f2d] tracking-tight m-0">
+        <h1 class="text-xl sm:text-2xl font-bold text-[#1C4587] tracking-tight m-0">
           {{ isViewingOtherCandidate() ? 'Candidate Profile' : 'My Profile' }}
         </h1>
-        <div class="absolute -bottom-2.5 left-0 w-20 h-1 bg-[#355f2d] rounded-full"></div>
+        <div class="absolute -bottom-2.5 left-0 w-20 h-1 bg-[#1C4587] rounded-full"></div>
       </div>
 
       @if (isViewingOtherCandidate()) {
         <button
           type="button"
           (click)="goBack()"
-          class="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#355f2d] text-xs sm:text-sm font-semibold rounded-xl border border-slate-300 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
+          class="px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 hover:text-[#1C4587] text-xs sm:text-sm font-semibold rounded-xl border border-slate-300 shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
           title="Back to Agniveer Candidates"
         >
           <svg
@@ -38,9 +38,9 @@
 
     @if (isViewingOtherCandidate()) {
       <div class="flex items-center gap-2 text-xs font-medium text-slate-500">
-        <a (click)="goBack()" class="hover:text-[#355f2d] cursor-pointer">Dashboard</a>
+        <a (click)="goBack()" class="hover:text-[#1C4587] cursor-pointer">Dashboard</a>
         <span>›</span>
-        <a (click)="goBack()" class="hover:text-[#355f2d] cursor-pointer">Agniveer Candidates</a>
+        <a (click)="goBack()" class="hover:text-[#1C4587] cursor-pointer">Agniveer Candidates</a>
         <span>›</span>
         <span class="text-slate-800 font-semibold">
           {{ profile()?.name || profile()?._id || 'Candidate Profile' }}
@@ -54,10 +54,10 @@
         class="bg-white rounded-2xl border border-slate-200 shadow-xs p-16 flex flex-col items-center justify-center space-y-4 min-h-[420px]"
       >
         <div
-          class="w-14 h-14 rounded-full border-4 border-slate-200 border-t-[#355f2d] animate-spin"
+          class="w-14 h-14 rounded-full border-4 border-slate-200 border-t-[#1C4587] animate-spin"
         ></div>
         <div class="text-center space-y-1">
-          <p class="text-base font-bold text-[#355f2d] tracking-wide m-0">
+          <p class="text-base font-bold text-[#1C4587] tracking-wide m-0">
             Loading Profile Details...
           </p>
           <p class="text-xs text-slate-500 font-medium m-0">
@@ -70,7 +70,7 @@
            CANDIDATE HERO PROFILE CARD
       ========================================================= -->
       <div
-        class="bg-[#355f2d] rounded-2xl p-6 sm:p-7 shadow-md text-white flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6 relative overflow-hidden"
+        class="bg-[#1C4587] rounded-2xl p-6 sm:p-7 shadow-md text-white flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6 relative overflow-hidden"
       >
         <!-- Circular Avatar -->
         <div
@@ -538,7 +538,7 @@
               <div class="overflow-x-auto">
                 <table class="w-full text-xs sm:text-sm">
                   <thead>
-                    <tr class="bg-[#355f2d] text-white">
+                    <tr class="bg-[#1C4587] text-white">
                       <th class="px-4 py-3 text-left font-semibold">Preference</th>
                       <th class="px-4 py-3 text-left font-semibold">Organisation Type</th>
                       <th class="px-4 py-3 text-left font-semibold">Organisation</th>
@@ -554,7 +554,7 @@
                     ) {
                       <tr class="hover:bg-slate-50 transition-colors">
                         <!-- Preference -->
-                        <td class="px-4 py-3 font-bold text-[#355f2d]">{{ i + 1 }}</td>
+                        <td class="px-4 py-3 font-bold text-[#1C4587]">{{ i + 1 }}</td>
 
                         <!-- Organisation Type -->
                         <td class="px-4 py-3 text-slate-700">

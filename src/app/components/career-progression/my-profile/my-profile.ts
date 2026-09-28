@@ -196,7 +196,7 @@ export class MyProfileComponent implements OnInit {
         icon: 'info',
         title: 'Update Not Allowed',
         text: 'Data already saved; update is not allowed.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -790,7 +790,8 @@ export class MyProfileComponent implements OnInit {
         error: (error) => {
           console.error('Error fetching agniveer details:', error);
 
-          this.isLoading.set(false);
+          // this.isLoading.set(false);
+          this.router.navigate(['/']);
         },
       });
   }
@@ -1830,7 +1831,7 @@ export class MyProfileComponent implements OnInit {
               icon: 'info',
               title: 'Data Already Saved',
               text: responseMsg || 'Data already saved; update is not allowed.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
             return;
           }
@@ -1870,7 +1871,7 @@ export class MyProfileComponent implements OnInit {
               icon: 'success',
               title: 'Draft Saved',
               text: responseMsg || 'Your additional profile details have been saved as a draft.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
               timer: 2500,
             });
           } else {
@@ -1887,7 +1888,7 @@ export class MyProfileComponent implements OnInit {
             icon: 'error',
             title: 'Error',
             text: response?.message || 'Failed to update additional details.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -1903,14 +1904,14 @@ export class MyProfileComponent implements OnInit {
             icon: 'info',
             title: 'Data Already Saved',
             text: 'Data already saved; update is not allowed.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         } else {
           Swal.fire({
             icon: 'error',
             title: 'Update Failed',
             text: errorText,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },

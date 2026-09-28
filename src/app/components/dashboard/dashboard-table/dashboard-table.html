@@ -1,3 +1,12 @@
+@if (isInitialLoading()) {
+  <div class="min-h-[70vh] w-full flex items-center justify-center p-8 bg-slate-50">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-12 flex flex-col items-center justify-center text-center max-w-md w-full gap-3">
+      <div class="w-12 h-12 rounded-full border-4 border-slate-200 border-t-[#1c4587] animate-spin"></div>
+      <p class="m-0 text-base font-bold text-[#1c4587]">Loading Records...</p>
+      <p class="m-0 text-xs text-slate-500 font-medium">Please wait while table data is being retrieved.</p>
+    </div>
+  </div>
+} @else {
 <div class="role-management-page">
   <!-- ================================================= -->
   <!-- PAGE TITLE -->
@@ -188,3 +197,4 @@
     </div>
   </div>
 </div>
+}

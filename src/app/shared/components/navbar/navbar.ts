@@ -109,8 +109,9 @@ export class NavbarComponent {
     // Load menu according to selected role
     this.menuService.refresh(true);
 
-    // Role 11 = Agniveer Dashboard
-    if (newRoleId === 11) {
+    if (newRoleId === 6) {
+      this.router.navigate(['/import']);
+    } else if (newRoleId === 11) {
       this.router.navigate(['/dashboard-agniveer']);
     } else {
       this.router.navigate(['/dashboard']);
@@ -189,7 +190,7 @@ export class NavbarComponent {
           icon: 'success',
           title: 'Password Changed Successfully',
           text: 'Your password has been changed. You will be logged out.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         }).then(() => {
           this.loginService.logoutAPI().subscribe({
             next: () => {
@@ -225,7 +226,7 @@ export class NavbarComponent {
             error?.error?.message ||
             error?.message ||
             'Unable to change password. Please try again.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });

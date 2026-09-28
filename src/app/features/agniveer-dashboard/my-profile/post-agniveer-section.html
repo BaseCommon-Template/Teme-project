@@ -1,0 +1,176 @@
+<div class="space-y-8">
+      <!-- 1. Civilian Educational Qualifications -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-sm text-slate-800 m-0">1. Higher & Technical Education</h3>
+            <p class="text-[11px] text-slate-400 m-0 mt-0.5">Degrees, Diplomas, and Post-Secondary Certifications</p>
+          </div>
+          <button
+            (click)="showAddQual.set(true)"
+            class="px-3.5 py-1.5 rounded-xl bg-[#1C4587] text-white text-xs font-bold hover:bg-[#153466] cursor-pointer border-none"
+          >
+            + Add Qualification
+          </button>
+        </div>
+
+        @if (showAddQual()) {
+          <div class="p-6 bg-blue-50/40 border-b border-blue-100 space-y-4">
+            <h4 class="font-bold text-xs text-blue-950 uppercase tracking-wider m-0">Add New Qualification</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Course / Degree *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newQual.course"
+                  placeholder="e.g. Bachelor of Arts"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Board / University *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newQual.board"
+                  placeholder="e.g. Delhi University"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Passing Year *</label>
+                <input
+                  type="number"
+                  [(ngModel)]="newQual.passing_year"
+                  placeholder="2025"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Score / Percentage</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newQual.percentage"
+                  placeholder="e.g. 78.5%"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button
+                (click)="showAddQual.set(false)"
+                class="px-4 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="saveQualification()"
+                class="px-4 py-1.5 rounded-xl bg-[#1C4587] text-white text-xs font-bold cursor-pointer border-none"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        }
+
+        <div class="p-6">
+          @if (!profile()?.qualifications || profile()!.qualifications!.length === 0) {
+            <p class="text-xs text-slate-400 m-0">No civilian higher qualifications added yet.</p>
+          } @else {
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              @for (q of profile()!.qualifications!; track $index) {
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1">
+                  <div class="font-bold text-slate-800 text-sm">{{ q.course }}</div>
+                  <div class="text-slate-600">{{ q.board }} ({{ q.passing_year }})</div>
+                  @if (q.percentage) {
+                    <div class="text-blue-700 font-semibold">Score: {{ q.percentage }}</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- 2. Employment & Civilian Experience -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-sm text-slate-800 m-0">2. Post-Service Civilian Employment</h3>
+            <p class="text-[11px] text-slate-400 m-0 mt-0.5">Corporate, PSARA, Security, or Govt. Roles</p>
+          </div>
+          <button
+            (click)="showAddEmp.set(true)"
+            class="px-3.5 py-1.5 rounded-xl bg-[#1C4587] text-white text-xs font-bold hover:bg-[#153466] cursor-pointer border-none"
+          >
+            + Add Employment
+          </button>
+        </div>
+
+        @if (showAddEmp()) {
+          <div class="p-6 bg-blue-50/40 border-b border-blue-100 space-y-4">
+            <h4 class="font-bold text-xs text-blue-950 uppercase tracking-wider m-0">Add Employment Record</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Company / Organization *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newEmp.company_name"
+                  placeholder="e.g. G4S Security"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Designation / Role *</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newEmp.designation"
+                  placeholder="e.g. Security Officer"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Duration (Months/Years)</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newEmp.duration"
+                  placeholder="e.g. 1 Year"
+                  class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 bg-white"
+                />
+              </div>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button
+                (click)="showAddEmp.set(false)"
+                class="px-4 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="saveEmployment()"
+                class="px-4 py-1.5 rounded-xl bg-[#1C4587] text-white text-xs font-bold cursor-pointer border-none"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        }
+
+        <div class="p-6">
+          @if (!profile()?.employments || profile()!.employments!.length === 0) {
+            <p class="text-xs text-slate-400 m-0">No post-service employment records added yet.</p>
+          } @else {
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              @for (e of profile()!.employments!; track $index) {
+                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1">
+                  <div class="font-bold text-slate-800 text-sm">{{ e.designation }}</div>
+                  <div class="text-slate-600">{{ e.company_name }}</div>
+                  @if (e.duration) {
+                    <div class="text-slate-400">Duration: {{ e.duration }}</div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>

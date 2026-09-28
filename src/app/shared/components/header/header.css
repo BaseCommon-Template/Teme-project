@@ -1,6 +1,6 @@
-/* Lightweight government portal header */
+/* Custom component styles for header matching https://careerprogression.mha.gov.in/ */
 .main-header {
-  background: #f7f0e9;
+  background: #ffffff;
   justify-content: space-between;
   align-items: center;
   padding: 26px 30px;
@@ -30,8 +30,8 @@
 }
 
 .home-affairs {
-  color: #172554;
-  font-size: 15px;
+  color: #000000;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: 0.025em;
   line-height: 1.2;
@@ -46,14 +46,11 @@
 }
 
 .center-title {
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 600;
-  color: #000;
+  color: #1a2a6c;
   white-space: nowrap;
   margin: 0;
-  text-align: center;
-  text-transform: uppercase;
-  font-family: 'Roboto', sans-serif;
 }
 
 .right-icons {

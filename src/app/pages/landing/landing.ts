@@ -52,7 +52,11 @@ export class LandingComponent implements OnInit, OnDestroy {
   readonly tickerMessage = signal<string>('');
 
   // Banner carousel
-  readonly images = ['1.png', '2.png', '3.png'];
+  readonly images = [
+    'assets/images/1.png',
+    'assets/images/2.png',
+    'assets/images/3.png',
+  ];
 
   readonly currentSlide = signal<number>(0);
 
@@ -104,7 +108,7 @@ export class LandingComponent implements OnInit, OnDestroy {
           if (decrypted && typeof decrypted === 'string') {
             try {
               const dec = CryptoHelper.decrypt(decrypted);
-              if (dec && dec !== decrypted) {
+              if (dec) {
                 try {
                   decrypted = typeof dec === 'string' ? JSON.parse(dec) : dec;
                 } catch {
@@ -132,24 +136,14 @@ export class LandingComponent implements OnInit, OnDestroy {
                 '';
             }
           } else if (typeof decrypted === 'string' && decrypted.trim()) {
-            const trimmed = decrypted.trim();
-            const isBase64Cipher =
-              trimmed.length > 30 && !trimmed.includes(' ') && /^[A-Za-z0-9+/=]+$/.test(trimmed);
-            if (!isBase64Cipher) {
-              msg = trimmed;
-            }
+            msg = decrypted.trim();
           }
         }
-
-        const fallback =
-          'Welcome to Theme Project - Ministry of Home Affairs, Government of India';
-        this.tickerMessage.set(msg || fallback);
+        this.tickerMessage.set(msg || '');
       },
       error: (err: any) => {
         console.error('Failed to load ticker message:', err);
-        this.tickerMessage.set(
-          'Welcome to Theme Project - Ministry of Home Affairs, Government of India',
-        );
+        this.tickerMessage.set('');
       },
     });
   }
@@ -244,21 +238,15 @@ export class LandingComponent implements OnInit, OnDestroy {
   // -----------------------------
 
   viewDetails(item: LandingNotificationItem | LandingOpeningItem): void {
-    console.log('Selected Item:', item);
-
-    // Notification attachment
     if ('attachmentPath' in item && item.attachmentPath) {
       const documentPath = item.attachmentPath;
-
       let fullUrl = documentPath;
-
       if (!documentPath.startsWith('http://') && !documentPath.startsWith('https://')) {
-        const base = environment.apiUrl.replace(/\/api\/?$/, '/');
-
+        const base = environment.signaturePath.replace(/\/api\/?$/, '/');
         fullUrl = base + (documentPath.startsWith('/') ? documentPath.slice(1) : documentPath);
       }
-
       window.open(fullUrl, '_blank');
+    } else {
     }
   }
 
@@ -266,4 +254,3 @@ export class LandingComponent implements OnInit, OnDestroy {
     this.selectedItem.set(null);
   }
 }
-

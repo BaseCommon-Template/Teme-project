@@ -79,6 +79,7 @@ export class Notifications implements OnInit {
   readonly allNotifications = signal<NotificationItem[]>([]);
   readonly notifications = signal<NotificationItem[]>([]);
   readonly archivedNotifications = signal<NotificationItem[]>([]);
+  readonly isInitialLoading = signal<boolean>(true);
   readonly isLoadingData = signal<boolean>(false);
 
   // Entities & SubEntities for modal
@@ -371,10 +372,16 @@ export class Notifications implements OnInit {
             this.allNotifications.set([]);
             this.partitionNotifications();
           }
+          this.isInitialLoading.set(false);
+        } else {
+          // this.isInitialLoading.set(false);
+          this.router.navigate(['/']);
         }
       },
       error: (err: any) => {
         console.error('[NotificationsComponent] job_notification_list Error:', err);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
       },
     });
   }
@@ -752,7 +759,7 @@ export class Notifications implements OnInit {
         icon: 'warning',
         title: 'Vacancies Not Added',
         text: 'Please add vacancies first before freezing.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
       });
       return;
     }
@@ -762,7 +769,7 @@ export class Notifications implements OnInit {
       text: `Are you sure you want to freeze vacancies for "${item.title}"? Once frozen, vacancies cannot be edited.`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#355f2d',
+      confirmButtonColor: '#224263',
       cancelButtonColor: '#94a3b8',
       confirmButtonText: 'Yes, Freeze it!',
       cancelButtonText: 'Cancel',
@@ -785,14 +792,14 @@ export class Notifications implements OnInit {
                     title: 'Frozen!',
                     text: `Vacancies for "${item.title}" have been successfully frozen.`,
                     icon: 'success',
-                    confirmButtonColor: '#355f2d',
+                    confirmButtonColor: '#224263',
                   });
                 } else {
                   Swal.fire({
                     title: 'Error!',
                     text: `Failed to freeze vacancies for "${item.title}".`,
                     icon: 'error',
-                    confirmButtonColor: '#355f2d',
+                    confirmButtonColor: '#224263',
                   });
                 }
               },
@@ -802,7 +809,7 @@ export class Notifications implements OnInit {
                   title: 'Frozen!',
                   text: `Vacancies for "${item.title}" have been frozen.`,
                   icon: 'success',
-                  confirmButtonColor: '#355f2d',
+                  confirmButtonColor: '#224263',
                 });
               },
             });
@@ -812,7 +819,7 @@ export class Notifications implements OnInit {
             title: 'Frozen!',
             text: `Vacancies for "${item.title}" have been frozen.`,
             icon: 'success',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#224263',
           });
         }
       }
@@ -826,7 +833,7 @@ export class Notifications implements OnInit {
         icon: 'warning',
         title: 'Cannot Publish',
         text: 'Notification must be frozen before it can be published.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
       });
       return;
     }
@@ -845,7 +852,7 @@ export class Notifications implements OnInit {
       text: `Are you sure you want to publish "${item.title}"?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#355f2d',
+      confirmButtonColor: '#224263',
       cancelButtonColor: '#94a3b8',
       confirmButtonText: 'Yes, Publish!',
       cancelButtonText: 'Cancel',
@@ -870,14 +877,14 @@ export class Notifications implements OnInit {
                     title: 'Published!',
                     text: `Notification "${item.title}" has been successfully published.`,
                     icon: 'success',
-                    confirmButtonColor: '#355f2d',
+                    confirmButtonColor: '#224263',
                   });
                 } else {
                   Swal.fire({
                     title: 'Error!',
                     text: `Failed to publish vacancies for "${item.title}".`,
                     icon: 'error',
-                    confirmButtonColor: '#355f2d',
+                    confirmButtonColor: '#224263',
                   });
                 }
               },
@@ -886,7 +893,7 @@ export class Notifications implements OnInit {
                   title: 'Error!',
                   text: `Failed to publish vacancies for "${item.title}".`,
                   icon: 'error',
-                  confirmButtonColor: '#355f2d',
+                  confirmButtonColor: '#224263',
                 });
               },
             });
@@ -942,7 +949,7 @@ export class Notifications implements OnInit {
           title: 'Successfully!',
           text: 'Job notification created successfully.',
           icon: 'success',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#224263',
         });
       },
       error: (err) => {

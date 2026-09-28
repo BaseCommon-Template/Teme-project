@@ -1,0 +1,211 @@
+<!-- Highly Visible 1-Line Alert Banner -->
+<div
+  class="relative w-full bg-[#18181b] text-white shadow-md border-y-2 border-[#FF9933] py-2.5 px-4 overflow-x-auto"
+>
+  <div
+    class="max-w-7xl mx-auto flex items-center justify-center gap-2.5 sm:gap-3 whitespace-nowrap text-center"
+  >
+    <div
+      class="inline-flex items-center gap-1.5 bg-[#FF9933] text-[#18181b] font-black text-xs uppercase px-2.5 py-1 rounded-full shadow-sm animate-pulse tracking-wider shrink-0"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-3.5 h-3.5 fill-current text-[#18181b]"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+        />
+      </svg>
+    </div>
+    <div
+      class="text-xs sm:text-sm md:text-base font-bold tracking-wide text-white whitespace-nowrap"
+    >
+      <span
+        class="bg-[#FF9933] text-[#18181b] font-black px-2 py-0.5 rounded text-xs sm:text-sm md:text-base mx-1 shadow-sm border border-[#FF9933] inline-block tracking-normal"
+      >
+        25.09.2026
+      </span>
+      is the Last Date for the Authentication of Part A and submission of Profile- Part B by
+      <span
+        class="text-[#FF9933] font-black underline decoration-[#FF9933] decoration-2 tracking-wider"
+      >
+        AGNIVEERS
+      </span>
+      on the Portal
+    </div>
+  </div>
+</div>
+
+<div id="maincontent" class="w-full bg-white py-8 lg:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <!-- ── Left Column: ABOUT US ── -->
+      <div class="lg:col-span-5 flex flex-col justify-between min-h-[300px]">
+        <div>
+          <!-- Title with vertical blue bar -->
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-1 h-6 bg-[#0066cc] rounded-full"></div>
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 uppercase tracking-tight m-0">
+              ABOUT US
+            </h2>
+          </div>
+
+          <!-- Description Paragraph -->
+          <p class="text-slate-700 text-sm sm:text-base leading-relaxed text-justify m-0">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+
+        <!-- Read More Button -->
+        <div class="mt-6 flex justify-end">
+          <a
+            routerLink="/about"
+            class="px-6 py-2.5 rounded-lg bg-[#234161] hover:bg-[#1a314b] text-white text-sm font-medium transition-colors no-underline shadow-xs cursor-pointer"
+          >
+            Read More
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Right Column: WHAT'S NEW ── -->
+      <div class="lg:col-span-7 flex flex-col gap-3">
+        <!-- Title with Purple Bookmark Icon -->
+        <div class="flex items-center gap-2.5 mb-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#8b5cf6"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6 text-purple-600"
+          >
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 uppercase tracking-tight m-0">
+            WHAT'S NEW
+          </h2>
+        </div>
+
+        <!-- Outer Card Box -->
+        <div
+          class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[320px] flex flex-col"
+        >
+          <!-- Top Tabs Header -->
+          <div class="p-3 border-b border-slate-100 bg-white">
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Tab 1: Current Openings -->
+              <button
+                (click)="activeTab.set('notification')"
+                [class.bg-[#234161]]="activeTab() === 'notification'"
+                [class.text-white]="activeTab() === 'notification'"
+                [class.bg-[#dbeafe]]="activeTab() !== 'notification'"
+                [class.text-[#234161]]="activeTab() !== 'notification'"
+                class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                Current Openings
+              </button>
+
+              <!-- Tab 2: Archives -->
+              <button
+                (click)="activeTab.set('archive')"
+                [class.bg-[#234161]]="activeTab() === 'archive'"
+                [class.text-white]="activeTab() === 'archive'"
+                [class.bg-[#dbeafe]]="activeTab() !== 'archive'"
+                [class.text-[#234161]]="activeTab() !== 'archive'"
+                class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                  />
+                </svg>
+                Archives
+              </button>
+
+              <!-- Tab 3: Gazette Notifications -->
+              <button
+                (click)="activeTab.set('gazette')"
+                [class.bg-[#234161]]="activeTab() === 'gazette'"
+                [class.text-white]="activeTab() === 'gazette'"
+                [class.bg-[#dbeafe]]="activeTab() !== 'gazette'"
+                [class.text-[#234161]]="activeTab() !== 'gazette'"
+                class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                Gazette Notifications
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab Content Area -->
+          <div class="p-6 flex-1 flex flex-col justify-center">
+            @if (activeTab() === 'notification') {
+              <app-notification-tab
+                [notifications]="notifications()"
+                [entities]="entities()"
+                [loading]="loading()"
+                (onSelect)="selectedNotificationId.set($event)"
+              />
+            } @else if (activeTab() === 'archive') {
+              <app-archive-tab
+                [notifications]="notifications()"
+                [entities]="entities()"
+                [loading]="loading()"
+                (onSelect)="selectedNotificationId.set($event)"
+              />
+            } @else if (activeTab() === 'gazette') {
+              <app-gazette-tab [gazetteItems]="gazetteItems()" />
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Details Modal -->
+<app-notification-view-modal
+  [notificationId]="selectedNotificationId()"
+  (close)="selectedNotificationId.set(null)"
+/>

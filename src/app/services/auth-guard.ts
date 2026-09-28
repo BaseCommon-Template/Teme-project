@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth';
+import { LoginService } from './login-service';
+import { firstValueFrom } from 'rxjs';
+
+export interface ValidateSessionResponse {
+  success?: boolean;
+  [key: string]: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +17,43 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private loginService: LoginService,
   ) {}
 
-  canActivate(route?: ActivatedRouteSnapshot, state?: RouterStateSnapshot): boolean {
-    const token = this.authService.getToken();
+  async canActivate(route?: ActivatedRouteSnapshot, state?: RouterStateSnapshot): Promise<boolean> {
+    const token =
+      this.authService.getToken() ||
+      (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null);
     const user = this.authService.getCurrentUser();
     const role = typeof window !== 'undefined' ? sessionStorage.getItem('role') : null;
+
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`).set('token', token);
+    }
+
+    try {
+      const response: ValidateSessionResponse = await firstValueFrom(
+        this.loginService.validateSessionAPI(token ? { token } : {}, { headers }),
+      );
+      const { success } = response;
+
+      // console.log('[AuthGuard] validateSessionAPI response:', response);
+
+      if (!success) {
+        this.clearSessionAndCookies();
+        this.router.navigate(['/unauthrize']);
+        return false;
+      }
+    } catch (error) {
+      // console.error('[AuthGuard] validateSessionAPI error:', error);
+      this.clearSessionAndCookies();
+      this.router.navigate(['/unauthrize']);
+      return false;
+    }
 
     // Check role restrictions if defined on route data (e.g., data: { roles: [1, 13] })
     const rawRoles = route?.data?.['roles'] ?? route?.data?.['role'];
@@ -46,7 +85,7 @@ export class AuthGuard implements CanActivate {
           return false;
         }
         this.router.navigate(['/auth/userlogin'], {
-          queryParams: state?.url ? { returnUrl: state.url } : undefined,
+          queryParams: state?.url ? { returnUrl: state?.url } : undefined,
         });
         return false;
       }
@@ -58,7 +97,7 @@ export class AuthGuard implements CanActivate {
 
     // Redirect unauthenticated users to login page
     this.router.navigate(['/auth/userlogin'], {
-      queryParams: state?.url ? { returnUrl: state.url } : undefined,
+      queryParams: state?.url ? { returnUrl: state?.url } : undefined,
     });
     return false;
   }
@@ -112,5 +151,38 @@ export class AuthGuard implements CanActivate {
     }
 
     return 0;
+  }
+
+  private clearSessionAndCookies(): void {
+    try {
+      this.authService.clear();
+    } catch (e) {}
+
+    if (typeof sessionStorage !== 'undefined') {
+      try {
+        sessionStorage.clear();
+      } catch (e) {}
+    }
+
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.clear();
+      } catch (e) {}
+    }
+
+    if (typeof document !== 'undefined' && document.cookie) {
+      try {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i];
+          const eqPos = cookie.indexOf('=');
+          const name = (eqPos > -1 ? cookie.substring(0, eqPos) : cookie).trim();
+          if (name) {
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; max-age=0`;
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=; max-age=0`;
+          }
+        }
+      } catch (e) {}
+    }
   }
 }

@@ -18,9 +18,9 @@
             <p class="text-xs text-slate-500 m-0 mt-0.5">Click or drag to add.</p>
           </div>
           @if (isLoading()) {
-            <div class="flex items-center gap-1.5 text-xs text-[#355f2d] font-semibold">
+            <div class="flex items-center gap-1.5 text-xs text-[#1C4587] font-semibold">
               <div
-                class="w-3.5 h-3.5 border-2 border-[#355f2d] border-t-transparent rounded-full animate-spin"
+                class="w-3.5 h-3.5 border-2 border-[#1C4587] border-t-transparent rounded-full animate-spin"
               ></div>
               <span>Loading...</span>
             </div>
@@ -39,7 +39,7 @@
             <!-- Loading State -->
             <div class="flex-1 flex flex-col items-center justify-center space-y-3 py-10">
               <div
-                class="w-10 h-10 border-3 border-slate-200 border-t-[#355f2d] rounded-full animate-spin"
+                class="w-10 h-10 border-3 border-slate-200 border-t-[#1C4587] rounded-full animate-spin"
               ></div>
               <p class="text-xs text-slate-400 font-medium m-0">Fetching organisations...</p>
             </div>
@@ -88,7 +88,7 @@
                   (dragend)="onDragEnd()"
                   (dblclick)="!isDraftSave() && addPreference(post)"
                   class="p-3.5 rounded-xl border border-slate-200 bg-white transition-all flex items-center justify-between group shadow-2xs select-none"
-                  [class.hover:border-[#355f2d]]="!isDraftSave()"
+                  [class.hover:border-[#1C4587]]="!isDraftSave()"
                   [class.hover:bg-blue-50/30]="!isDraftSave()"
                   [class.cursor-grab]="!isDraftSave()"
                   [class.active:cursor-grabbing]="!isDraftSave()"
@@ -98,7 +98,7 @@
                     @if (!isDraftSave()) {
                       <!-- Drag Grip Handle -->
                       <span
-                        class="text-slate-300 group-hover:text-[#355f2d] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
+                        class="text-slate-300 group-hover:text-[#1C4587] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
                         title="Drag to reorder/move"
                       >
                         ⋮⋮
@@ -107,7 +107,7 @@
 
                     <!-- Shield Icon -->
                     <div
-                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#355f2d]/10 text-slate-600 group-hover:text-[#355f2d] flex items-center justify-center shrink-0 transition-colors"
+                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#1C4587]/10 text-slate-600 group-hover:text-[#1C4587] flex items-center justify-center shrink-0 transition-colors"
                     >
                       <svg
                         class="w-4 h-4"
@@ -127,7 +127,7 @@
                     <!-- Name -->
                     <div class="min-w-0">
                       <span
-                        class="text-xs font-bold text-slate-800 group-hover:text-[#355f2d] block truncate transition-colors"
+                        class="text-xs font-bold text-slate-800 group-hover:text-[#1C4587] block truncate transition-colors"
                       >
                         {{
                           post.organisationName ||
@@ -147,7 +147,7 @@
                     <button
                       type="button"
                       (click)="addPreference(post); $event.stopPropagation()"
-                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#355f2d] text-slate-400 group-hover:text-white flex items-center justify-center shrink-0 transition-all cursor-pointer border border-slate-200/60 group-hover:border-[#355f2d] shadow-2xs ml-2"
+                      class="w-8 h-8 rounded-lg bg-slate-100 group-hover:bg-[#1C4587] text-slate-400 group-hover:text-white flex items-center justify-center shrink-0 transition-all cursor-pointer border border-slate-200/60 group-hover:border-[#1C4587] shadow-2xs ml-2"
                       title="Add to preferences"
                       aria-label="Add to preferences"
                     >
@@ -178,7 +178,7 @@
       ========================================================= -->
       <div
         class="border border-slate-200 rounded-xl overflow-hidden bg-white flex flex-col min-h-[460px] shadow-2xs transition-colors"
-        [class.border-[#355f2d]]="isDraggingOverFilled()"
+        [class.border-[#1C4587]]="isDraggingOverFilled()"
         [class.bg-blue-50/20]="isDraggingOverFilled()"
         (dragover)="onDragOverContainer($event)"
         (dragleave)="onDragLeaveContainer($event)"
@@ -212,7 +212,7 @@
             <!-- Dashed Drop Area -->
             <div
               class="border-2 border-dashed rounded-2xl p-8 min-h-[320px] flex flex-col items-center justify-center text-center space-y-3 transition-colors select-none"
-              [class.border-[#355f2d]]="isDraggingOverFilled()"
+              [class.border-[#1C4587]]="isDraggingOverFilled()"
               [class.bg-blue-50/40]="isDraggingOverFilled()"
               [class.border-slate-200]="!isDraggingOverFilled()"
             >
@@ -250,7 +250,7 @@
                   [class.hover:shadow-xs]="!isDraftSave()"
                   [class.cursor-grab]="!isDraftSave()"
                   [class.active:cursor-grabbing]="!isDraftSave()"
-                  [class.border-[#355f2d]]="!isDraftSave() && dragOverFilledIndex === idx"
+                  [class.border-[#1C4587]]="!isDraftSave() && dragOverFilledIndex === idx"
                   [class.bg-blue-50/30]="!isDraftSave() && dragOverFilledIndex === idx"
                   [title]="!isDraftSave() ? 'Drag to reorder, or double-click to remove' : ''"
                 >
@@ -258,7 +258,7 @@
                     @if (!isDraftSave()) {
                       <!-- Reorder Grip Handle -->
                       <span
-                        class="text-slate-300 group-hover:text-[#355f2d] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
+                        class="text-slate-300 group-hover:text-[#1C4587] transition-colors text-lg leading-none cursor-grab active:cursor-grabbing shrink-0"
                         title="Drag up or down to reorder"
                       >
                         ⋮⋮
@@ -267,7 +267,7 @@
 
                     <!-- Preference Order Number (1, then 2, etc.) -->
                     <span
-                      class="w-7 h-7 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                      class="w-7 h-7 rounded-full bg-[#1C4587] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
                     >
                       {{ idx + 1 }}
                     </span>
@@ -294,7 +294,7 @@
                         type="button"
                         (click)="movePreferenceUp(idx); $event.stopPropagation()"
                         [disabled]="idx === 0"
-                        class="p-1 rounded-md text-slate-500 hover:text-[#355f2d] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
+                        class="p-1 rounded-md text-slate-500 hover:text-[#1C4587] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
                         title="Move Up"
                       >
                         ▲
@@ -305,7 +305,7 @@
                         type="button"
                         (click)="movePreferenceDown(idx); $event.stopPropagation()"
                         [disabled]="idx === selectedPreferences().length - 1"
-                        class="p-1 rounded-md text-slate-500 hover:text-[#355f2d] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
+                        class="p-1 rounded-md text-slate-500 hover:text-[#1C4587] hover:bg-slate-100 disabled:opacity-25 border-none bg-transparent cursor-pointer transition-colors"
                         title="Move Down"
                       >
                         ▼
@@ -357,7 +357,7 @@
           </span>
         </div>
         <span class="text-xs font-semibold text-slate-600">
-          Total Selected: <strong class="text-[#355f2d]">{{ selectedPreferences().length }}</strong>
+          Total Selected: <strong class="text-[#1C4587]">{{ selectedPreferences().length }}</strong>
         </span>
       </div>
 
@@ -379,14 +379,14 @@
                 (dragover)="onDragOverFilledItem($event, idx)"
                 (drop)="onDropFilledItem($event, idx)"
                 (dragend)="onDragEnd()"
-                class="flex items-center gap-2.5 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl shadow-2xs hover:border-[#355f2d] hover:shadow-xs transition-all shrink-0 cursor-grab active:cursor-grabbing select-none group"
-                [class.border-[#355f2d]]="dragOverFilledIndex === idx"
+                class="flex items-center gap-2.5 px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl shadow-2xs hover:border-[#1C4587] hover:shadow-xs transition-all shrink-0 cursor-grab active:cursor-grabbing select-none group"
+                [class.border-[#1C4587]]="dragOverFilledIndex === idx"
                 [class.bg-blue-50/40]="dragOverFilledIndex === idx"
                 title="Drag horizontally to reorder"
               >
                 <!-- Order Number Badge (1, 2, 3...) -->
                 <span
-                  class="w-6 h-6 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                  class="w-6 h-6 rounded-full bg-[#1C4587] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
                 >
                   {{ idx + 1 }}
                 </span>
@@ -409,7 +409,7 @@
                     type="button"
                     (click)="movePreferenceUp(idx); $event.stopPropagation()"
                     [disabled]="idx === 0"
-                    class="p-1 text-slate-400 hover:text-[#355f2d] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
+                    class="p-1 text-slate-400 hover:text-[#1C4587] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
                     title="Move Left"
                   >
                     ◀
@@ -420,7 +420,7 @@
                     type="button"
                     (click)="movePreferenceDown(idx); $event.stopPropagation()"
                     [disabled]="idx === selectedPreferences().length - 1"
-                    class="p-1 text-slate-400 hover:text-[#355f2d] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
+                    class="p-1 text-slate-400 hover:text-[#1C4587] disabled:opacity-20 border-none bg-transparent cursor-pointer transition-colors text-xs leading-none"
                     title="Move Right"
                   >
                     ▶
@@ -444,7 +444,7 @@
               >
                 <!-- Order Number Badge (1, 2, 3...) -->
                 <span
-                  class="w-6 h-6 rounded-full bg-[#355f2d] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
+                  class="w-6 h-6 rounded-full bg-[#1C4587] text-white text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs"
                 >
                   {{ idx + 1 }}
                 </span>
@@ -529,7 +529,7 @@
           type="button"
           (click)="onSubmitApplication()"
           [disabled]="isSaving()"
-          class="px-6 py-2.5 bg-[#355f2d] hover:bg-[#46584b] text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-98 border-none disabled:opacity-50 disabled:cursor-not-allowed"
+          class="px-6 py-2.5 bg-[#1C4587] hover:bg-[#153569] text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-98 border-none disabled:opacity-50 disabled:cursor-not-allowed"
         >
           @if (isSaving()) {
             <div

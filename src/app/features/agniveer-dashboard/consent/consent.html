@@ -1,0 +1,99 @@
+<div class="max-w-3xl mx-auto space-y-6">
+      <!-- Header Banner -->
+      <div class="p-8 rounded-3xl bg-gradient-to-r from-[#1a2a6c] to-[#1e3a8a] text-white text-center space-y-2">
+        <div class="text-4xl">📋</div>
+        <h2 class="text-xl font-bold m-0">Consent & Career Option Declaration</h2>
+        <p class="text-xs text-blue-200 m-0">
+          Please read the declaration carefully and declare your preference below.
+        </p>
+      </div>
+
+      <!-- Info Alert -->
+      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center gap-3">
+        <span class="text-base">ℹ️</span>
+        <span>Submitting this declaration will be permanently recorded against your service profile.</span>
+      </div>
+
+      <!-- Declaration Card -->
+      <div
+        [class.bg-emerald-50]="checked()"
+        [class.border-emerald-300]="checked()"
+        class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6 transition-colors"
+      >
+        <div class="p-5 bg-blue-50/60 rounded-2xl border border-blue-100 flex items-start gap-4">
+          <span class="text-2xl shrink-0">📜</span>
+          <div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+              Declaration Statement
+            </div>
+            <p class="text-sm font-bold text-[#1C4587] leading-relaxed m-0">
+              I hereby authorize the Ministry of Home Affairs to share my verified service records with participating Central Armed Police Forces (BSF, CISF, CRPF, ITBP, SSB, Assam Rifles), State Police forces, and empanelled PSARA recruitment bodies under the <span class="text-[#FF9933]">Theme Project Program</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="border-t border-dashed border-slate-200 pt-4">
+          <label class="flex items-start gap-3 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              [(ngModel)]="checked"
+              [disabled]="submitted()"
+              class="w-5 h-5 rounded text-blue-700 focus:ring-blue-500 mt-0.5"
+            />
+            <div class="flex-1 text-xs">
+              <span class="font-bold text-slate-800 block mb-0.5">
+                I confirm that I have read and understood the above declaration.
+              </span>
+              <span class="text-slate-400">
+                By checking this box, you are digitally signing and authenticating this choice.
+              </span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      @if (submitted()) {
+        <div class="p-6 bg-emerald-50 border border-emerald-200 rounded-3xl flex items-center gap-4 text-emerald-900">
+          <span class="text-3xl">✅</span>
+          <div>
+            <div class="font-bold text-sm">Declaration Recorded Successfully</div>
+            <div class="text-xs text-emerald-700">Your profile status has been updated in the central registry.</div>
+          </div>
+        </div>
+      } @else {
+        <button
+          [disabled]="!checked() || submitting()"
+          (click)="showDialog.set(true)"
+          class="w-full py-3.5 rounded-2xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-md cursor-pointer border-none disabled:opacity-50 transition-all"
+        >
+          Submit Consent Declaration
+        </button>
+      }
+
+      <!-- Confirm Dialog Modal -->
+      @if (showDialog()) {
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center space-y-4 shadow-2xl">
+            <div class="text-4xl">⚠️</div>
+            <h3 class="text-base font-bold text-slate-900 m-0">Confirm Declaration</h3>
+            <p class="text-xs text-slate-600 m-0 leading-relaxed">
+              Are you sure you want to submit this declaration? This record will be submitted to the Ministry repository.
+            </p>
+            <div class="pt-2 flex gap-3">
+              <button
+                (click)="showDialog.set(false)"
+                class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer border-none"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="onConfirmSubmit()"
+                class="flex-1 py-2.5 rounded-xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold cursor-pointer border-none"
+              >
+                Yes, Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>

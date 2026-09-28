@@ -132,6 +132,13 @@ function isSecureKey(key: string): boolean {
   return true;
 }
 
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  // Globally disable right-click context menu
+  document.addEventListener('contextmenu', (event: MouseEvent) => {
+    event.preventDefault();
+  });
+}
+
 if (typeof window !== 'undefined' && typeof Storage !== 'undefined') {
   // Capture native browser Storage.prototype methods (crucial for Firefox compatibility)
   const originalStorageGetItem = Storage.prototype.getItem;

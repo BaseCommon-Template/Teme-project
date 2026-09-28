@@ -12,7 +12,7 @@ export class LoginService {
   headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   options = { headers: this.headers };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   handleError(error: HttpErrorResponse) {
     const errorMsg = error?.error?.message || error?.message || 'An unknown error occurred';
@@ -76,6 +76,21 @@ export class LoginService {
   janParichayCallbackAPI(param: any) {
     return this.http
       .post(this.apiURL + 'JanParichay/callback', param, this.options)
+      .pipe(catchError(this.handleError));
+  }
+
+  validateSessionAPI(param: any = {}, options?: any) {
+    let reqOptions = this.options;
+    if (options instanceof HttpHeaders) {
+      reqOptions = { headers: options };
+    } else if (options && options.headers) {
+      reqOptions = options;
+    } else if (options) {
+      reqOptions = { headers: new HttpHeaders(options) };
+    }
+
+    return this.http
+      .get(this.apiURL + 'Users/ValidateSession', reqOptions)
       .pipe(catchError(this.handleError));
   }
 

@@ -145,9 +145,9 @@ export class Newnotification implements OnInit, AfterViewInit {
               type="button"
               data-action="view-attachment"
               data-path="${path}"
-              style="background:#46584b; color:#ffffff; font-size:12px; font-weight:600; padding:3px 16px; border-radius:9999px; border:none; cursor:pointer; transition:background-color 0.2s; display:inline-flex; align-items:center; justify-content:center; line-height:1.2;"
+              style="background:#162f6a; color:#ffffff; font-size:12px; font-weight:600; padding:3px 16px; border-radius:9999px; border:none; cursor:pointer; transition:background-color 0.2s; display:inline-flex; align-items:center; justify-content:center; line-height:1.2;"
               onmouseover="this.style.backgroundColor='#122452'"
-              onmouseout="this.style.backgroundColor='#46584b'"
+              onmouseout="this.style.backgroundColor='#162f6a'"
             >
               View
             </button>

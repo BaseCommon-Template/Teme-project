@@ -55,6 +55,52 @@ function has403Body(body: any): boolean {
   return false;
 }
 
+function is401Status(val: any): boolean {
+  return val === 401 || val === '401';
+}
+
+function has401Header(headers: any): boolean {
+  if (!headers) return false;
+  return (
+    is401Status(headers.get('status')) ||
+    is401Status(headers.get('status-code')) ||
+    is401Status(headers.get('statusCode')) ||
+    is401Status(headers.get('x-status-code'))
+  );
+}
+
+function has401Body(body: any): boolean {
+  if (!body) return false;
+  if (typeof body === 'object') {
+    if (
+      is401Status(body.status) ||
+      is401Status(body.statusCode) ||
+      is401Status(body.code) ||
+      is401Status(body.responseCode)
+    ) {
+      return true;
+    }
+
+    if (typeof body.data === 'string') {
+      try {
+        const decrypted = CryptoHelper.decrypt(body.data);
+        if (decrypted && decrypted !== body.data) {
+          const parsed = JSON.parse(decrypted);
+          if (
+            is401Status(parsed?.status) ||
+            is401Status(parsed?.statusCode) ||
+            is401Status(parsed?.code) ||
+            is401Status(parsed?.responseCode)
+          ) {
+            return true;
+          }
+        }
+      } catch (e) {}
+    }
+  }
+  return false;
+}
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const cookieService = inject(CookieService);
   const router = inject(Router);
@@ -63,6 +109,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const redirectToUnauthorized = () => {
     if (typeof window !== 'undefined' && !router.url.includes('/unauthrize')) {
       router.navigate(['/unauthrize']);
+    }
+  };
+
+  const redirectToLogin = () => {
+    if (
+      typeof window !== 'undefined' &&
+      !router.url.includes('/auth/userlogin') &&
+      !router.url.includes('/login')
+    ) {
+      router.navigate(['/']);
     }
   };
 
@@ -125,6 +181,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         if (is403Status(event.status) || has403Header(event.headers) || has403Body(event.body)) {
           redirectToUnauthorized();
         }
+
+        const isAuthUrl =
+          req.url.includes('Users/login') ||
+          req.url.includes('Users/refresh') ||
+          req.url.includes('Users/logout');
+
+        if (
+          !isAuthUrl &&
+          (is401Status(event.status) || has401Header(event.headers) || has401Body(event.body))
+        ) {
+          authService.clear();
+          redirectToLogin();
+        }
       }
     }),
     catchError((error: HttpErrorResponse) => {
@@ -135,17 +204,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         redirectToUnauthorized();
       }
 
-      if (error.status === 401) {
-        const isAuthOrMenuUrl =
+      const is401 =
+        error.status === 401 ||
+        is401Status(error.status) ||
+        has401Header(error.headers) ||
+        has401Body(error.error);
+
+      if (is401) {
+        const isAuthUrl =
           req.url.includes('Users/login') ||
           req.url.includes('Users/refresh') ||
-          req.url.includes('Users/logout') ||
-          req.url.includes('Menu/GetByRole') ||
-          req.url.includes('GetByRole');
+          req.url.includes('Users/logout');
 
         const refreshToken = authService.getRefreshToken();
 
-        if (!isAuthOrMenuUrl && refreshToken) {
+        if (!isAuthUrl && refreshToken) {
           if (!isRefreshing) {
             isRefreshing = true;
             refreshTokenSubject.next(null);
@@ -166,7 +239,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               catchError((refreshErr) => {
                 isRefreshing = false;
                 refreshTokenSubject.next(null);
-                authService.performLogout();
+                authService.clear();
+                redirectToLogin();
                 return throwError(() => refreshErr);
               }),
             );
@@ -187,17 +261,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           }
         }
 
-        if (!isAuthOrMenuUrl) {
-          if (typeof sessionStorage !== 'undefined') {
-            sessionStorage.clear();
-          }
-          if (typeof localStorage !== 'undefined') {
-            localStorage.clear();
-          }
-          try {
-            cookieService.deleteAll('/');
-            cookieService.deleteAll();
-          } catch (e) {}
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.clear();
+        }
+        if (typeof localStorage !== 'undefined') {
+          localStorage.clear();
+        }
+        try {
+          cookieService.deleteAll('/');
+          cookieService.deleteAll();
+        } catch (e) {}
+
+        if (!req.url.includes('Users/login')) {
+          authService.clear();
+          redirectToLogin();
         }
       }
 

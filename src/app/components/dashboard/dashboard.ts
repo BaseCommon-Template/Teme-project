@@ -7,6 +7,7 @@ import { ScheduleItem, ScheduleService } from '../../services/schedule/schedule'
 import { JobNotificationService } from '../../services/notification/notification';
 import { CryptoHelper } from '../../helpers/crypto-helper';
 import { environment } from '../../../environments/environment';
+import { NewnotificationService } from '../../core/services/newnotification';
 
 export interface OpeningNotification {
   srNo: number;
@@ -19,6 +20,14 @@ export interface OpeningNotification {
   round?: string | number | null;
   documentPath?: string;
   raw?: any;
+}
+
+export interface DashboardNotificationItem {
+  id: string;
+  title: string;
+  attachmentPath?: string;
+  createdAt?: string;
+  isActive: boolean;
 }
 
 export interface DashboardStats {
@@ -53,16 +62,19 @@ export class Dashboard implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly scheduleService = inject(ScheduleService);
   private readonly jobNotificationService = inject(JobNotificationService);
+  readonly notificationService = inject(NewnotificationService);
   private readonly authService = inject(AuthService);
 
-  readonly activeTab = signal<'openings' | 'archives' | 'gazette'>('openings');
+  readonly isInitialLoading = signal<boolean>(true);
+  readonly activeTab = signal<'notification' | 'openings' | 'archives'>('notification');
   readonly activeScheduleData = signal<ScheduleItem | null>(null);
 
   readonly currentOpenings = signal<OpeningNotification[]>([]);
   readonly archivedOpenings = signal<OpeningNotification[]>([]);
   readonly gazetteNotifications = signal<OpeningNotification[]>([]);
+  readonly notifications = signal<DashboardNotificationItem[]>([]);
 
-  readonly notifications = computed(() => {
+  readonly openingNotifications = computed(() => {
     const tab = this.activeTab();
     if (tab === 'openings') {
       return this.currentOpenings();
@@ -94,7 +106,6 @@ export class Dashboard implements OnInit {
   });
 
   readonly isAgniveerUser = computed(() => {
-    // Make this computed reactive when role changes
     this.authService.authVersion();
 
     const roleId = this.authService.getRoleId();
@@ -108,6 +119,56 @@ export class Dashboard implements OnInit {
 
     // 2. Fetch Schedule first, then Job Notifications
     this.loadScheduleAndNotifications();
+    this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this.notificationService.getAll().subscribe({
+      next: (response: any) => {
+        try {
+          let encryptedData = response;
+
+          if (typeof response === 'object') {
+            encryptedData = response?.data ?? response?.result ?? response?.response ?? response;
+          }
+
+          const decryptedData = CryptoHelper.decrypt(encryptedData);
+
+          let finalData: any = decryptedData;
+
+          if (typeof decryptedData === 'string') {
+            try {
+              finalData = JSON.parse(decryptedData);
+            } catch {
+              finalData = {};
+            }
+          }
+
+          const records = Array.isArray(finalData?.records) ? finalData.records : [];
+
+          const activeNotifications: DashboardNotificationItem[] = records
+            .filter((item: any) => item.IsActive === true)
+            .map((item: any) => ({
+              id: String(item.Id),
+              title: item.NotificationTitle ?? '',
+              description: item.Description ?? '',
+              attachmentPath: item.AttachmentPath ?? '',
+              createdAt: item.CreatedAt ?? '',
+              isActive: item.IsActive === true,
+            }));
+
+          this.notifications.set(activeNotifications);
+        } catch (error) {
+          console.error('Notification processing error:', error);
+          this.notifications.set([]);
+        }
+      },
+
+      error: (error: any) => {
+        console.error('Dashboard Notification API Error:', error);
+        this.notifications.set([]);
+      },
+    });
   }
 
   fetchDashboardCounts(): void {
@@ -248,15 +309,27 @@ export class Dashboard implements OnInit {
                 agniveerPreferenceDraftCount: agniveerPreferenceDraftCount,
               }));
             }
+            this.isInitialLoading.set(false);
           } catch (e) {
             console.error('Error decrypting dashboard count data:', e);
+            // this.isInitialLoading.set(false);
+            this.router.navigate(['/']);
           }
+        } else {
+          // this.isInitialLoading.set(false);
+          this.router.navigate(['/']);
         }
       },
       error: (err: any) => {
         console.error('Dashboard Count API Error:', err);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
       },
     });
+  }
+
+  hasNotifications(): boolean {
+    return this.notifications().length > 0;
   }
 
   openAgniveerTable(filter: string, count?: number, draftSave?: number, part?: string): void {
@@ -505,22 +578,45 @@ export class Dashboard implements OnInit {
   }
 
   viewDocument(documentPath: string): void {
+    // console.log('========== VIEW DOCUMENT ==========');
+    // console.log('Document Path:', documentPath);
+    // console.log('API URL:', environment.apiUrl);
+
     if (!documentPath) {
+      console.warn('Document path is empty!');
       return;
     }
 
     let fullUrl = documentPath;
 
     if (!documentPath.startsWith('http://') && !documentPath.startsWith('https://')) {
-      const base = environment.apiUrl.replace(/\/api\/?$/, '/');
+      const base = environment.signaturePath.replace(/\/api\/?$/, '/');
+
+      // console.log('Base URL:', base);
 
       fullUrl = base + (documentPath.startsWith('/') ? documentPath.slice(1) : documentPath);
     }
 
+    // console.log('FINAL DOCUMENT URL:', fullUrl);
+    // console.log('==================================');
+
     window.open(fullUrl, '_blank');
   }
 
-  setActiveTab(tab: 'openings' | 'archives' | 'gazette'): void {
+  viewDetails(item: DashboardNotificationItem | OpeningNotification): void {
+    if ('attachmentPath' in item && item.attachmentPath) {
+      const documentPath = item.attachmentPath;
+      let fullUrl = documentPath;
+      if (!documentPath.startsWith('http://') && !documentPath.startsWith('https://')) {
+        const base = environment.signaturePath.replace(/\/api\/?$/, '/');
+        fullUrl = base + (documentPath.startsWith('/') ? documentPath.slice(1) : documentPath);
+      }
+      window.open(fullUrl, '_blank');
+    } else {
+    }
+  }
+
+  setActiveTab(tab: 'notification' | 'openings' | 'archives'): void {
     this.activeTab.set(tab);
   }
 }

@@ -1,0 +1,126 @@
+<div class="space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#18181b] pl-4">
+          <h1 class="text-2xl font-bold text-slate-900 m-0">
+            Organization Units (Sub-Entities)
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">
+            Manage individual forces and departments (BSF, CISF, CRPF, Assam Rifles, ITBP, SSB, State Police)
+          </p>
+        </div>
+
+        @if (canAdd()) {
+          <button
+            (click)="openCreateModal()"
+            class="px-5 py-2.5 rounded-2xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer border-none"
+          >
+            <span>➕</span>
+            <span>Add Organization Unit</span>
+          </button>
+        }
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div class="relative flex-1 max-w-sm">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search unit by name or acronym..."
+            class="w-full px-3.5 py-2 pl-9 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <span class="absolute left-3 top-2 text-slate-400 text-xs">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-600">Filter by Parent:</label>
+          <select
+            [(ngModel)]="selectedEntityFilter"
+            class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">All Parent Organizations</option>
+            @for (entity of entities(); track entity._id) {
+              <option [value]="entity._id">{{ entity.entity_name }} ({{ entity.short_name }})</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            Loading organization units...
+          </div>
+        } @else if (filteredSubEntities().length === 0) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            No organization units found.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead class="bg-[#254260] text-white font-semibold">
+                <tr>
+                  <th class="p-3.5 pl-6 w-12">Sr. No.</th>
+                  <th class="p-3.5">Unit Name</th>
+                  <th class="p-3.5">Acronym</th>
+                  <th class="p-3.5">Parent Entity</th>
+                  <th class="p-3.5">HQ Location</th>
+                  <th class="p-3.5">Website</th>
+                  <th class="p-3.5 text-right pr-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for (sub of filteredSubEntities(); track sub._id; let idx = $index) {
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-3.5 pl-6 text-slate-500 font-medium">{{ idx + 1 }}</td>
+                    <td class="p-3.5 font-bold text-slate-800">{{ sub.sub_entity_name }}</td>
+                    <td class="p-3.5 font-bold text-blue-700">{{ sub.short_name }}</td>
+                    <td class="p-3.5 text-slate-600 font-medium">{{ getParentEntityName(sub.parent_entity_id) }}</td>
+                    <td class="p-3.5 text-slate-600">{{ sub.hq_city || sub.hq_state ? (sub.hq_city + ', ' + sub.hq_state) : '—' }}</td>
+                    <td class="p-3.5 text-slate-600">
+                      @if (sub.official_website_url) {
+                        <a [href]="sub.official_website_url" target="_blank" class="text-blue-600 hover:underline">Link ↗</a>
+                      } @else {
+                        <span>—</span>
+                      }
+                    </td>
+                    <td class="p-3.5 text-right pr-6 whitespace-nowrap">
+                      <div class="flex items-center justify-end gap-2">
+                        @if (canEdit()) {
+                          <button
+                            (click)="openEditModal(sub)"
+                            class="px-3 py-1 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer bg-white transition-colors"
+                          >
+                            Edit
+                          </button>
+                        }
+                        @if (canDelete()) {
+                          <button
+                            (click)="onDelete(sub._id)"
+                            class="px-3 py-1 rounded-lg border border-red-200 hover:bg-red-50 text-red-600 text-xs font-semibold cursor-pointer bg-white transition-colors"
+                          >
+                            Delete
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- SubEntity Modal -->
+    <app-sub-entity-modal
+      [isOpen]="isModalOpen()"
+      [isEditing]="!!selectedSubEntity()"
+      [subEntity]="selectedSubEntity()"
+      [entities]="entities()"
+      (close)="isModalOpen.set(false)"
+      (save)="onSaveSubEntity($event)"
+    />

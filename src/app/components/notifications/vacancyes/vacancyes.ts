@@ -1376,7 +1376,7 @@ export class Vacancyes implements OnInit {
         icon: 'info',
         title: 'Already Saved',
         text: 'Vacancies for this notification have already been finalized and cannot be modified.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
       });
       return;
     }
@@ -1407,7 +1407,7 @@ export class Vacancyes implements OnInit {
         icon: 'warning',
         title: 'No Vacancies to Save',
         text: 'There are no vacancy rows available to save.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
       });
       return;
     }
@@ -1423,7 +1423,7 @@ export class Vacancyes implements OnInit {
         icon: 'warning',
         title: 'Vacancies Required',
         text: 'All vacancy counts are 0. Please enter at least one vacancy count greater than 0 before saving.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
       });
       return;
     }
@@ -1450,7 +1450,7 @@ export class Vacancyes implements OnInit {
           icon: 'warning',
           title: 'Vacancies Required for Each Organisation',
           text: `In each organisation, at least 1 vacancy must be filled (greater than 0). The following organisation(s) have all 0 vacancies: ${orgNames}.`,
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#224263',
         });
         return;
       }
@@ -1462,7 +1462,7 @@ export class Vacancyes implements OnInit {
         text: 'Are you sure you want to save the vacancies? Once saved, you will not be able to modify or change them later.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#224263',
         cancelButtonColor: '#94a3b8',
         confirmButtonText: 'Yes, Save it!',
         cancelButtonText: 'Cancel',
@@ -1548,7 +1548,7 @@ export class Vacancyes implements OnInit {
               (isDraft
                 ? 'Vacancy draft details have been successfully saved.'
                 : 'Vacancy details have been successfully saved.'),
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#224263',
           }).then(() => {
             this.goBack();
           });
@@ -1560,7 +1560,7 @@ export class Vacancyes implements OnInit {
               res?.message ||
               dec?.message ||
               (isDraft ? 'Failed to save draft vacancies.' : 'Failed to save vacancies.'),
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#224263',
           });
         }
       },
@@ -1574,7 +1574,7 @@ export class Vacancyes implements OnInit {
           text: isDraft
             ? 'Something went wrong while saving draft vacancies.'
             : 'Something went wrong while saving vacancies.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#224263',
         });
       },
     });

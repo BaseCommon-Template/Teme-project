@@ -375,3 +375,53 @@ textarea.ng-invalid.ng-touched {
 .titleBg {
     background-color: #ebebeb !important ;
 }
+
+/* Global Page Title & Header Bar Theme: Saffron background and Black left border */
+.page-title,
+[class*="page-title"] {
+  background: #FF9933 !important;
+  border-left: 7px solid #18181b !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.page-title h1,
+.page-title h2,
+.page-title h3,
+.page-title span,
+[class*="page-title"] h1,
+[class*="page-title"] h2,
+[class*="page-title"] h3 {
+  color: #18181b !important;
+  font-weight: 700 !important;
+}
+
+.back-btn {
+  background: #18181b !important;
+  color: #ffffff !important;
+  border-radius: 4px;
+}
+
+.back-btn:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* AG Grid Header Global Theme (Matching Sleek Dark Charcoal) */
+.ag-header,
+.ag-header-row,
+.ag-header-cell,
+.role-management-grid .ag-header,
+.role-management-grid .ag-header-row,
+.role-management-grid .ag-header-cell {
+  background-color: #18181b !important;
+  background: #18181b !important;
+  color: #ffffff !important;
+}
+
+.ag-header-cell-label,
+.ag-header-cell-text,
+.role-management-grid .ag-header-cell-label,
+.role-management-grid .ag-header-cell-text {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}

@@ -9,7 +9,7 @@
     >
       <!-- Log Modal Header with Solid Color (No Gradient) -->
       <div
-        class="px-6 py-4.5 bg-[#355f2d] text-white flex items-center justify-between shrink-0 shadow-sm"
+        class="px-6 py-4.5 bg-[#254260] text-white flex items-center justify-between shrink-0 shadow-sm"
       >
         <div class="flex items-center gap-3.5">
           <div
@@ -54,7 +54,7 @@
         <div class="flex items-center gap-4 text-xs font-semibold">
           <div class="flex items-center gap-1.5 text-slate-700">
             <span class="text-slate-400 font-normal">Branch:</span>
-            <span class="font-bold text-[#355f2d]">{{ batch.branch }}</span>
+            <span class="font-bold text-[#1C4587]">{{ batch.branch }}</span>
           </div>
           <div class="flex items-center gap-1.5 text-emerald-700">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
@@ -83,7 +83,7 @@
             [ngModel]="logSearchText()"
             (ngModelChange)="logSearchText.set($event)"
             placeholder="Filter logs..."
-            class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#355f2d] w-40 sm:w-52"
+            class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#1C4587] w-40 sm:w-52"
           />
           <select
             [ngModel]="logStatusFilter()"
@@ -109,7 +109,7 @@
         } @else {
           <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
             <table class="w-full text-left text-xs sm:text-sm">
-              <thead class="bg-[#355f2d] text-white font-semibold">
+              <thead class="bg-[#254260] text-white font-semibold">
                 <tr>
                   <th class="py-2.5 px-3 font-semibold text-white">#</th>
                   <th class="py-2.5 px-3 font-semibold text-white">Service ID</th>
@@ -123,7 +123,7 @@
                 @for (log of filteredLogs(); track $index) {
                   <tr class="hover:bg-slate-50/80 transition-colors">
                     <td class="py-2.5 px-3 text-slate-400 text-xs">{{ $index + 1 }}</td>
-                    <td class="py-2.5 px-3 font-bold text-[#355f2d]">{{ log.serviceId }}</td>
+                    <td class="py-2.5 px-3 font-bold text-[#1C4587]">{{ log.serviceId }}</td>
                     <td class="py-2.5 px-3 text-slate-800 font-semibold">
                       {{ log.candidateName }}
                     </td>

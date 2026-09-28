@@ -1,0 +1,145 @@
+<div class="space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#18181b] pl-4">
+          <h1 class="text-2xl font-bold text-slate-900 m-0">
+            Recruitment Openings & Notifications
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">
+            Manage vacancy advertisements, eligibility criteria, and application windows
+          </p>
+        </div>
+
+        @if (canAdd()) {
+          <button
+            (click)="openCreateModal()"
+            class="px-5 py-2.5 rounded-2xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer border-none"
+          >
+            <span>➕</span>
+            <span>Create New Opening</span>
+          </button>
+        }
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div class="relative flex-1 max-w-sm">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search by title or advt. number..."
+            class="w-full px-3.5 py-2 pl-9 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <span class="absolute left-3 top-2 text-slate-400 text-xs">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-600">Filter Organization:</label>
+          <select
+            [(ngModel)]="selectedEntityFilter"
+            class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">All Organizations</option>
+            @for (entity of entities(); track entity._id) {
+              <option [value]="entity._id">{{ entity.entity_name }} ({{ entity.short_name }})</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            Loading recruitment openings...
+          </div>
+        } @else if (filteredNotifications().length === 0) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            No openings found.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead class="bg-[#254260] text-white font-semibold">
+                <tr>
+                  <th class="p-3.5 pl-6 w-12">Sr. No.</th>
+                  <th class="p-3.5">Title & Advt No.</th>
+                  <th class="p-3.5">Organization</th>
+                  <th class="p-3.5 whitespace-nowrap">Opening Date</th>
+                  <th class="p-3.5 whitespace-nowrap">Closing Date</th>
+                  <th class="p-3.5 text-center">Status</th>
+                  <th class="p-3.5 text-right pr-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for (notif of filteredNotifications(); track notif._id; let idx = $index) {
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-3.5 pl-6 text-slate-500 font-medium">{{ idx + 1 }}</td>
+                    <td class="p-3.5">
+                      <div class="font-bold text-slate-800 leading-snug">{{ notif.notification_title }}</div>
+                      <div class="text-[11px] text-slate-400">Advt: {{ notif.advertisement_number || 'N/A' }}</div>
+                    </td>
+                    <td class="p-3.5 text-slate-600 font-semibold">{{ getEntityName(notif.entity_id) }}</td>
+                    <td class="p-3.5 text-slate-600 whitespace-nowrap">{{ formatDate(notif.application_opening_date) }}</td>
+                    <td class="p-3.5 text-slate-600 whitespace-nowrap font-medium text-red-600">{{ formatDate(notif.application_closing_date) }}</td>
+                    <td class="p-3.5 text-center">
+                      <span
+                        [class.bg-emerald-50]="isOpenDate(notif.application_closing_date)"
+                        [class.text-emerald-700]="isOpenDate(notif.application_closing_date)"
+                        [class.bg-slate-100]="!isOpenDate(notif.application_closing_date)"
+                        [class.text-slate-500]="!isOpenDate(notif.application_closing_date)"
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+                      >
+                        {{ isOpenDate(notif.application_closing_date) ? 'Active' : 'Archived' }}
+                      </span>
+                    </td>
+                    <td class="p-3.5 text-right pr-6 whitespace-nowrap">
+                      <div class="flex items-center justify-end gap-2">
+                        <button
+                          (click)="selectedViewId.set(notif._id)"
+                          class="px-3 py-1 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer bg-white transition-colors"
+                        >
+                          View
+                        </button>
+                        @if (canEdit()) {
+                          <button
+                            (click)="openEditModal(notif)"
+                            class="px-3 py-1 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-semibold cursor-pointer bg-white transition-colors"
+                          >
+                            Edit
+                          </button>
+                        }
+                        @if (canDelete()) {
+                          <button
+                            (click)="onDelete(notif._id)"
+                            class="px-3 py-1 rounded-lg border border-red-200 hover:bg-red-50 text-red-600 text-xs font-semibold cursor-pointer bg-white transition-colors"
+                          >
+                            Delete
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Notification Edit/Create Modal -->
+    <app-notification-modal
+      [isOpen]="isModalOpen()"
+      [editingNotification]="selectedNotification()"
+      [entities]="entities()"
+      [subEntities]="subEntities()"
+      (close)="isModalOpen.set(false)"
+      (save)="onSaveNotification($event)"
+    />
+
+    <!-- Notification Details Modal View -->
+    <app-notification-view-modal
+      [notificationId]="selectedViewId()"
+      (close)="selectedViewId.set(null)"
+    />

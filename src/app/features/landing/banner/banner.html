@@ -1,0 +1,58 @@
+<div class="relative w-full overflow-hidden select-none bg-slate-900">
+  <!-- Image Slides -->
+  <div class="relative w-full">
+    @for (img of images; track $index; let idx = $index) {
+    <div
+      [class.opacity-100]="idx === currentSlide()"
+      [class.opacity-0]="idx !== currentSlide()"
+      [class.z-10]="idx === currentSlide()"
+      [class.z-0]="idx !== currentSlide()"
+      [class.relative]="idx === 0"
+      [class.absolute]="idx !== 0"
+      class="top-0 left-0 w-full transition-opacity duration-700 ease-in-out"
+    >
+      <img
+        [src]="img"
+        [alt]="'Slide ' + (idx + 1)"
+        class="w-full h-auto block"
+        style="width: 100%; height: auto;"
+      />
+    </div>
+    }
+  </div>
+
+  <!-- Left Arrow -->
+  <button
+    (click)="prevSlide()"
+    class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center text-lg sm:text-xl transition-all cursor-pointer border border-white/20 backdrop-blur-xs"
+    aria-label="Previous slide"
+  >
+    ❮
+  </button>
+
+  <!-- Right Arrow -->
+  <button
+    (click)="nextSlide()"
+    class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center text-lg sm:text-xl transition-all cursor-pointer border border-white/20 backdrop-blur-xs"
+    aria-label="Next slide"
+  >
+    ❯
+  </button>
+
+  <!-- Indicator Dots -->
+  <div
+    class="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-md"
+  >
+    @for (img of images; track $index; let idx = $index) {
+    <button
+      (click)="goToSlide(idx)"
+      [class.w-7]="idx === currentSlide()"
+      [class.bg-white]="idx === currentSlide()"
+      [class.w-2.5]="idx !== currentSlide()"
+      [class.bg-white/50]="idx !== currentSlide()"
+      class="h-2.5 rounded-full transition-all duration-300 border-none cursor-pointer p-0"
+      [attr.aria-label]="'Go to slide ' + (idx + 1)"
+    ></button>
+    }
+  </div>
+</div>

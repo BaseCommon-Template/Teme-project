@@ -303,7 +303,7 @@
 
   border-radius: 4px;
 
-  background: #355f2d;
+  background: #1c4587;
 
   color: #ffffff;
 
@@ -323,7 +323,7 @@
 }
 
 .publish-btn:hover {
-  background: #46584b;
+  background: #153d78;
 
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 }
@@ -675,7 +675,7 @@
 
   padding: 13px 18px;
 
-  background: #355f2d;
+  background: #1c4587;
 
   color: #ffffff;
 }
@@ -812,15 +812,15 @@
 }
 
 .save-btn {
-  border: 1px solid #355f2d;
+  border: 1px solid #1c4587;
 
-  background: #355f2d;
+  background: #1c4587;
 
   color: #ffffff;
 }
 
 .save-btn:hover {
-  background: #46584b;
+  background: #153466;
 }
 
 .save-btn:disabled {
@@ -963,7 +963,7 @@
   width: 36px;
   height: 36px;
   border: 3.5px solid #cbd5e1;
-  border-top-color: #355f2d;
+  border-top-color: #1c4587;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -971,7 +971,7 @@
 .loading-text {
   font-size: 13px;
   font-weight: 600;
-  color: #355f2d;
+  color: #1c4587;
 }
 
 @keyframes spin {

@@ -1073,7 +1073,7 @@ export class Preferences implements OnInit {
         text: isDraft
           ? 'Please select at least one organisation preference before saving as draft.'
           : 'Please select at least one organisation preference before submitting your application.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -1106,7 +1106,7 @@ export class Preferences implements OnInit {
             icon: 'success',
             title: isDraft ? 'Draft Saved' : 'Application Submitted!',
             text: msg,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
             timer: isDraft ? 2500 : 3500,
           }).then(() => {
             if (isDraft) {
@@ -1118,7 +1118,7 @@ export class Preferences implements OnInit {
             icon: 'info',
             title: isDraft ? 'Draft Saved' : 'Application Status',
             text: msg,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -1132,7 +1132,7 @@ export class Preferences implements OnInit {
             typeof error === 'string'
               ? error
               : error?.message || 'Failed to save preferences. Please try again.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });
@@ -1161,7 +1161,7 @@ export class Preferences implements OnInit {
         icon: 'warning',
         title: 'No Preferences Selected',
         text: 'Please select at least one organisation preference before submitting your application.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -1171,7 +1171,7 @@ export class Preferences implements OnInit {
       text: `You have selected ${this.selectedPreferences().length} organisation preference(s). Are you sure you want to submit your application?`,
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#355f2d',
+      confirmButtonColor: '#1C4587',
       cancelButtonColor: '#64748B',
       confirmButtonText: 'Yes, Submit Application',
       cancelButtonText: 'Review Again',

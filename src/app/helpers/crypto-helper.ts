@@ -1,8 +1,8 @@
 import * as CryptoJS from 'crypto-js';
 
 export class CryptoHelper {
-  private static readonly KEY = CryptoJS.enc.Utf8.parse('3829171131048143');
-  private static readonly IV = CryptoJS.enc.Utf8.parse('8316058492273143');
+  private static readonly KEY = CryptoJS.enc.Utf8.parse('K8vR2mX7pL4sN9qW6tY3hD1fG5jC0zA8');
+  private static readonly IV = CryptoJS.enc.Utf8.parse('Q7nM4xP9kL2vR6sT');
 
   /** Decrypt AES (C# compatible) */
   static decrypt(cipherText: string): string {

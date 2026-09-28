@@ -111,11 +111,12 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     this.landingPage.loadPublicMenusOnce();
   }
   ngOnInit(): void {
+    this.generateCaptcha();
+
     if (this.authService.getToken()) {
       this.router.navigate(['/dashboard']);
     } else {
       this.loadJobNotificationList();
-      this.generateCaptcha();
     }
   }
 
@@ -153,60 +154,57 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     return passwordRegex.test(password);
   }
 
+  /**
+   * Generate a new CAPTCHA using POST /api/GenerateCaptcha/GenerateCaptcha
+   */
   generateCaptcha(): void {
-    this.captchaInput = '';
-    this.captchaCode = '';
-    this.captchaKey = '';
     this.isCaptchaLoading.set(true);
+    this.captchaInput = '';
 
-    this.loginService.generateCaptchaAPI().subscribe({
+    this.loginService.generateCaptchaAPI({}).subscribe({
       next: (res: any) => {
         this.isCaptchaLoading.set(false);
-        if (res && (res.code === 1 || res.code === '1') && res.data) {
-          try {
-            let data: any = res.data;
-            if (typeof data === 'string') {
-              try {
-                const decrypted = CryptoHelper.decrypt(data);
-                if (typeof decrypted === 'string' && decrypted.trim().startsWith('{')) {
-                  data = JSON.parse(decrypted);
-                } else if (data.trim().startsWith('{')) {
-                  data = JSON.parse(data);
-                }
-              } catch (e) {
-                // Keep data string as fallback
-              }
-            }
+        let decryptedData: any = null;
 
-            if (typeof data === 'object' && data !== null) {
-              this.captchaCode = data.captcha || data.captchaCode || data.captchaImg || data.code || '';
-              this.captchaKey = data.key || data.captchaKey || data.id || '';
-            } else if (typeof data === 'string' && data.length <= 10) {
-              this.captchaCode = data;
-              this.captchaKey = res.key || res.captchaKey || '';
+        const rawData = res?.data ?? res;
+
+        if (rawData) {
+          try {
+            let dec = typeof rawData === 'string' ? CryptoHelper.decrypt(rawData) : rawData;
+            if (typeof dec === 'string') {
+              try {
+                dec = JSON.parse(dec);
+              } catch (e) { }
             }
+            if (typeof dec === 'string') {
+              try {
+                dec = JSON.parse(dec);
+              } catch (e) { }
+            }
+            decryptedData = dec;
           } catch (e) {
-            console.error('Failed to parse CAPTCHA response:', e);
+            decryptedData = rawData;
           }
         }
 
-        // Ensure a 6-digit numeric CAPTCHA is displayed if API returned encrypted/unparsed string
-        if (!this.captchaCode || this.captchaCode.length > 10) {
-          this.captchaCode = this.generate6DigitNumberCaptcha();
-          this.captchaKey = this.captchaCode;
+        if (Array.isArray(decryptedData) && decryptedData.length > 0) {
+          decryptedData = decryptedData[0];
+        }
+
+        const key = decryptedData?.key || decryptedData?.Key || decryptedData?.key_code || '';
+        const captcha =
+          decryptedData?.captcha ||
+          decryptedData?.Captcha ||
+          decryptedData?.captcha_code ||
+          '';
+
+        if (key || captcha) {
+          this.captchaKey = String(key || Date.now());
+          this.captchaCode = String(captcha || '');
         }
       },
-      error: (err: any) => {
-        this.isCaptchaLoading.set(false);
-        console.error('Generate CAPTCHA API Error:', err);
-        this.captchaCode = this.generate6DigitNumberCaptcha();
-        this.captchaKey = this.captchaCode;
-      },
-    });
-  }
 
-  private generate6DigitNumberCaptcha(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    });
   }
 
   /**
@@ -762,8 +760,9 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // CAPTCHA validation
     if (!this.captchaInput || !this.captchaInput.trim()) {
-      this.error.set('Please enter 6-digit CAPTCHA code.');
+      this.error.set('Please enter the CAPTCHA code.');
       return;
     }
 
@@ -775,9 +774,9 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     let loginPayload: any = {
       userid: this.username.trim(),
       password: this.password,
+      forceLogin: false,
       key: this.captchaKey,
       captcha: this.captchaInput.trim(),
-      forceLogin: false,
     };
     let loginReqParam: any = JSON.stringify(loginPayload);
     loginReqParam = CryptoHelper.encrypt(loginReqParam);
@@ -846,13 +845,6 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
           });
         } else {
           this.loading.set(false);
-          if (
-            res?.message?.includes('Padding is invalid') ||
-            this.username.trim().toLowerCase() === 'demo@exploer.com'
-          ) {
-            this.handleDirectLoginBypass();
-            return;
-          }
           this.username = '';
           this.password = '';
           this.captchaInput = '';
@@ -867,10 +859,6 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
       },
       error: (err: any) => {
         this.loading.set(false);
-        if (this.username.trim().toLowerCase() === 'demo@exploer.com') {
-          this.handleDirectLoginBypass();
-          return;
-        }
         this.username = '';
         this.password = '';
         this.captchaInput = '';
@@ -883,19 +871,5 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
         });
       },
     });
-  }
-
-  private handleDirectLoginBypass(): void {
-    this.loading.set(false);
-    this.authService.setToken('local-development-token');
-    this.authService.setCurrentUser({
-      userName: this.username || 'demo@exploer.com',
-      email: this.username || 'demo@exploer.com',
-      roles: [{ roleId: 13, roleName: 'Admin' }],
-    });
-    this.authService.setRoles([{ roleId: 13, roleName: 'Admin' }]);
-    this.authService.setRoleId(13, 'Admin');
-    this.menuService.loadDefaultMenus();
-    this.router.navigate(['/dashboard'], { replaceUrl: true });
   }
 }

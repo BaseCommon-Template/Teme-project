@@ -292,7 +292,7 @@
   width: 36px;
   height: 36px;
   border: 3.5px solid #cbd5e1;
-  border-top-color: #355f2d;
+  border-top-color: #1c4587;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -300,7 +300,7 @@
 .loading-text {
   font-size: 13px;
   font-weight: 600;
-  color: #355f2d;
+  color: #1c4587;
 }
 
 @keyframes spin {

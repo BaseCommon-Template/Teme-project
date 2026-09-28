@@ -1,9 +1,9 @@
 <div class="p-4 sm:p-6 lg:p-8 max-w-[100%] mx-auto bg-slate-50 min-h-screen font-['Poppins',sans-serif]">
 
   <!-- Top Banner / Header Bar (Matching Dashboard) -->
-  <div class="bg-[#46584b] flex items-center">
-    <div class="w-1.5 h-15 bg-[#447a3a] mr-3.5"></div>
-    <h1 class="text-lg sm:text-xl font-bold text-[#fff] m-0 tracking-tight">Update Name</h1>
+  <div class="bg-[#FF9933] flex items-center">
+    <div class="w-1.5 h-15 bg-[#18181b] mr-3.5"></div>
+    <h1 class="text-lg sm:text-xl font-bold text-[#18181b] m-0 tracking-tight">Update Name</h1>
   </div>
 
   <!-- Form Screen Container (Matching Dashboard) -->
@@ -11,7 +11,7 @@
 
     <!-- Breadcrumb Navigation Below the Strip -->
     <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 pb-3 border-b border-slate-200/80">
-      <a routerLink="/dashboard" class="text-[#355f2d] hover:underline cursor-pointer">Dashboard</a>
+      <a routerLink="/dashboard" class="text-[#1C4587] hover:underline cursor-pointer">Dashboard</a>
       <span class="text-slate-400">›</span>
       <span class="text-slate-800 font-bold">Update Name</span>
     </div>
@@ -30,13 +30,13 @@
           <div class="relative flex-1">
             <input id="agniveerId" type="text" formControlName="agniveerId" placeholder="Enter Agniveer ID"
               autocomplete="off" (input)="onAgniveerIdChange()"
-              class="w-full px-4 py-2.5 bg-slate-50/50 hover:bg-white focus:bg-white border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#355f2d]/20 focus:border-[#355f2d] transition-all h-11 font-medium"
+              class="w-full px-4 py-2.5 bg-slate-50/50 hover:bg-white focus:bg-white border border-slate-300 rounded-xl text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1C4587]/20 focus:border-[#1C4587] transition-all h-11 font-medium"
               [class.border-red-500]="searchControls['agniveerId'].invalid && searchControls['agniveerId'].touched" />
           </div>
 
           <!-- Right Side Search Button -->
           <button type="submit" [disabled]="isSearching() || searchForm.invalid"
-            class="px-6 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs sm:text-sm font-bold tracking-wide shadow-sm hover:shadow-md transition-all flex items-center gap-2 cursor-pointer border-none h-11 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed">
+            class="px-6 py-2.5 rounded-xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs sm:text-sm font-bold tracking-wide shadow-sm hover:shadow-md transition-all flex items-center gap-2 cursor-pointer border-none h-11 shrink-0 disabled:opacity-50 disabled:cursor-not-allowed">
             @if (isSearching()) {
             <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
             <span>Searching...</span>
@@ -104,7 +104,7 @@
             <div class="relative">
               <input id="newName" type="text" formControlName="newName" placeholder="Enter new name" autocomplete="off"
                 maxlength="100" (keydown)="preventInvalidNameChars($event)" (input)="sanitizeNewName()"
-                class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#355f2d]/20 focus:border-[#355f2d] transition-all h-11"
+                class="w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1C4587]/20 focus:border-[#1C4587] transition-all h-11"
                 [class.border-red-500]="updateControls['newName'].invalid && (updateControls['newName'].touched || submittedUpdate())"
                 [class.border-emerald-500]="updateControls['newName'].valid && updateControls['newName'].value" />
 
@@ -156,7 +156,7 @@
             </button>
 
             <button type="submit" [disabled]="isUpdating() || updateForm.invalid"
-              class="px-7 py-2.5 rounded-xl bg-[#355f2d] hover:bg-[#46584b] text-white text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer border-none h-11 disabled:opacity-50 disabled:cursor-not-allowed">
+              class="px-7 py-2.5 rounded-xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs sm:text-sm font-bold tracking-wider uppercase shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer border-none h-11 disabled:opacity-50 disabled:cursor-not-allowed">
               @if (isUpdating()) {
               <div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               <span>Updating Name...</span>

@@ -219,7 +219,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Opening Date Required',
         text: 'Please select an Opening Date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -229,7 +229,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Closing Date Required',
         text: 'Please select a Closing Date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -239,7 +239,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Invalid Date Range',
         text: 'Closing date cannot be earlier than opening date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -249,7 +249,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Profile Edit Opening Date Required',
         text: 'Please select a Profile Edit Opening Date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -259,7 +259,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Profile Edit Closing Date Required',
         text: 'Please select a Profile Edit Closing Date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -269,7 +269,7 @@ export class ScheduleEdit implements OnChanges {
         icon: 'warning',
         title: 'Invalid Profile Edit Date Range',
         text: 'Profile edit closing date cannot be earlier than profile edit opening date.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#254260',
       });
       return;
     }
@@ -320,7 +320,7 @@ export class ScheduleEdit implements OnChanges {
             icon: 'error',
             title: 'Failed to Save Schedule',
             text: res?.message || 'Something went wrong while saving the schedule.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#254260',
           });
         } else {
           this.isSubmitting.set(false);
@@ -332,7 +332,7 @@ export class ScheduleEdit implements OnChanges {
               (this.isEditMode()
                 ? 'Schedule updated successfully.'
                 : 'Schedule created successfully.'),
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#254260',
             timer: 2200,
           });
 
@@ -362,7 +362,7 @@ export class ScheduleEdit implements OnChanges {
             err?.error?.message ||
             err?.message ||
             'Something went wrong while saving the schedule.',
-            confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#254260',
         });
       },
     });

@@ -129,7 +129,13 @@ export class ProfileDropdownComponent {
     this.authService.setRoleId(newRoleId, newRoleName);
     this.menuService.refresh(true);
     this.closeDropdown.emit();
-    this.router.navigate(['/dashboard']);
+    if (newRoleId === 6) {
+      this.router.navigate(['/import']);
+    } else if (newRoleId === 11) {
+      this.router.navigate(['/dashboard-agniveer']);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   openChangePasswordModal(): void {

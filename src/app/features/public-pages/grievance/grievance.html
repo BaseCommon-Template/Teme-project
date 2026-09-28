@@ -1,0 +1,89 @@
+<div class="bg-slate-50 py-10 px-4 sm:px-8 lg:px-16 min-h-[70vh]" id="maincontent">
+      <div class="max-w-4xl mx-auto space-y-8">
+        <div class="border-l-4 border-blue-600 pl-4">
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 m-0">
+            Grievance Redressal
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-1">
+            Lodge grievances related to service records, skill certificates, verification, and portal access
+          </p>
+        </div>
+
+        @if (ticketId()) {
+          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center space-y-3">
+            <div class="text-4xl">🎫</div>
+            <h3 class="text-lg font-bold text-emerald-900 m-0">Grievance Ticket Created!</h3>
+            <p class="text-xs text-emerald-700 m-0">
+              Your Ticket ID is <strong class="text-base text-emerald-900 font-mono">{{ ticketId() }}</strong>.
+              Our nodal officers will review your submission promptly.
+            </p>
+            <button
+              (click)="resetForm()"
+              class="px-5 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 cursor-pointer border-none"
+            >
+              Lodge Another Grievance
+            </button>
+          </div>
+        } @else {
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <form (ngSubmit)="onSubmit()" class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Grievance Category *
+                </label>
+                <select
+                  [(ngModel)]="formData.grievance_type"
+                  name="grievance_type"
+                  required
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+                >
+                  <option value="" disabled>Select category</option>
+                  <option value="Service Record Discrepancy">Service Record Discrepancy</option>
+                  <option value="Skill Certificate Issue">Skill Certificate Issue</option>
+                  <option value="Portal Access / Login Problem">Portal Access / Login Problem</option>
+                  <option value="Verification Delay">Verification Delay</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Issue Description *
+                </label>
+                <textarea
+                  [(ngModel)]="formData.description"
+                  name="description"
+                  required
+                  rows="5"
+                  placeholder="Explain the details of your issue clearly..."
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none resize-y"
+                ></textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Initial Remarks / Reference Details
+                </label>
+                <input
+                  type="text"
+                  [(ngModel)]="formData.remarks"
+                  name="remarks"
+                  placeholder="Optional reference number or note"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div class="pt-2 flex justify-end">
+                <button
+                  type="submit"
+                  [disabled]="submitting()"
+                  class="px-6 py-2.5 rounded-xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-sm transition-all cursor-pointer border-none disabled:opacity-50"
+                >
+                  {{ submitting() ? 'Submitting...' : 'Submit Grievance' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    </div>

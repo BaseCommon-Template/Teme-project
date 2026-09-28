@@ -179,7 +179,7 @@ export class ImportAgniveerProfiles implements OnInit {
         const fileName = data.Attachment ? data.Attachment.split('/').pop() : 'Attachment';
         return `
           <div class="flex flex-col justify-center py-0.5" style="font-family:'Poppins',sans-serif;line-height:1.25;">
-            <div class="flex items-center gap-1.5 font-bold text-[#355f2d] hover:underline cursor-pointer text-xs">
+            <div class="flex items-center gap-1.5 font-bold text-[#1C4587] hover:underline cursor-pointer text-xs">
               <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
@@ -213,7 +213,7 @@ export class ImportAgniveerProfiles implements OnInit {
             .toUpperCase() || 'AD';
         return `
           <div class="flex items-center gap-2" style="font-family:'Poppins',sans-serif;">
-            <div class="w-6 h-6 rounded-full bg-blue-100 text-[#355f2d] flex items-center justify-center font-bold text-[10px] shrink-0">
+            <div class="w-6 h-6 rounded-full bg-blue-100 text-[#1C4587] flex items-center justify-center font-bold text-[10px] shrink-0">
               ${initials}
             </div>
             <span class="text-xs font-semibold text-slate-700 truncate" title="${val}">

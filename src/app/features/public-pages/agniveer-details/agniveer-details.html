@@ -1,0 +1,121 @@
+<div class="bg-slate-50 py-10 px-4 sm:px-8 lg:px-16 min-h-[80vh]">
+      <div class="max-w-5xl mx-auto space-y-6">
+        <div class="flex items-center justify-between">
+          <a
+            routerLink="/"
+            class="text-xs font-bold text-[#1C4587] hover:underline flex items-center gap-1.5"
+          >
+            ← Back to Portal
+          </a>
+        </div>
+
+        @if (loading()) {
+          <div class="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-400 text-sm">
+            Loading candidate verified profile...
+          </div>
+        } @else if (error() || !profile()) {
+          <div class="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-4">
+            <div class="text-3xl">⚠️</div>
+            <h3 class="text-base font-bold text-slate-800">Candidate Profile Not Found</h3>
+            <p class="text-xs text-slate-500">The requested Agniveer profile could not be loaded or requires authorized access.</p>
+          </div>
+        } @else {
+          <!-- Profile Card -->
+          <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+            <!-- Header Banner -->
+            <div class="p-6 sm:p-8 bg-gradient-to-r from-[#1a2a6c] to-[#1e3a8a] text-white flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              <div class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-2xl font-black border border-white/30 shrink-0">
+                {{ getInitials(profile()?.personal_details?.candidate_name) }}
+              </div>
+              <div class="flex-1 text-center sm:text-left space-y-1">
+                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <h1 class="text-xl sm:text-2xl font-bold m-0">
+                    {{ profile()?.personal_details?.candidate_name || 'Agniveer Candidate' }}
+                  </h1>
+                  <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[10px] font-bold">
+                    ✓ Verified
+                  </span>
+                </div>
+                <p class="text-xs text-blue-200 m-0">
+                  Service ID: <strong>{{ profile()?.service_details?.service_number || 'N/A' }}</strong> |
+                  Force: <strong>{{ profile()?.service_details?.defence_force || 'Indian Armed Forces' }}</strong>
+                </p>
+                <p class="text-xs text-blue-200 m-0">
+                  Rank: {{ profile()?.service_details?.rank || 'Agniveer' }} | Trade: {{ profile()?.service_details?.trade || 'General Duty' }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Profile Sections -->
+            <div class="p-6 sm:p-8 space-y-8">
+              <!-- Personal & Domicile Details -->
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#1C4587] border-b border-slate-200 pb-2 mb-4">
+                  1. Personal & Contact Details
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Father's Name</span>
+                    <span class="font-bold text-slate-800">{{ profile()?.personal_details?.father_name || '—' }}</span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Gender / DOB</span>
+                    <span class="font-bold text-slate-800">
+                      {{ profile()?.personal_details?.gender || '—' }} / {{ formatDate(profile()?.personal_details?.dob) }}
+                    </span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">State / UT & District</span>
+                    <span class="font-bold text-slate-800">
+                      {{ profile()?.personal_details?.domicile_state_or_ut || '—' }}, {{ profile()?.personal_details?.domicile_district || '—' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Service Details -->
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#1C4587] border-b border-slate-200 pb-2 mb-4">
+                  2. Military Service & Unit Records
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Enrolment Date</span>
+                    <span class="font-bold text-slate-800">{{ formatDate(profile()?.service_details?.date_of_enrolment) }}</span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Discharge Date</span>
+                    <span class="font-bold text-slate-800">{{ formatDate(profile()?.service_details?.date_of_discharge) }}</span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Character / Conduct</span>
+                    <span class="font-bold text-emerald-700">{{ profile()?.service_details?.character_assessed || 'Exemplary' }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Education & Skills -->
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-[#1C4587] border-b border-slate-200 pb-2 mb-4">
+                  3. Skill & Education Credentials
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Civilian Education</span>
+                    <span class="font-bold text-slate-800">{{ profile()?.skill_and_education?.highest_civil_education || '—' }}</span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Military Technical Courses</span>
+                    <span class="font-bold text-slate-800">{{ profile()?.skill_and_education?.military_courses_passed || 'Completed' }}</span>
+                  </div>
+                  <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <span class="text-slate-400 block font-medium">Kaushal Praman Patra</span>
+                    <span class="font-bold text-blue-700">{{ profile()?.skill_and_education?.kaushal_praman_patra_issued ? 'Issued' : 'In Progress' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>

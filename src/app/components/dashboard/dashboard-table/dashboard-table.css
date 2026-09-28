@@ -25,8 +25,8 @@
   display: flex;
   align-items: center;
   padding-left: 20px;
-  background: #eeeeee;
-  border-left: 7px solid #4aa5df;
+  background: #FF9933;
+  border-left: 7px solid #18181b;
   border-bottom: 1px solid #d4d4d4;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
   box-sizing: border-box;
@@ -34,7 +34,7 @@
 
 .role-management-page .page-title h2 {
   margin: 0;
-  color: #6879d9;
+  color: #18181b;
   font-size: 24px;
   font-weight: 700;
   line-height: 44px;
@@ -175,9 +175,9 @@
   align-items: center;
   gap: 6px;
   padding: 0 16px;
-  background: #46584b;
+  background: #162f6a;
   color: #ffffff;
-  border: 1px solid #46584b;
+  border: 1px solid #162f6a;
   border-radius: 5px;
   font-size: 12px;
   font-weight: 600;
@@ -235,7 +235,7 @@
   padding: 0 15px;
   border: none;
   border-radius: 4px;
-  background: #355f2d;
+  background: #1c4587;
   color: #ffffff;
   font-size: 12px;
   font-weight: 700;
@@ -246,7 +246,7 @@
 }
 
 .role-management-page .publish-btn:hover {
-  background: #46584b;
+  background: #153d78;
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 }
 
@@ -272,7 +272,7 @@
 ========================================================= */
 
 :host ::ng-deep .role-management-grid .ag-header {
-  background: #4285d4 !important;
+  background: #18181b !important;
   color: #ffffff !important;
   border-bottom: 1px solid #286bb7 !important;
   height: 30px !important;
@@ -280,13 +280,13 @@
 
 :host ::ng-deep .role-management-grid .ag-header-row {
   height: 30px !important;
-  background: #4285d4 !important;
+  background: #18181b !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-cell {
-  background: #4285d4 !important;
+  background: #18181b !important;
   color: #ffffff !important;
-  border-right: 1px solid #76a5d6 !important;
+  border-right: 1px solid #333333 !important;
   padding-left: 7px !important;
   padding-right: 7px !important;
   height: 30px !important;
@@ -502,7 +502,7 @@
   width: 36px;
   height: 36px;
   border: 3.5px solid #cbd5e1;
-  border-top-color: #355f2d;
+  border-top-color: #1c4587;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -510,7 +510,7 @@
 .loading-text {
   font-size: 13px;
   font-weight: 600;
-  color: #355f2d;
+  color: #1c4587;
 }
 
 @keyframes spin {
@@ -550,7 +550,7 @@
 .back-btn {
   margin-right: 20px;
   padding: 8px 18px;
-  background: #005b96;
+  background: #18181b;
   color: #fff;
   text-decoration: none;
   border-radius: 4px;
@@ -560,7 +560,7 @@
 }
 
 .back-btn:hover {
-  background: #004775;
+  background: #000000;
 }
 
 /* =========================================================
@@ -583,7 +583,7 @@
   font-size: 12px;
   font-weight: 600;
   font-family: inherit;
-  color: #355f2d;
+  color: #1c4587;
   background: #eff6ff;
   border: 1px solid #bfdbfe;
   border-radius: 6px;
@@ -593,9 +593,9 @@
 }
 
 :host ::ng-deep .action-view-btn:hover {
-  background: #355f2d;
+  background: #1c4587;
   color: #ffffff;
-  border-color: #355f2d;
+  border-color: #1c4587;
   box-shadow: 0 2px 5px rgba(28, 69, 135, 0.25);
   transform: translateY(-1px);
 }

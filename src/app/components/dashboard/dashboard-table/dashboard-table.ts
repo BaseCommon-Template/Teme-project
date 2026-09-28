@@ -37,6 +37,8 @@ export class DashboardTable implements OnInit, AfterViewInit {
 
   readonly rowData = signal<DashboardTableRecord[]>([]);
 
+  readonly isInitialLoading = signal<boolean>(true);
+
   readonly isLoading = signal<boolean>(false);
 
   readonly searchQuery = signal<string>('');
@@ -334,6 +336,8 @@ export class DashboardTable implements OnInit, AfterViewInit {
         this.totalRecords.set(0);
         this.totalPages.set(1);
         this.isLoading.set(false);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
       },
     });
   }
@@ -348,6 +352,8 @@ export class DashboardTable implements OnInit, AfterViewInit {
         this.rowData.set([]);
         this.totalRecords.set(0);
         this.totalPages.set(1);
+        // this.isInitialLoading.set(false);
+        this.router.navigate(['/']);
         return;
       }
 
@@ -483,8 +489,8 @@ export class DashboardTable implements OnInit, AfterViewInit {
       this.rowData.set([]);
       this.totalRecords.set(0);
       this.totalPages.set(1);
-    } finally {
-      this.isLoading.set(false);
+      // this.isInitialLoading.set(false);
+      this.router.navigate(['/']);
     }
   }
 

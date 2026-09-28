@@ -151,7 +151,7 @@ export class MeritModalComponent {
               icon: 'error',
               title: 'Processing Failed',
               text: errText,
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
             this.cdr.markForCheck();
             return;
@@ -189,7 +189,7 @@ export class MeritModalComponent {
             icon: 'success',
             title: 'Merit List Uploaded Successfully',
             text: body.message || 'Merit Excel processed successfully.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
             timer: 3000,
           });
 

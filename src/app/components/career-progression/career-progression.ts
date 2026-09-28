@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
@@ -24,7 +25,7 @@ import {
 } from '../../core/models/masters.model';
 import { CryptoHelper } from '../../helpers/crypto-helper';
 // import { environment } from '../../../environments/environment';
-// import { Preferences } from './preferences/preferences';
+import { Preferences } from './preferences/preferences';
 import { environment } from '../../../environments/environment';
 
 export type ActiveTabType = 'part-a' | 'part-b' | 'preference';
@@ -33,8 +34,10 @@ export type { ForcePreferenceItem } from './preferences/preferences';
 @Component({
   selector: 'app-career-progression',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, 
-    // Preferences
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    Preferences
   ],
   templateUrl: './career-progression.html',
   styleUrl: './career-progression.css',
@@ -42,6 +45,7 @@ export type { ForcePreferenceItem } from './preferences/preferences';
 export class CareerProgression implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
   private readonly masterService = inject(MasterService);
   private readonly authService = inject(AuthService);
   private readonly myProfileService = inject(MyProfileService);
@@ -165,6 +169,7 @@ export class CareerProgression implements OnInit {
           try {
             const dec = CryptoHelper.decrypt(res.data);
             const data = typeof dec === 'string' ? JSON.parse(dec) : dec;
+            // console.log('🔥 getActiveSchedule FULL RESPONSE:', data);
             const schedule =
               data?.Schedule ?? data?.schedule ?? data?.Table ?? data?.Schedules ?? data;
 
@@ -192,7 +197,7 @@ export class CareerProgression implements OnInit {
               icon: 'warning',
               title: 'No Active Schedule',
               text: 'No active schedule was found. Profile editing is currently unavailable.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
           }
           return;
@@ -241,7 +246,7 @@ export class CareerProgression implements OnInit {
               icon: 'warning',
               title: 'Part B Not Open',
               text: 'Part B is currently not enabled in the active schedule.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
             return;
           }
@@ -250,7 +255,7 @@ export class CareerProgression implements OnInit {
               icon: 'warning',
               title: 'Profile Edit Closed',
               text: 'The profile edit window is currently not active.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
             return;
           }
@@ -270,7 +275,7 @@ export class CareerProgression implements OnInit {
             icon: 'error',
             title: 'Schedule Verification Error',
             text: 'Unable to verify schedule status. Please try again later.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -283,7 +288,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Part B Not Open',
         text: 'Part B is currently not enabled in the active schedule.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -293,7 +298,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Preferences Not Open',
         text: 'Preferences (Part C) is currently not enabled in the active schedule.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -303,7 +308,7 @@ export class CareerProgression implements OnInit {
         icon: 'info',
         title: 'First Complete Profile',
         text: 'Please complete and submit your Part B profile details first before accessing preferences.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -397,7 +402,7 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'No Active Schedule',
             text: 'No active schedule was found. Profile editing is currently unavailable.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -419,7 +424,7 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'Schedule Inactive',
             text: 'The schedule is currently inactive. Profile editing is not allowed.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -432,7 +437,7 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'Part B Closed',
             text: 'Part B is currently not enabled in the active schedule.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -455,7 +460,7 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'Dates Missing',
             text: 'Profile edit opening or closing date is missing in the schedule.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -487,12 +492,12 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'Invalid Dates',
             text: 'Invalid ProfileEditOpeningDate or ProfileEditClosingDate in schedule.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
 
-        if (now.isBefore(openMoment)) {
+        if (openMoment && openMoment.isValid() && now.isBefore(openMoment)) {
           console.warn('[Schedule Check] Today is before ProfileEditOpeningDate');
           this.canEditProfile.set(false);
           this.cdr.detectChanges();
@@ -500,20 +505,25 @@ export class CareerProgression implements OnInit {
             icon: 'warning',
             title: 'Profile Edit Not Open',
             text: `Profile editing is not allowed. The editing window opens on ${openMoment.format('DD/MM/YYYY')}.`,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
 
-        if (now.isAfter(closeMoment)) {
-          console.warn('[Schedule Check] Today is after ProfileEditClosingDate');
+        if (
+          closeMoment &&
+          closeMoment.isValid() &&
+          now.isAfter(closeMoment) &&
+          this.agniveerData()?.Agniveer?.DraftSave === 0
+        ) {
+          // console.warn('[Schedule Check] Today is after ProfileEditClosingDate');
           this.canEditProfile.set(false);
           this.cdr.detectChanges();
           Swal.fire({
             icon: 'warning',
             title: 'Profile Edit Window Closed',
             text: `Profile editing is closed. The deadline was ${closeMoment.format('DD/MM/YYYY')}.`,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           return;
         }
@@ -535,7 +545,7 @@ export class CareerProgression implements OnInit {
           icon: 'error',
           title: 'Schedule Verification Error',
           text: 'Unable to verify schedule status. Please try again later.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });
@@ -595,7 +605,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Editing Not Allowed',
         text: 'Profile editing is closed because the schedule is inactive or outside the active window.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -604,13 +614,194 @@ export class CareerProgression implements OnInit {
         icon: 'info',
         title: 'Update Not Allowed',
         text: 'Data already saved; update is not allowed.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
     this.isEditMode.set(true);
     this.additionalForm.enable();
+    this.loadActiveScheduleForEdit();
     this.cdr.detectChanges();
+  }
+
+  private loadActiveScheduleForEdit(): void {
+    const payload = {};
+    const encrypted = CryptoHelper.encrypt(JSON.stringify(payload));
+    const encryptedPayload = JSON.stringify(encrypted);
+
+    Swal.fire({
+      title: 'Verifying Schedule...',
+      text: 'Please wait while we check the Part B submission window.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this.scheduleService.getActiveSchedule(encryptedPayload).subscribe({
+      next: (res: any) => {
+        Swal.close();
+
+        let scheduleItem: any = null;
+
+        if (res?.code === 1 && res?.data) {
+          try {
+            const dec = CryptoHelper.decrypt(res.data);
+            const data = typeof dec === 'string' ? JSON.parse(dec) : dec;
+
+            const schedule =
+              data?.Schedule ?? data?.schedule ?? data?.Table ?? data?.Schedules ?? data;
+
+            if (Array.isArray(schedule)) {
+              scheduleItem = schedule.find((s: any) => this.isScheduleActiveFlag(s)) || schedule[0];
+            } else if (
+              schedule &&
+              typeof schedule === 'object' &&
+              Object.keys(schedule).length > 0
+            ) {
+              scheduleItem = schedule;
+            }
+          } catch (error) {
+            console.error('Error decrypting schedule:', error);
+          }
+        }
+
+        if (!scheduleItem) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'No Active Schedule',
+            text: 'No active schedule was found. Part B submission is currently unavailable.',
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        // Active check
+        const isActive = this.isScheduleActiveFlag(scheduleItem);
+
+        // Part B enabled check
+        const isPartBOpen = isActive && this.checkIsOpenPartB(scheduleItem);
+
+        if (!isPartBOpen) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Part B Closed',
+            text: 'Part B submission is currently closed.',
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        // Dates from getActiveSchedule response
+        const openingDateVal = scheduleItem?.ProfileEditOpeningDate;
+        const closingDateVal = scheduleItem?.ProfileEditClosingDate;
+
+        if (!openingDateVal || !closingDateVal) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Dates Missing',
+            text: 'Part B opening or closing date is missing.',
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        const now = moment();
+
+        const openMoment = this.parseWithMoment(openingDateVal, false);
+
+        const closeMoment = this.parseWithMoment(closingDateVal, true);
+
+        if (!openMoment || !openMoment.isValid() || !closeMoment || !closeMoment.isValid()) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Invalid Dates',
+            text: 'Invalid Part B opening or closing date.',
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        if (now.isBefore(openMoment)) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Part B Not Open',
+            text: `Part B submission will open on ${openMoment.format('DD/MM/YYYY')}.`,
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        if (now.isAfter(closeMoment)) {
+          this.canEditProfile.set(false);
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Part B Submission Closed',
+            text: `Part B submission closed on ${closeMoment.format('DD/MM/YYYY')}.`,
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        this.canEditProfile.set(true);
+        this.activeSchedule.set(scheduleItem);
+
+        this.isEditMode.set(true);
+        this.additionalForm.enable();
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        Swal.close();
+
+        console.error('Error fetching active schedule for Part B:', err);
+
+        this.canEditProfile.set(false);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Schedule Check Failed',
+          text: 'Unable to verify Part B submission window. Please try again.',
+          confirmButtonColor: '#1C4587',
+        });
+      },
+    });
+  }
+
+  isPartBUpdateAllowed(): boolean {
+    const closingDate =
+      this.activeSchedule()?.ClosingDate ?? this.activeSchedule()?.ProfileEditClosingDate;
+
+    if (!closingDate) {
+      return false;
+    }
+
+    const now = moment();
+    const closeMoment = this.parseWithMoment(closingDate, true);
+
+    if (!closeMoment || !closeMoment.isValid()) {
+      return false;
+    }
+
+    return now.isSameOrBefore(closeMoment);
   }
 
   cancelEditMode(): void {
@@ -933,6 +1124,7 @@ export class CareerProgression implements OnInit {
   fetchAgniveerDetails(): void {
     this.isLoading.set(true);
     const currentUser = this.authService.getCurrentUser();
+    // console.log('🔥 CURRENT USER:', currentUser);
     const agniveerAutoid =
       currentUser?.agniveer_autoid ||
       currentUser?.autoid ||
@@ -962,6 +1154,7 @@ export class CareerProgression implements OnInit {
               if (typeof decryptedData === 'string') {
                 decryptedData = JSON.parse(decryptedData);
               }
+              // console.log('🔥 DECRYPTED DATA:', decryptedData);
             } catch (e) {
               console.error('Error decrypting Agniveer details:', e);
               decryptedData = response.data;
@@ -1152,7 +1345,8 @@ export class CareerProgression implements OnInit {
         },
         error: (error) => {
           console.error('Error fetching agniveer details:', error);
-          this.isLoading.set(false);
+          // this.isLoading.set(false);
+          this.router.navigate(['/']);
         },
       });
   }
@@ -1748,7 +1942,7 @@ export class CareerProgression implements OnInit {
           icon: 'warning',
           title: 'Invalid File Format',
           text: 'Please select a JPG or PNG image file.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
         input.value = '';
         return;
@@ -1759,7 +1953,7 @@ export class CareerProgression implements OnInit {
           icon: 'warning',
           title: 'File Too Large',
           text: 'Signature file size must be 200KB or less.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
         input.value = '';
         return;
@@ -1825,7 +2019,7 @@ export class CareerProgression implements OnInit {
               icon: 'success',
               title: 'Uploaded Successfully',
               text: 'Signature uploaded successfully.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
               timer: 2000,
               showConfirmButton: false,
             });
@@ -1839,7 +2033,7 @@ export class CareerProgression implements OnInit {
             icon: 'error',
             title: 'Upload Failed',
             text: 'Failed to upload signature. Please try again.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
           input.value = '';
         },
@@ -1893,7 +2087,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Missing Agniveer ID',
         text: 'Agniveer Auto ID is not available. Please refresh the page or login again.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1905,7 +2099,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: "Missing Mother's Name",
         text: "Mother's Name is required. Please fill in Mother's Name.",
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1917,7 +2111,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Nationality',
         text: 'Nationality is required. Please select Nationality.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1934,7 +2128,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Invalid Nationality',
         text: `Nationality ID for "${natName}" is not available in master records.`,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1946,7 +2140,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Religion',
         text: 'Religion is required. Please select Religion.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1963,7 +2157,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Invalid Religion',
         text: `Religion ID for "${relName}" is not available in master records.`,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -1986,7 +2180,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Reservation Category in Center',
         text: 'Reservation Category in Center is required. Please select Reservation Category in Center.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2015,7 +2209,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Reservation Category',
         text: 'Reservation Category in the Domicile State is required. Please select Reservation Category.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2027,7 +2221,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing State',
         text: 'Domicile State / UT is required. Please select Domicile State / UT.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2054,7 +2248,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Invalid State',
         text: `State ID for "${stateName}" is not available in master records.`,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2066,7 +2260,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing District',
         text: 'Domicile District is required. Please select Domicile District.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2114,7 +2308,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Invalid District',
         text: `District ID for "${distName}" is not available in master records.`,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2126,7 +2320,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Police Station',
         text: 'Police Station is required. Please enter or select Police Station.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2183,7 +2377,7 @@ export class CareerProgression implements OnInit {
         icon: 'error',
         title: 'Invalid Police Station',
         text: `Police Station ID for "${psName}" is not available. Please enter or select a valid Police Station.`,
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2202,7 +2396,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Missing Signature',
         text: 'Please upload signature before saving.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return null;
     }
@@ -2248,7 +2442,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Save Not Allowed',
         text: 'Profile editing is closed because the schedule is inactive or outside the active window.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -2257,7 +2451,7 @@ export class CareerProgression implements OnInit {
         icon: 'info',
         title: 'Save Not Allowed',
         text: 'Data already saved; further updates are not permitted.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -2270,7 +2464,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Submit Not Allowed',
         text: 'Profile editing is closed because the schedule is inactive or outside the active window.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -2279,7 +2473,7 @@ export class CareerProgression implements OnInit {
         icon: 'info',
         title: 'Submit Not Allowed',
         text: 'Data already saved; further updates are not permitted.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -2291,7 +2485,7 @@ export class CareerProgression implements OnInit {
         icon: 'warning',
         title: 'Incomplete Details',
         text: 'Please fill in all mandatory fields before submitting.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#1C4587',
       });
       return;
     }
@@ -2301,7 +2495,7 @@ export class CareerProgression implements OnInit {
       text: 'Once submitted, details cannot be edited again. Do you want to proceed?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#355f2d',
+      confirmButtonColor: '#1C4587',
       cancelButtonColor: '#64748B',
       confirmButtonText: 'Yes, Submit Details',
       cancelButtonText: 'Review Again',
@@ -2349,7 +2543,7 @@ export class CareerProgression implements OnInit {
               icon: 'info',
               title: 'Data Already Saved',
               text: responseMsg || 'Data already saved; update is not allowed.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
             });
             return;
           }
@@ -2387,7 +2581,7 @@ export class CareerProgression implements OnInit {
               icon: 'success',
               title: 'Draft Saved',
               text: responseMsg || 'Your additional profile details have been saved as a draft.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
               timer: 2500,
             });
           } else {
@@ -2395,7 +2589,7 @@ export class CareerProgression implements OnInit {
               icon: 'success',
               title: 'Details Submitted',
               text: responseMsg || 'Your additional profile details have been saved successfully.',
-              confirmButtonColor: '#355f2d',
+              confirmButtonColor: '#1C4587',
               timer: 3000,
             });
           }
@@ -2404,7 +2598,7 @@ export class CareerProgression implements OnInit {
             icon: 'error',
             title: 'Error',
             text: response?.message || 'Failed to update additional details.',
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -2414,7 +2608,7 @@ export class CareerProgression implements OnInit {
           icon: 'error',
           title: 'Request Failed',
           text: err || 'An unexpected error occurred while communicating with the server.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });
@@ -2522,7 +2716,7 @@ export class CareerProgression implements OnInit {
             icon: 'error',
             title: 'Error',
             text: response?.message,
-            confirmButtonColor: '#355f2d',
+            confirmButtonColor: '#1C4587',
           });
         }
       },
@@ -2532,7 +2726,7 @@ export class CareerProgression implements OnInit {
           icon: 'error',
           title: 'Request Failed',
           text: err || 'An unexpected error occurred while communicating with the server.',
-          confirmButtonColor: '#355f2d',
+          confirmButtonColor: '#1C4587',
         });
       },
     });

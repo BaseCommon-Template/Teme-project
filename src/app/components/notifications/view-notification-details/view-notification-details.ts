@@ -394,7 +394,7 @@ export class ViewNotificationDetails implements OnInit {
         icon: 'info',
         title: 'No Document Uploaded',
         text: 'No notification document was uploaded for this opening.',
-        confirmButtonColor: '#355f2d',
+        confirmButtonColor: '#205493',
       });
       return;
     }

@@ -1,0 +1,121 @@
+<div class="space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="border-l-4 border-[#18181b] pl-4">
+          <h1 class="text-2xl font-bold text-slate-900 m-0">
+            Recruitment Applications
+          </h1>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">
+            Review candidate applications submitted against published recruitment vacancies
+          </p>
+        </div>
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
+        <div class="relative flex-1 max-w-sm">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search candidate name or service ID..."
+            class="w-full px-3.5 py-2 pl-9 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <span class="absolute left-3 top-2 text-slate-400 text-xs">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-bold text-slate-600">Status:</label>
+          <select
+            [(ngModel)]="statusFilter"
+            (ngModelChange)="loadApplications()"
+            class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
+          >
+            <option value="">All Statuses</option>
+            <option value="SUBMITTED">Submitted</option>
+            <option value="SHORTLISTED">Shortlisted</option>
+            <option value="ACCEPTED">Accepted</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Applications Table -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            Loading candidate applications...
+          </div>
+        } @else if (filteredApplications().length === 0) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            No job applications found.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead class="bg-[#254260] text-white font-semibold">
+                <tr>
+                  <th class="p-3.5 pl-6 w-12">Sr. No.</th>
+                  <th class="p-3.5">Candidate Name</th>
+                  <th class="p-3.5">Opening / Notification</th>
+                  <th class="p-3.5">Trade Preferences</th>
+                  <th class="p-3.5 whitespace-nowrap">Submitted On</th>
+                  <th class="p-3.5 text-center">Status</th>
+                  <th class="p-3.5 text-right pr-6">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                @for (app of filteredApplications(); track app._id; let idx = $index) {
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-3.5 pl-6 text-slate-500 font-medium">{{ idx + 1 }}</td>
+                    <td class="p-3.5">
+                      <div class="font-bold text-slate-800">{{ getCandidateName(app) }}</div>
+                      <div class="text-[11px] text-slate-400 font-mono">{{ getCandidateServiceId(app) }}</div>
+                    </td>
+                    <td class="p-3.5">
+                      <div class="font-semibold text-slate-800">{{ getNotificationTitle(app) }}</div>
+                    </td>
+                    <td class="p-3.5">
+                      <div class="flex flex-wrap gap-1">
+                        @for (p of app.post_preferences; track p.preference_order) {
+                          <span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold">
+                            #{{ p.preference_order }}: {{ p.post_name }}
+                          </span>
+                        }
+                      </div>
+                    </td>
+                    <td class="p-3.5 text-slate-600 whitespace-nowrap">{{ formatDate(app.submitted_at || app.createdAt) }}</td>
+                    <td class="p-3.5 text-center">
+                      <span
+                        [class.bg-blue-50]="app.application_status === 'SUBMITTED'"
+                        [class.text-blue-700]="app.application_status === 'SUBMITTED'"
+                        [class.bg-purple-50]="app.application_status === 'SHORTLISTED'"
+                        [class.text-purple-700]="app.application_status === 'SHORTLISTED'"
+                        [class.bg-emerald-50]="app.application_status === 'ACCEPTED'"
+                        [class.text-emerald-700]="app.application_status === 'ACCEPTED'"
+                        [class.bg-red-50]="app.application_status === 'REJECTED'"
+                        [class.text-red-700]="app.application_status === 'REJECTED'"
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+                      >
+                        {{ app.application_status }}
+                      </span>
+                    </td>
+                    <td class="p-3.5 text-right pr-6 whitespace-nowrap">
+                      <select
+                        [ngModel]="app.application_status"
+                        (ngModelChange)="onStatusChange(app._id, $event)"
+                        class="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold focus:outline-none bg-white cursor-pointer"
+                      >
+                        <option value="SUBMITTED">Submitted</option>
+                        <option value="SHORTLISTED">Shortlisted</option>
+                        <option value="ACCEPTED">Accepted</option>
+                        <option value="REJECTED">Rejected</option>
+                      </select>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>

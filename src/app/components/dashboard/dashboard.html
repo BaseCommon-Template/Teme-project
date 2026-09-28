@@ -1,245 +1,908 @@
-<div class="p-4 sm:p-6 lg:p-8 max-w-[100%] mx-auto bg-slate-50 min-h-screen">
-  <!-- Top Banner / Header Bar -->
-  <div class="bg-[#252525] flex items-center px-4 py-3 rounded-t-xl">
-    <div class="w-1.5 h-6 bg-[#447a3a] mr-3.5 rounded-full"></div>
-    <h1 class="text-lg sm:text-xl font-bold text-white m-0 tracking-tight">Dashboard</h1>
+@if (isInitialLoading()) {
+  <div class="min-h-[70vh] w-full flex items-center justify-center p-8 bg-slate-50">
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-12 flex flex-col items-center justify-center text-center max-w-md w-full gap-3">
+      <div class="w-12 h-12 rounded-full border-4 border-slate-200 border-t-[#1c4587] animate-spin"></div>
+      <p class="m-0 text-base font-bold text-[#1c4587]">Loading Dashboard...</p>
+      <p class="m-0 text-xs text-slate-500 font-medium">Please wait while dashboard details are being loaded.</p>
+    </div>
   </div>
-  <div
-    class="bg-white border border-gray-200 p-6 sm:p-8 shadow-md rounded-b-xl min-h-[500px] grid grid-cols-1 lg:grid-cols-12 gap-6 items-start w-full">
+} @else {
+<div class="p-4 sm:p-6 lg:p-8 max-w-[100%] mx-auto bg-slate-50">
+  <!-- Top Banner / Header Bar -->
+  <div class="bg-[#FF9933] flex items-center">
+    <div class="w-1.5 h-15 bg-[#18181b] mr-3.5"></div>
+    <h1 class="text-lg sm:text-xl font-bold text-[#18181b] m-0 tracking-tight">Dashboard</h1>
+  </div>
+  <div class="bg-[#fff] border border-gray-200 p-5 shadow-md">
+    <!-- Main Grid Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left Column: Statistics Cards -->
+      <div class="lg:col-span-7 space-y-6">
+        <!-- Section 1: AGNIVEER STATISTICS -->
+        @if (!isAgniveerUser()) {
+          <div>
+            <div
+              class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4 text-slate-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              <span>AGNIVEER STATISTICS</span>
+            </div>
 
-    <!-- LEFT COLUMN: STATISTICS & STATUS CARDS (LG: 7 cols) -->
-    <div class="lg:col-span-7 space-y-6">
-      <!-- 1. AGNIVEER STATISTICS -->
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-          <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider m-0">
-            THEME STATISTICS
-          </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <!-- Card 1: TOTAL AGNIVEERS -->
+              <div
+                (click)="openAgniveerTable('all', stats().agniveerCount)"
+                role="button"
+                [tabindex]="stats().agniveerCount > 0 ? 0 : -1"
+                class="bg-[#e0f2fe] border border-sky-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                    TOTAL AGNIVEERS
+                  </span>
+                  <div
+                    class="w-8 h-8 rounded-xl bg-white/90 text-sky-600 flex items-center justify-center shadow-2xs"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="flex items-baseline justify-between mt-2">
+                  <div class="text-3xl font-black text-slate-900 leading-none">
+                    {{ stats().agniveerCount }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: REHABILITATED -->
+              <div
+                (click)="openAgniveerTable('rehabilitated', stats().rehabCount)"
+                role="button"
+                [tabindex]="stats().rehabCount > 0 ? 0 : -1"
+                class="bg-[#d1fae5] border border-emerald-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                    REHABILITATED
+                  </span>
+                  <div
+                    class="w-8 h-8 rounded-xl bg-white/90 text-emerald-600 flex items-center justify-center shadow-2xs"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="flex items-baseline justify-between mt-2">
+                  <div class="text-3xl font-black text-slate-900 leading-none">
+                    {{ stats().rehabCount }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: TO BE REHABILITATED -->
+              <!-- <div (click)="openAgniveerTable('toBeRehab')" role="button" tabindex="0"
+              class="bg-[#fef3c7] border border-amber-200/80 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  TO BE REHABILITATED
+                </span>
+                <div class="w-8 h-8 rounded-xl bg-white/90 text-amber-600 flex items-center justify-center shadow-2xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+              </div>
+              <div class="flex items-baseline justify-between mt-2">
+                <div class="text-3xl font-black text-slate-900 leading-none">
+                  {{ stats().toBeRehabCount }}
+                </div>
+              </div>
+            </div> -->
+            </div>
+          </div>
+        }
+
+        <!-- Section 2: AGNIVEER PART B STATUS -->
+        <div>
+          <div
+            class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span>AGNIVEER PART B STATUS</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Card 1: PART B FILLED -->
+            <div
+              (click)="openAgniveerTable('partB_filled', stats().agniveerPartBCountFill, 1, 'B')"
+              role="button"
+              [tabindex]="stats().agniveerPartBCountFill > 0 ? 0 : -1"
+              class="bg-[#ede9fe] border border-violet-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  PART B SUBMITTED
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-violet-600 flex items-center justify-center shadow-2xs shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().agniveerPartBCountFill }}
+              </div>
+            </div>
+
+            <!-- Card 2: PART B NOT FILLED -->
+            <div
+              (click)="
+                openAgniveerTable('partB_not_filled', stats().agniveerPartBCountNotFill, 0, 'B')
+              "
+              role="button"
+              [tabindex]="stats().agniveerPartBCountNotFill > 0 ? 0 : -1"
+              class="bg-[#fef3c7] border border-amber-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  PART B NOT SUBMITTED
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-amber-600 flex items-center justify-center shadow-2xs shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().agniveerPartBCountNotFill }}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- TOTAL AGNIVEERS -->
-          <div (click)="openAgniveerTable('all', stats().agniveerCount)"
-            class="bg-[#e8f2fe] border border-blue-200 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">TOTAL AGNIVEERS</span>
-              <div class="w-8 h-8 rounded-full bg-white text-blue-600 flex items-center justify-center shadow-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+        <!-- Section 3: AGNIVEER PART C STATUS -->
+        <div>
+          <div
+            class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+              />
+            </svg>
+            <span>AGNIVEER PART C STATUS</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Card 1: PART C FILLED -->
+            <div
+              (click)="
+                openAgniveerTable('partC_filled', stats().agniveerPreferenceDraftCount, 1, 'C')
+              "
+              role="button"
+              [tabindex]="stats().agniveerPreferenceDraftCount > 0 ? 0 : -1"
+              class="bg-[#ccfbf1] border border-teal-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  PART C SUBMITTED
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-teal-600 flex items-center justify-center shadow-2xs shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().agniveerPreferenceDraftCount }}
+              </div>
+            </div>
+
+            <!-- Card 2: PART C NOT FILLED -->
+            <!-- <div
+              (click)="
+                openAgniveerTable('partC_not_filled', stats().agniveerPartCCountNotFill, 0, 'C')
+              "
+              role="button"
+              [tabindex]="stats().agniveerPartCCountNotFill > 0 ? 0 : -1"
+              class="bg-[#ffe4e6] border border-rose-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  PART C NOT SUBMITTED
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-rose-600 flex items-center justify-center shadow-2xs shrink-0"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().agniveerPartCCountNotFill }}
+              </div>
+            </div> -->
+          </div>
+        </div>
+
+        <!-- ================================================= -->
+        <!-- SECTION: HIT COUNT -->
+        <!-- ================================================= -->
+
+        <!-- <div>
+          <div
+            class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+
+            <span>HIT COUNT</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+            (click)="openDashboardTable('hit', stats().hitCount)"
+              role="button"
+              tabindex="0"
+              class="bg-[#ede9fe] border border-violet-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  HIT COUNT
+                </span>
+
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-violet-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().hitCount }}
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- ================================================= -->
+        <!-- SECTION: DEPARTMENT & AGNIVEER -->
+        <!-- ================================================= -->
+
+        <!-- <div>
+          <div
+            class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 21h18M5 21V5l7-3 7 3v16M9 9h6M9 13h6M9 17h6"
+              />
+            </svg>
+
+            <span>SESSION COUNT</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              role="button"
+              tabindex="0"
+              class="bg-[#ffedd5] border border-orange-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  DEPARTMENT
+                </span>
+
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-orange-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 21h18M5 21V5l7-3 7 3v16M9 9h6M9 13h6M9 17h6"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().departmentCount }}
+              </div>
+            </div>
+
+            <div
+              role="button"
+              tabindex="0"
+              class="bg-[#e0f2fe] border border-sky-200/90 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  AGNIVEER
+                </span>
+
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-sky-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().agniveerSessionCount }}
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Section 4: ORGANIZATIONS / OPENINGS -->
+        <!-- <div>
+          <div
+            class="flex items-center gap-2 text-slate-600 font-bold text-xs uppercase tracking-wider mb-3"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 text-slate-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9"
+              />
+            </svg>
+            <span>ORGANIZATIONS / OPENINGS</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div
+              /* (click)="openOrganizationTypeTable('types')" */
+              role="button"
+              tabindex="0"
+              class="bg-[#ffedd5] border border-orange-200/80 rounded-2xl cursor-pointer p-4 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  ORGANIZATION TYPE
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-orange-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-8.97-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().subEntityCount }}
+              </div>
+            </div>
+
+            <div
+              /* (click)="openOrganizationTypeTable('organisations')" */
+              role="button"
+              tabindex="0"
+              class="bg-[#dbeafe] border border-blue-200/80 cursor-pointer rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  ONBOARDED ORGANIZATIONS
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-indigo-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0V11m0 0h4m-4 0H9"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().entityCount }}
+              </div>
+            </div>
+
+            <div
+              /* (click)="openOrganizationTypeTable('openings')" */
+              role="button"
+              tabindex="0"
+              class="bg-[#dbeafe] border border-blue-200/80 cursor-pointer rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-shadow flex flex-col justify-between min-h-[120px]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
+                  CURRENT OPENINGS
+                </span>
+                <div
+                  class="w-8 h-8 rounded-xl bg-white/90 text-blue-600 flex items-center justify-center shadow-2xs"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="text-3xl font-black text-slate-900 mt-2 leading-none">
+                {{ stats().openingCount }}
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+
+      <div class="lg:col-span-5">
+        <div
+          class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col justify-between h-full min-h-[460px]"
+        >
+          <div>
+            <div class="flex items-center gap-2.5 mb-4">
+              <div class="w-1 h-5 bg-[#162f6a] rounded-full"></div>
+              <h2
+                class="text-base sm:text-lg font-bold text-slate-900 m-0 uppercase tracking-tight"
+              >
+                NOTIFICATIONS
+              </h2>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 mb-4">
+              <button
+                (click)="setActiveTab('notification')"
+                [class]="
+                  activeTab() === 'notification'
+                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                <span>Notifications</span>
+              </button>
+
+              <button
+                (click)="setActiveTab('openings')"
+                [class]="
+                  activeTab() === 'openings'
+                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                <span>Current Openings</span>
+              </button>
+
+              <button
+                (click)="setActiveTab('archives')"
+                [class]="
+                  activeTab() === 'archives'
+                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2m-14 0v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                  />
+                </svg>
+                <span>Archives</span>
+              </button>
+
+              <!-- <button (click)="setActiveTab('gazette')"
+                [class]="activeTab() === 'gazette'
+                ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-              </div>
+                <span>Gazette Notifications</span>
+              </button> -->
             </div>
-            <div class="text-3xl font-black text-slate-900 tracking-tight">
-              {{ stats().agniveerCount }}
-            </div>
-          </div>
 
-          <!-- REHABILITATED -->
-          <div (click)="openAgniveerTable('rehabilitated', stats().rehabCount)"
-            class="bg-[#dcfce7] border border-emerald-200 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">REHABILITATED</span>
-              <div class="w-8 h-8 rounded-full bg-white text-emerald-600 flex items-center justify-center shadow-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900 tracking-tight">
-              {{ stats().rehabCount }}
-            </div>
-          </div>
-        </div>
-      </div>
+            <!-- Table Container -->
+            <!-- Table Container -->
+            <div class="rounded-xl border border-slate-200 overflow-hidden mb-4 shadow-2xs">
+              <div class="overflow-x-auto">
+                <!-- ================= NOTIFICATIONS ================= -->
+                @if (activeTab() === 'notification') {
+                  <table class=" notifications-table-wrapper w-full text-xs text-left border-collapse">
+                    <thead class="bg-[#162f6a] text-white font-bold">
+                      <tr>
+                        <th class="py-2.5 px-3 w-12 text-center border-r border-white/10">
+                          Sr. No.
+                        </th>
 
-      <!-- 2. AGNIVEER PART B STATUS -->
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider m-0">
-            AGNIVEER PART B STATUS
-          </h2>
-        </div>
+                        <th class="py-2.5 px-3 border-r border-white/10">Title</th>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- PART B SUBMITTED -->
-          <div (click)="openAgniveerTable('part_b_fill', stats().agniveerPartBCountFill, undefined, 'B')"
-            class="bg-[#f3e8ff] border border-purple-200 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">PART B SUBMITTED</span>
-              <div class="w-8 h-8 rounded-full bg-white text-purple-600 flex items-center justify-center shadow-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900 tracking-tight">
-              {{ stats().agniveerPartBCountFill }}
-            </div>
-          </div>
+                        <th class="py-2.5 px-3 text-center">Action</th>
+                      </tr>
+                    </thead>
 
-          <!-- PART B NOT SUBMITTED -->
-          <div (click)="openAgniveerTable('part_b_not_fill', stats().agniveerPartBCountNotFill, undefined, 'B')"
-            class="bg-[#fef9c3] border border-amber-200 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">PART B NOT SUBMITTED</span>
-              <div class="w-8 h-8 rounded-full bg-white text-amber-600 flex items-center justify-center shadow-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900 tracking-tight">
-              {{ stats().agniveerPartBCountNotFill }}
-            </div>
-          </div>
-        </div>
-      </div>
+                    <tbody class="divide-y divide-slate-200 bg-white">
+                      @if (notifications().length > 0) {
+                        @for (
+                          notification of notifications();
+                          track notification.id;
+                          let i = $index
+                        ) {
+                          <tr class="hover:bg-slate-50 transition-colors">
+                            <!-- Sr No -->
+                            <td
+                              class="py-2.5 px-3 text-center font-medium text-slate-600 border-r border-slate-100"
+                            >
+                              {{ i + 1 }}
+                            </td>
 
-      <!-- 3. AGNIVEER PART C STATUS -->
-      <div>
-        <div class="flex items-center gap-2 mb-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-          </svg>
-          <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider m-0">
-            AGNIVEER PART C STATUS
-          </h2>
-        </div>
+                            <!-- Title -->
+                            <td
+                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
+                            >
+                              {{ notification.title }}
+                            </td>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- PART C SUBMITTED -->
-          <div (click)="openAgniveerTable('part_c_fill', stats().agniveerPartCCountFill, undefined, 'C')"
-            class="bg-[#ccfbf1] border border-teal-200 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">PART C SUBMITTED</span>
-              <div class="w-8 h-8 rounded-full bg-white text-teal-600 flex items-center justify-center shadow-xs">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-              </div>
-            </div>
-            <div class="text-3xl font-black text-slate-900 tracking-tight">
-              {{ stats().agniveerPartCCountFill }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT COLUMN: NOTIFICATIONS PANEL (LG: 5 cols) -->
-    <div
-      class="lg:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 sm:p-5 flex flex-col min-h-[450px]">
-      <!-- Title Header -->
-      <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
-        <div class="w-1.5 h-5 bg-[#252525] rounded-full"></div>
-        <h2 class="text-base font-bold text-slate-900 tracking-wide m-0 uppercase">
-          NOTIFICATIONS
-        </h2>
-      </div>
-
-      <!-- Tabs -->
-      <div class="flex flex-wrap items-center gap-1.5 mb-4">
-        <button type="button" (click)="setActiveTab('openings')" [class.bg-[#252525]]="activeTab() === 'openings'"
-          [class.text-white]="activeTab() === 'openings'" [class.bg-slate-100]="activeTab() !== 'openings'"
-          [class.text-slate-700]="activeTab() !== 'openings'"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-          <span>Notifications</span>
-        </button>
-
-        <button type="button" (click)="setActiveTab('archives')" [class.bg-[#252525]]="activeTab() === 'archives'"
-          [class.text-white]="activeTab() === 'archives'" [class.bg-slate-100]="activeTab() !== 'archives'"
-          [class.text-slate-700]="activeTab() !== 'archives'"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-          <span>Current Openings</span>
-        </button>
-
-        <button type="button" (click)="setActiveTab('gazette')" [class.bg-[#252525]]="activeTab() === 'gazette'"
-          [class.text-white]="activeTab() === 'gazette'" [class.bg-slate-100]="activeTab() !== 'gazette'"
-          [class.text-slate-700]="activeTab() !== 'gazette'"
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border-none">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-          </svg>
-          <span>Archives</span>
-        </button>
-      </div>
-
-      <!-- Notifications Table -->
-      <div class="flex-1 overflow-x-auto rounded-xl border border-slate-200">
-        <table class="w-full text-xs text-left border-collapse">
-          <thead>
-            <tr class="bg-[#252525] text-white">
-              <th class="px-3 py-2.5 font-bold w-14 text-center">Sr. No.</th>
-              <th class="px-3 py-2.5 font-bold">Title</th>
-              <th class="px-3 py-2.5 font-bold text-center w-20">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (notifications().length === 0) {
-            <tr>
-              <td colspan="3" class="px-3 py-8 text-center text-slate-400 font-medium">
-                No items available.
-              </td>
-            </tr>
-            } @else {
-            @for (item of notifications(); track item.id || $index; let idx = $index) {
-            <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-              <td class="px-3 py-2.5 text-center font-medium text-slate-600">
-                {{ item.srNo || (idx + 1) }}
-              </td>
-              <td class="px-3 py-2.5 font-semibold text-slate-800">
-                {{ item.title || item.organisationName || 'Notification Details' }}
-              </td>
-              <td class="px-3 py-2.5 text-center">
-                @if (item.documentPath) {
-                <button type="button" (click)="viewDocument(item.documentPath)"
-                  class="px-3 py-1 rounded-full bg-[#252525] hover:bg-[#355f2d] text-white text-[11px] font-bold cursor-pointer border-none transition-colors">
-                  View
-                </button>
-                } @else {
-                <span class="text-slate-400 text-[11px] italic">N/A</span>
+                            <!-- Action -->
+                            <td class="py-2.5 px-3 text-center">
+                              @if (notification.attachmentPath) {
+                                <button
+                                  type="button"
+                                  (click)="viewDetails(notification)"
+                                  class="inline-block bg-[#162f6a] hover:bg-[#122452] text-white text-xs font-semibold px-4 py-1 rounded-full transition-colors shadow-2xs border-0 cursor-pointer"
+                                >
+                                  View
+                                </button>
+                              } @else {
+                                <span class="text-slate-400 text-xs"> N/A </span>
+                              }
+                            </td>
+                          </tr>
+                        }
+                      } @else {
+                        <tr>
+                          <td
+                            colspan="3"
+                            class="py-8 text-center text-slate-400 font-medium text-xs"
+                          >
+                            No published notifications found.
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
                 }
-              </td>
-            </tr>
-            }
-            }
-          </tbody>
-        </table>
+
+                <!-- ================= CURRENT OPENINGS / ARCHIVES ================= -->
+                @if (activeTab() === 'openings' || activeTab() === 'archives') {
+                  <table class="notifications-table-wrapper w-full text-xs text-left border-collapse">
+                    <thead class="bg-[#162f6a] text-white font-bold">
+                      <tr>
+                        <th class="py-2.5 px-3 w-12 text-center border-r border-white/10">
+                          Sr. No.
+                        </th>
+
+                        <th class="py-2.5 px-3 border-r border-white/10">Title</th>
+
+                        <th class="py-2.5 px-3 border-r border-white/10">Advt No.</th>
+
+                        <th class="py-2.5 px-3 border-r border-white/10">Organisation Type</th>
+
+                        <th class="py-2.5 px-3 text-center">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-slate-200 bg-white">
+                      @if (openingNotifications().length > 0) {
+                        @for (noti of openingNotifications(); track noti.id ?? noti.srNo) {
+                          <tr class="hover:bg-slate-50 transition-colors">
+                            <!-- Sr No -->
+                            <td
+                              class="py-2.5 px-3 text-center font-medium text-slate-600 border-r border-slate-100"
+                            >
+                              {{ noti.srNo }}
+                            </td>
+
+                            <!-- Title -->
+                            <td
+                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
+                            >
+                              {{ noti.title || 'N/A' }}
+                            </td>
+
+                            <!-- Advt No -->
+                            <td
+                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
+                            >
+                              {{ noti.advtNo || 'N/A' }}
+                            </td>
+
+                            <!-- Organisation -->
+                            <td class="py-2.5 px-3 text-slate-600 border-r border-slate-100">
+                              {{ noti.organisationName || 'N/A' }}
+                            </td>
+
+                            <!-- Action -->
+                            <td class="py-2.5 px-3 text-center">
+                              @if (noti.documentPath) {
+                                <button
+                                  type="button"
+                                  (click)="viewDocument(noti.documentPath)"
+                                  class="inline-block bg-[#162f6a] hover:bg-[#122452] text-white text-xs font-semibold px-4 py-1 rounded-full transition-colors shadow-2xs border-0 cursor-pointer"
+                                >
+                                  View
+                                </button>
+                              } @else {
+                                <span class="text-slate-400 text-xs"> N/A </span>
+                              }
+                            </td>
+                          </tr>
+                        }
+                      } @else {
+                        <tr>
+                          <td
+                            colspan="5"
+                            class="py-8 text-center text-slate-400 font-medium text-xs"
+                          >
+                            No
+                            {{
+                              activeTab() === 'openings' ? 'current openings' : 'archived openings'
+                            }}
+                            found.
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Action Link -->
+          <!-- <a
+            routerLink="/detailed-noti"
+            class="bg-[#dbeafe]/80 hover:bg-[#dbeafe] border border-blue-200/80 rounded-xl py-2 px-4 text-center block no-underline transition-colors mt-2"
+          >
+            <span class="text-[#162f6a] font-bold text-xs flex items-center justify-center gap-1.5">
+              <span>View All Notifications ({{ notifications().length }})</span>
+              <span>&rarr;</span>
+            </span>
+          </a> -->
+        </div>
       </div>
     </div>
-
   </div>
 </div>
+}

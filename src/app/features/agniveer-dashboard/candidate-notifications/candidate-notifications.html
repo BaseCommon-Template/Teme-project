@@ -1,0 +1,88 @@
+<div class="max-w-5xl mx-auto space-y-6">
+      <!-- Header -->
+      <div class="border-l-4 border-[#18181b] pl-4">
+        <h1 class="text-2xl font-bold text-slate-900 m-0">
+          Job Vacancies & Service Notifications
+        </h1>
+        <p class="text-xs text-slate-500 m-0 mt-0.5">
+          Active job openings in CAPFs, Assam Rifles, State Police, and PSARA for Ex-Agniveers
+        </p>
+      </div>
+
+      <!-- Notifications List -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-xs overflow-hidden">
+        @if (loading()) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            Loading notifications...
+          </div>
+        } @else if (notifications().length === 0) {
+          <div class="text-center py-12 text-slate-400 text-xs font-medium">
+            No active job openings available at the moment.
+          </div>
+        } @else {
+          <div class="divide-y divide-slate-100">
+            @for (item of notifications(); track item._id) {
+              <div class="p-6 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="space-y-1.5 flex-1">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 font-bold text-[10px] border border-blue-200">
+                      Advt: {{ item.advertisement_number || 'N/A' }}
+                    </span>
+                    <span class="text-xs text-slate-400">
+                      Issued: {{ formatDate(item.application_opening_date) }}
+                    </span>
+                  </div>
+
+                  <h3 class="text-base font-bold text-slate-900 m-0">
+                    {{ item.notification_title }}
+                  </h3>
+
+                  <p class="text-xs text-slate-500 m-0">
+                    Organization: <strong>{{ getEntityName(item.entity_id) }}</strong> | Closing Date: <strong class="text-red-600">{{ formatDate(item.application_closing_date) }}</strong>
+                  </p>
+
+                  @if (item.post_preference && item.post_preference.length > 0) {
+                    <div class="flex flex-wrap gap-1.5 pt-1">
+                      @for (p of item.post_preference; track p) {
+                        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold">
+                          {{ p }}
+                        </span>
+                      }
+                    </div>
+                  }
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2.5 shrink-0">
+                  <button
+                    (click)="selectedViewId.set(item._id)"
+                    class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer border-none"
+                  >
+                    View Details
+                  </button>
+
+                  @if (appliedNotificationIds().has(item._id)) {
+                    <span class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">
+                      ✓ Applied
+                    </span>
+                  } @else {
+                    <a
+                      [routerLink]="['/dashboard/notifications/apply-job', item._id]"
+                      class="px-5 py-2 rounded-xl bg-[#FF9933] hover:bg-[#e68523] text-white text-xs font-bold no-underline shadow-xs transition-all"
+                    >
+                      Apply Now
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Notification Details Modal View -->
+    <app-notification-view-modal
+      [notificationId]="selectedViewId()"
+      (close)="selectedViewId.set(null)"
+    />

@@ -1,0 +1,105 @@
+<div class="max-w-4xl mx-auto space-y-6">
+      <div class="flex items-center justify-between">
+        <a
+          routerLink="/dashboard/notifications"
+          class="text-xs font-bold text-[#1C4587] hover:underline"
+        >
+          ← Back to Vacancies
+        </a>
+      </div>
+
+      @if (loading()) {
+        <div class="bg-white p-12 rounded-3xl border border-slate-200 text-center text-slate-400 text-sm">
+          Loading vacancy application form...
+        </div>
+      } @else if (appliedSuccess()) {
+        <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-10 text-center space-y-4">
+          <div class="text-4xl">🎉</div>
+          <h2 class="text-xl font-bold text-emerald-900 m-0">Application Submitted Successfully!</h2>
+          <p class="text-xs text-emerald-700 m-0">
+            Your application has been registered with the recruiting organization. You can track status in My Applications.
+          </p>
+          <div class="pt-2 flex justify-center gap-3">
+            <a
+              routerLink="/agniveerdashboard"
+              class="px-5 py-2.5 rounded-xl bg-emerald-700 text-white text-xs font-bold no-underline hover:bg-emerald-800"
+            >
+              Go to Candidate Dashboard
+            </a>
+          </div>
+        </div>
+      } @else if (notification()) {
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <!-- Banner -->
+          <div class="p-6 bg-gradient-to-r from-[#1a2a6c] to-[#1e3a8a] text-white space-y-1">
+            <span class="px-2.5 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
+              Advt: {{ notification()?.advertisement_number || 'N/A' }}
+            </span>
+            <h1 class="text-xl font-bold m-0 pt-1">
+              Apply for {{ notification()?.notification_title }}
+            </h1>
+            <p class="text-xs text-blue-200 m-0">
+              Submit your Agniveer verified credentials directly for recruitment
+            </p>
+          </div>
+
+          <!-- Application Form -->
+          <form (ngSubmit)="onSubmitApplication()" class="p-6 sm:p-8 space-y-6">
+            @if (errorMessage()) {
+              <div class="p-3 bg-red-50 text-red-600 rounded-xl text-xs font-semibold">
+                {{ errorMessage() }}
+              </div>
+            }
+
+            <!-- Post Preferences -->
+            @if (notification()?.post_preference && notification()!.post_preference!.length > 0) {
+              <div class="space-y-3">
+                <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Select Your Post / Trade Preferences (Rank Ordered) *
+                </label>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  @for (post of notification()!.post_preference!; track post; let idx = $index) {
+                    <label
+                      class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer select-none"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="isPostSelected(post)"
+                        (change)="togglePost(post)"
+                        class="rounded text-blue-600 focus:ring-blue-500"
+                      />
+                      <span class="text-xs font-bold text-slate-800">{{ post }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Candidate Verification Confirmation -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2">
+              <span class="font-bold text-slate-800 block">Candidate Declarations & Profile Sharing:</span>
+              <p class="m-0 leading-relaxed">
+                By submitting this application, I authorize the Ministry of Home Affairs and the recruiting organization to access my verified military service records, educational qualifications, NCVET Kaushal Praman Patra, and performance records.
+              </p>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <a
+                routerLink="/dashboard/notifications"
+                class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold no-underline"
+              >
+                Cancel
+              </a>
+              <button
+                type="submit"
+                [disabled]="submitting()"
+                class="px-6 py-2.5 rounded-xl bg-[#1C4587] hover:bg-[#153466] text-white text-xs font-bold shadow-md cursor-pointer border-none disabled:opacity-50"
+              >
+                {{ submitting() ? 'Submitting Application...' : 'Confirm & Submit Application' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
