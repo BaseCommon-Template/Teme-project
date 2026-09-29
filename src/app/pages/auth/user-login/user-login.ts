@@ -434,6 +434,89 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     this.username = this.username.replace(/[^A-Za-z0-9_@-]/g, '').slice(0, 100);
   }
 
+  // performLogout(token: string): void {
+  //   let headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //   });
+
+  //   if (token) {
+  //     headers = headers.set('Authorization', `Bearer ${token}`);
+  //   }
+
+  //   Swal.fire({
+  //     title: 'Clearing session...',
+  //     text: 'Please wait...',
+  //     allowOutsideClick: false,
+  //     didOpen: () => {
+  //       Swal.showLoading();
+  //     },
+  //   });
+
+  //   const apiUrl = environment.apiUrl.endsWith('/') ? environment.apiUrl : environment.apiUrl + '/';
+  //   this.http.post(apiUrl + 'Users/logout', {}, { headers }).subscribe({
+  //     next: () => {
+  //       Swal.fire({
+  //         title: 'Please wait...',
+  //         text: 'Logging in...',
+  //         allowOutsideClick: false,
+  //         didOpen: () => {
+  //           Swal.showLoading();
+  //         },
+  //       });
+
+  //       this.loginService.loginAPI(this.loginReqData).subscribe({
+  //         next: (loginRes: any) => {
+  //           Swal.close();
+  //           // console.log('Login Response:', loginRes);
+  //           if (loginRes && loginRes.code === 1 && loginRes.data) {
+  //             try {
+  //               let encryptData: any = loginRes.data;
+  //               let decrypted = CryptoHelper.decrypt(encryptData);
+  //               let loginData = JSON.parse(decrypted);
+  //               this.handleSuccessResponse(loginData, loginRes);
+  //             } catch (e) {
+  //               this.error.set('Failed to parse login response');
+  //               this.generateCaptcha();
+  //             }
+  //           } else {
+  //             this.username = '';
+  //             this.password = '';
+  //             this.captchaInput = '';
+  //             this.generateCaptcha();
+  //             Swal.fire({
+  //               icon: 'error',
+  //               title: 'Login Failed',
+  //               text: loginRes?.message || 'Could not complete login request.',
+  //             });
+  //           }
+  //         },
+  //         error: (loginErr: any) => {
+  //           Swal.close();
+  //           this.username = '';
+  //           this.password = '';
+  //           this.captchaInput = '';
+  //           this.generateCaptcha();
+  //           Swal.fire({
+  //             icon: 'error',
+  //             title: 'Login Failed',
+  //             text: loginErr?.error?.message || loginErr?.message || 'Server connection failed',
+  //           });
+  //         },
+  //       });
+  //     },
+  //     error: (err: any) => {
+  //       Swal.close();
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Logout Failed',
+  //         text: err?.error?.message || err?.message || 'Failed to clear previous session',
+  //       });
+  //     },
+  //   });
+  // }
+
+
+
   performLogout(token: string): void {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -453,59 +536,35 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     });
 
     const apiUrl = environment.apiUrl.endsWith('/') ? environment.apiUrl : environment.apiUrl + '/';
+    
     this.http.post(apiUrl + 'Users/logout', {}, { headers }).subscribe({
       next: () => {
-        Swal.fire({
-          title: 'Please wait...',
-          text: 'Logging in...',
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
+        // 1. Close the loading spinner
+        Swal.close();
 
-        this.loginService.loginAPI(this.loginReqData).subscribe({
-          next: (loginRes: any) => {
-            Swal.close();
-            // console.log('Login Response:', loginRes);
-            if (loginRes && loginRes.code === 1 && loginRes.data) {
-              try {
-                let encryptData: any = loginRes.data;
-                let decrypted = CryptoHelper.decrypt(encryptData);
-                let loginData = JSON.parse(decrypted);
-                this.handleSuccessResponse(loginData, loginRes);
-              } catch (e) {
-                this.error.set('Failed to parse login response');
-                this.generateCaptcha();
-              }
-            } else {
-              this.username = '';
-              this.password = '';
-              this.captchaInput = '';
-              this.generateCaptcha();
-              Swal.fire({
-                icon: 'error',
-                title: 'Login Failed',
-                text: loginRes?.message || 'Could not complete login request.',
-              });
-            }
-          },
-          error: (loginErr: any) => {
-            Swal.close();
-            this.username = '';
-            this.password = '';
-            this.captchaInput = '';
-            this.generateCaptcha();
-            Swal.fire({
-              icon: 'error',
-              title: 'Login Failed',
-              text: loginErr?.error?.message || loginErr?.message || 'Server connection failed',
-            });
-          },
+        // 2. Clear the sensitive form fields
+        this.password = '';
+        this.captchaInput = '';
+        
+        // 3. Generate a fresh CAPTCHA for the new login attempt
+        this.generateCaptcha();
+
+        // 4. Show a success message to the user
+        Swal.fire({
+          icon: 'success',
+          title: 'Session Cleared',
+          text: 'Your previous session has been logged out successfully. You can now log in.',
+          confirmButtonText: 'OK'
         });
       },
       error: (err: any) => {
         Swal.close();
+        
+        // It's best practice to clear the form even if it fails
+        this.password = '';
+        this.captchaInput = '';
+        this.generateCaptcha();
+        
         Swal.fire({
           icon: 'error',
           title: 'Logout Failed',
@@ -816,14 +875,12 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
         } else if (res && res.code === 2) {
           this.loading.set(false);
           Swal.fire({
-            icon: 'error',
-            title: 'Login',
-            text:
-              res.message ||
-              'Active session exists. Do you want to logout from all previous instances before logging in?',
-            confirmButtonText: 'Login',
-            showCancelButton: true,
-          }).then((result) => {
+    icon: 'warning', // Changed to warning since it's a destructive action
+    title: 'Active Session Exists',
+    text: res.message || 'Do you want to logout from all previous instances?',
+    confirmButtonText: 'Yes, Logout', // Updated text
+    showCancelButton: true,
+  }).then((result) => {
             if (result.isConfirmed) {
               try {
                 let data: any = CryptoHelper.decrypt(res.data);

@@ -9,8 +9,8 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { provideClientHydration } from '@angular/platform-browser';
 import { CookieService } from 'ngx-cookie-service';
 import { routes } from './app.routes';
-// import { authInterceptor } from './auth-interceptor';
-import { authInterceptor } from './intercepter/auth.intercepter';
+import { authInterceptor } from './auth-interceptor';
+// import { authInterceptor } from './intercepter/auth.intercepter';
 import { WordLimitService } from './services/word-limit.service';
 import { HtmlSanitizerService } from './services/html-sanitizer.service';
 

@@ -100,12 +100,12 @@ export class AuthService {
 
     this.roles = mixedRoles;
 
-    try {
-      const encryptedRoles = CryptoHelper.encrypt(JSON.stringify(this.roles));
-      this.setCookie('roles', encryptedRoles);
-    } catch (e) {
-      this.setCookie('roles', JSON.stringify(this.roles));
-    }
+    // try {
+    //   const encryptedRoles = CryptoHelper.encrypt(JSON.stringify(this.roles));
+    //   this.setCookie('roles', encryptedRoles);
+    // } catch (e) {
+    //   this.setCookie('roles', JSON.stringify(this.roles));
+    // }
 
     if (typeof sessionStorage !== 'undefined') {
       try {
@@ -154,25 +154,25 @@ export class AuthService {
     }
 
     // 2. Check Cookie
-    const storedCookie = this.cookieService.get('roles');
-    if (storedCookie) {
-      try {
-        const dec = CryptoHelper.decrypt(storedCookie);
-        const roles = dec ? JSON.parse(dec) : JSON.parse(storedCookie);
-        if (Array.isArray(roles) && roles.length) {
-          this.roles = roles;
-          return this.roles;
-        }
-      } catch (e) {
-        try {
-          const roles = JSON.parse(storedCookie);
-          if (Array.isArray(roles) && roles.length) {
-            this.roles = roles;
-            return this.roles;
-          }
-        } catch (err) {}
-      }
-    }
+    // const storedCookie = this.cookieService.get('roles');
+    // if (storedCookie) {
+    //   try {
+    //     const dec = CryptoHelper.decrypt(storedCookie);
+    //     const roles = dec ? JSON.parse(dec) : JSON.parse(storedCookie);
+    //     if (Array.isArray(roles) && roles.length) {
+    //       this.roles = roles;
+    //       return this.roles;
+    //     }
+    //   } catch (e) {
+    //     try {
+    //       const roles = JSON.parse(storedCookie);
+    //       if (Array.isArray(roles) && roles.length) {
+    //         this.roles = roles;
+    //         return this.roles;
+    //       }
+    //     } catch (err) {}
+    //   }
+    // }
 
     // 3. Fallback from currentUser (safely without writing to signals in computed)
     const user = this.getCurrentUser();
@@ -339,35 +339,72 @@ export class AuthService {
   // SET TOKEN
   // =====================================================
 
+  // setToken(token: string): void {
+  //   this.token = token;
+
+  //   // Clear public menus from session storage upon login
+  //   if (typeof sessionStorage !== 'undefined') {
+  //     try {
+  //       sessionStorage.removeItem('public_menus');
+  //     } catch (e) {}
+  //   }
+
+  //   // Update CommonService login state
+  //   this.commonService.isLogin = true;
+  //   this.commonService.token = token;
+
+  //   this.setCookie('token', token);
+
+  //   // Notify reactive components
+  //   this.authVersion.update((v) => v + 1);
+
+  //   const idleService = this.injector.get(IdleService);
+
+  //   idleService.startWatching();
+
+  //   this.startTokenRefreshTimer();
+  // }
+
   setToken(token: string): void {
     this.token = token;
 
-    // Clear public menus from session storage upon login
     if (typeof sessionStorage !== 'undefined') {
       try {
         sessionStorage.removeItem('public_menus');
+        // ADDED: Explicitly store token only in session storage
+        sessionStorage.setItem('token', token); 
       } catch (e) {}
     }
 
-    // Update CommonService login state
     this.commonService.isLogin = true;
     this.commonService.token = token;
 
-    this.setCookie('token', token);
+    // REMOVED: this.setCookie('token', token);
 
-    // Notify reactive components
     this.authVersion.update((v) => v + 1);
 
     const idleService = this.injector.get(IdleService);
-
     idleService.startWatching();
-
     this.startTokenRefreshTimer();
   }
 
   // =====================================================
   // SET REFRESH TOKEN
   // =====================================================
+
+  // setRefreshToken(token: string): void {
+  //   if (!token) return;
+  //   this.refreshToken = token;
+
+  //   if (typeof sessionStorage !== 'undefined') {
+  //     try {
+  //       sessionStorage.setItem('refreshToken', token);
+  //       sessionStorage.setItem('refresh_token', token);
+  //     } catch (e) {}
+  //   }
+
+  //   this.setCookie('refreshToken', token);
+  // }
 
   setRefreshToken(token: string): void {
     if (!token) return;
@@ -379,8 +416,7 @@ export class AuthService {
         sessionStorage.setItem('refresh_token', token);
       } catch (e) {}
     }
-
-    this.setCookie('refreshToken', token);
+    // REMOVED: this.setCookie('refreshToken', token);
   }
   setJpAccessToken(token: string): void {
     if (!token) return;
@@ -403,46 +439,79 @@ export class AuthService {
   // SET ROLE ID
   // =====================================================
 
+  // setRoleId(roleId: number, roleName?: string): void {
+  //   if (roleId === undefined || roleId === null) {
+  //     // console.warn('Role ID is missing');
+  //     return;
+  //   }
+
+  //   const numericRoleId = Number(roleId);
+
+  //   if (isNaN(numericRoleId)) {
+  //     // console.warn('Invalid Role ID:', roleId);
+  //     return;
+  //   }
+
+  //   // 1. Remove older role data from sessionStorage
+  //   if (typeof sessionStorage !== 'undefined') {
+  //     try {
+  //       sessionStorage.removeItem('role');
+  //       sessionStorage.removeItem('role-id');
+  //       sessionStorage.removeItem('roleId');
+  //       if (roleName) {
+  //         sessionStorage.removeItem('role_name');
+  //       }
+  //     } catch (e) {}
+  //   }
+
+  //   // 2. Remove older role data from cookies
+  //   if (typeof window !== 'undefined') {
+  //     try {
+  //       this.cookieService.delete('roleId', '/');
+  //       this.cookieService.delete('roleId');
+  //       this.cookieService.delete('role-id', '/');
+  //       this.cookieService.delete('role-id');
+  //       this.cookieService.delete('role', '/');
+  //       this.cookieService.delete('role');
+  //     } catch (e) {}
+  //   }
+
+  //   this.roleId = numericRoleId;
+
+  //   // Session Storage
+  //   if (typeof sessionStorage !== 'undefined') {
+  //     sessionStorage.setItem('role', numericRoleId.toString());
+  //     sessionStorage.setItem('role-id', numericRoleId.toString());
+  //     sessionStorage.setItem('roleId', numericRoleId.toString());
+  //     if (roleName) {
+  //       sessionStorage.setItem('role_name', roleName);
+  //     }
+  //   }
+
+  //   // Cookie
+  //   try {
+  //     const encryptedRoleId = CryptoHelper.encrypt(numericRoleId.toString());
+  //     this.setCookie('roleId', encryptedRoleId);
+  //   } catch (e) {
+  //     this.setCookie('roleId', numericRoleId.toString());
+  //   }
+
+  //   // Notify Navbar / MenuService
+  //   this.authVersion.update((v) => v + 1);
+
+  //   // console.log('========== ROLE SET ==========');
+  //   // console.log('Role ID:', numericRoleId);
+  //   // console.log('Session Role:', sessionStorage.getItem('role'));
+  //   // console.log('==============================');
+  // }
+
+
   setRoleId(roleId: number, roleName?: string): void {
-    if (roleId === undefined || roleId === null) {
-      // console.warn('Role ID is missing');
-      return;
-    }
+    if (roleId === undefined || roleId === null || isNaN(Number(roleId))) return;
 
     const numericRoleId = Number(roleId);
-
-    if (isNaN(numericRoleId)) {
-      // console.warn('Invalid Role ID:', roleId);
-      return;
-    }
-
-    // 1. Remove older role data from sessionStorage
-    if (typeof sessionStorage !== 'undefined') {
-      try {
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('role-id');
-        sessionStorage.removeItem('roleId');
-        if (roleName) {
-          sessionStorage.removeItem('role_name');
-        }
-      } catch (e) {}
-    }
-
-    // 2. Remove older role data from cookies
-    if (typeof window !== 'undefined') {
-      try {
-        this.cookieService.delete('roleId', '/');
-        this.cookieService.delete('roleId');
-        this.cookieService.delete('role-id', '/');
-        this.cookieService.delete('role-id');
-        this.cookieService.delete('role', '/');
-        this.cookieService.delete('role');
-      } catch (e) {}
-    }
-
     this.roleId = numericRoleId;
 
-    // Session Storage
     if (typeof sessionStorage !== 'undefined') {
       sessionStorage.setItem('role', numericRoleId.toString());
       sessionStorage.setItem('role-id', numericRoleId.toString());
@@ -452,36 +521,37 @@ export class AuthService {
       }
     }
 
-    // Cookie
-    try {
-      const encryptedRoleId = CryptoHelper.encrypt(numericRoleId.toString());
-      this.setCookie('roleId', encryptedRoleId);
-    } catch (e) {
-      this.setCookie('roleId', numericRoleId.toString());
-    }
+    // REMOVED: ALL this.cookieService.delete(...) and this.setCookie(...)
 
-    // Notify Navbar / MenuService
     this.authVersion.update((v) => v + 1);
-
-    // console.log('========== ROLE SET ==========');
-    // console.log('Role ID:', numericRoleId);
-    // console.log('Session Role:', sessionStorage.getItem('role'));
-    // console.log('==============================');
   }
 
   // =====================================================
   // GET TOKEN
   // =====================================================
 
+  // getToken(): string | null {
+  //   if (this.token) {
+  //     return this.token;
+  //   }
+
+  //   if (typeof window !== 'undefined') {
+  //     const stored = this.cookieService.get('token');
+
+  //     return stored || null;
+  //   }
+
+  //   return null;
+  // }
+
   getToken(): string | null {
     if (this.token) {
       return this.token;
     }
 
-    if (typeof window !== 'undefined') {
-      const stored = this.cookieService.get('token');
-
-      return stored || null;
+    if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+      // CHANGED: Only look in sessionStorage, never cookies
+      return sessionStorage.getItem('token') || null;
     }
 
     return null;
@@ -491,59 +561,77 @@ export class AuthService {
   // GET ROLE ID
   // =====================================================
 
+  // getRoleId(): number {
+  //   // 1. Memory
+  //   if (this.roleId !== null) {
+  //     return this.roleId;
+  //   }
+
+  //   // 2. SSR safety
+  //   if (typeof window === 'undefined') {
+  //     return 0;
+  //   }
+
+  //   // 3. Session Storage
+  //   const sessionRole =
+  //     sessionStorage.getItem('role-id') ||
+  //     sessionStorage.getItem('role') ||
+  //     sessionStorage.getItem('roleId');
+
+  //   if (sessionRole) {
+  //     const roleId = Number(sessionRole);
+
+  //     if (!isNaN(roleId)) {
+  //       this.roleId = roleId;
+  //       return roleId;
+  //     }
+  //   }
+
+  //   // 4. Cookie
+  //   const stored = this.cookieService.get('roleId');
+
+  //   if (!stored) {
+  //     return 0;
+  //   }
+
+  //   try {
+  //     const decrypted = CryptoHelper.decrypt(stored);
+  //     const roleId = Number(decrypted);
+
+  //     if (!isNaN(roleId)) {
+  //       this.roleId = roleId;
+  //       return roleId;
+  //     }
+  //   } catch (e) {
+  //     // Cookie may be plain text
+  //   }
+
+  //   // 5. Plain cookie fallback
+  //   const roleId = Number(stored);
+
+  //   if (!isNaN(roleId)) {
+  //     this.roleId = roleId;
+  //     return roleId;
+  //   }
+
+  //   return 0;
+  // }
+
   getRoleId(): number {
-    // 1. Memory
-    if (this.roleId !== null) {
-      return this.roleId;
-    }
+    if (this.roleId !== null) return this.roleId;
+    if (typeof window === 'undefined') return 0;
 
-    // 2. SSR safety
-    if (typeof window === 'undefined') {
-      return 0;
-    }
-
-    // 3. Session Storage
-    const sessionRole =
-      sessionStorage.getItem('role-id') ||
-      sessionStorage.getItem('role') ||
-      sessionStorage.getItem('roleId');
-
-    if (sessionRole) {
-      const roleId = Number(sessionRole);
-
-      if (!isNaN(roleId)) {
-        this.roleId = roleId;
-        return roleId;
+    if (typeof sessionStorage !== 'undefined') {
+      const sessionRole = sessionStorage.getItem('role-id') || sessionStorage.getItem('role') || sessionStorage.getItem('roleId');
+      if (sessionRole) {
+        const roleId = Number(sessionRole);
+        if (!isNaN(roleId)) {
+          this.roleId = roleId;
+          return roleId;
+        }
       }
     }
-
-    // 4. Cookie
-    const stored = this.cookieService.get('roleId');
-
-    if (!stored) {
-      return 0;
-    }
-
-    try {
-      const decrypted = CryptoHelper.decrypt(stored);
-      const roleId = Number(decrypted);
-
-      if (!isNaN(roleId)) {
-        this.roleId = roleId;
-        return roleId;
-      }
-    } catch (e) {
-      // Cookie may be plain text
-    }
-
-    // 5. Plain cookie fallback
-    const roleId = Number(stored);
-
-    if (!isNaN(roleId)) {
-      this.roleId = roleId;
-      return roleId;
-    }
-
+    // REMOVED: Cookie fallback logic
     return 0;
   }
 
@@ -551,30 +639,46 @@ export class AuthService {
   // GET REFRESH TOKEN
   // =====================================================
 
-  getRefreshToken(): string | null {
-    if (this.refreshToken) {
-      return this.refreshToken;
-    }
+  // getRefreshToken(): string | null {
+  //   if (this.refreshToken) {
+  //     return this.refreshToken;
+  //   }
 
-    if (typeof window !== 'undefined') {
+  //   if (typeof window !== 'undefined') {
+  //     try {
+  //       const storedSession =
+  //         sessionStorage.getItem('refreshToken') || sessionStorage.getItem('refresh_token');
+  //       if (storedSession) {
+  //         this.refreshToken = storedSession;
+  //         return storedSession;
+  //       }
+  //     } catch (e) {}
+
+  //     const stored =
+  //       this.cookieService.get('refreshToken') || this.cookieService.get('refresh_token');
+
+  //     if (stored) {
+  //       this.refreshToken = stored;
+  //       return stored;
+  //     }
+  //   }
+
+  //   return null;
+  // }
+
+  getRefreshToken(): string | null {
+    if (this.refreshToken) return this.refreshToken;
+
+    if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
       try {
-        const storedSession =
-          sessionStorage.getItem('refreshToken') || sessionStorage.getItem('refresh_token');
+        const storedSession = sessionStorage.getItem('refreshToken') || sessionStorage.getItem('refresh_token');
         if (storedSession) {
           this.refreshToken = storedSession;
           return storedSession;
         }
       } catch (e) {}
-
-      const stored =
-        this.cookieService.get('refreshToken') || this.cookieService.get('refresh_token');
-
-      if (stored) {
-        this.refreshToken = stored;
-        return stored;
-      }
     }
-
+    // REMOVED: cookieService logic
     return null;
   }
 
@@ -596,19 +700,19 @@ export class AuthService {
         }
       } catch (e) {}
 
-      try {
-        const storedLocal = localStorage.getItem('jpAccessToken');
-        if (storedLocal) {
-          this.jpAccessToken = storedLocal;
-          return storedLocal;
-        }
-      } catch (e) {}
+      // try {
+      //   const storedLocal = localStorage.getItem('jpAccessToken');
+      //   if (storedLocal) {
+      //     this.jpAccessToken = storedLocal;
+      //     return storedLocal;
+      //   }
+      // } catch (e) {}
 
-      const stored = this.cookieService.get('jpAccessToken');
-      if (stored) {
-        this.jpAccessToken = stored;
-        return stored;
-      }
+      // const stored = this.cookieService.get('jpAccessToken');
+      // if (stored) {
+      //   this.jpAccessToken = stored;
+      //   return stored;
+      // }
     }
 
     return null;

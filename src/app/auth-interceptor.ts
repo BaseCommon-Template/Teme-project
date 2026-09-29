@@ -126,7 +126,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   try {
     token =
       authService.getToken() ||
-      cookieService.get('token') ||
+      // cookieService.get('token') ||
       (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') || '' : '');
   } catch (e) {
     token = '';
