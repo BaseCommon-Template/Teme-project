@@ -113,8 +113,7 @@
             <!-- Top Tabs Header -->
             <div class="p-3 border-b border-slate-100 bg-white">
               <div class="flex flex-wrap items-center gap-2">
-                <!-- Tab 1: Current Openings -->
-                 @if (hasNotifications()) {
+                <!-- Notifications Tab -->
                 <button
                   type="button"
                   (click)="activeTab.set('notification')"
@@ -130,80 +129,13 @@
                   </svg>
                   Notifications
                 </button>
-              }
-
-                <button
-                  type="button"
-                  (click)="activeTab.set('openings')"
-                  [class.bg-[#18181b]]="activeTab() === 'openings'"
-                  [class.text-[#FF9933]]="activeTab() === 'openings'"
-                  [class.bg-[#f4f4f5]]="activeTab() !== 'openings'"
-                  [class.text-[#18181b]]="activeTab() !== 'openings'"
-                  class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3.5 h-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                    />
-                  </svg>
-                  Current Openings
-                </button>
-
-                <!-- Tab 2: Archives -->
-                <button type="button" (click)="activeTab.set('archive')"
-                  [class.bg-[#18181b]]="activeTab() === 'archive'" [class.text-[#FF9933]]="activeTab() === 'archive'"
-                  [class.bg-[#f4f4f5]]="activeTab() !== 'archive'" [class.text-[#18181b]]="activeTab() !== 'archive'"
-                  class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
-                  </svg>
-                  Archives
-                </button>
-
-                <!-- Tab 3: Gazette Notifications -->
-                <!-- <button
-                  type="button"
-                  (click)="activeTab.set('gazette')"
-                  [class.bg-[#234161]]="activeTab() === 'gazette'"
-                  [class.text-white]="activeTab() === 'gazette'"
-                  [class.bg-[#dbeafe]]="activeTab() !== 'gazette'"
-                  [class.text-[#234161]]="activeTab() !== 'gazette'"
-                  class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-3.5 h-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Gazette Notifications
-                </button> -->
               </div>
             </div>
 
             <!-- Tab Content Area -->
             <div class="p-5 flex-1 flex flex-col justify-start">
-              <!-- TAB 1: CURRENT OPENINGS -->
-              @if (activeTab() === 'notification' && hasNotifications()) {
+              <!-- TAB 1: NOTIFICATIONS -->
+              @if (activeTab() === 'notification') {
                 @if (notifications().length === 0) {
                   <div class="text-center py-12 text-slate-400 text-sm font-medium">
                     No notifications available.
@@ -250,125 +182,7 @@
                   </div>
                 }
               }
-
-              @if (activeTab() === 'openings') {
-                @if (currentOpenings().length === 0) {
-                  <div class="text-center py-12 text-slate-400 text-sm font-medium">
-                    No current openings found.
-                  </div>
-                } @else {
-                  <div class="overflow-x-auto rounded-xl border border-slate-200">
-                    <table class="w-full text-sm border-collapse">
-                      <thead>
-                        <tr class="bg-[#18181b] text-[#FF9933] text-xs">
-                          <th class="text-left px-3 py-2.5 font-semibold w-8">Sr. No.</th>
-                          <th class="text-left px-3 py-2.5 font-semibold">Title & Organisation</th>
-                          <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
-                            Opening Date
-                          </th>
-                          <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
-                            Closing Date
-                          </th>
-                          <th class="text-right px-3 py-2.5 font-semibold">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (item of currentOpenings(); track item.id; let idx = $index) {
-                          <tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
-                            <td class="px-3 py-2.5 text-slate-800 text-xs font-medium">
-                              <!-- {{ idx + 1 }} -->
-                            </td>
-                            <td class="px-3 py-2.5">
-                              <p class="text-slate-800 font-bold text-xs leading-snug m-0">
-                                <!-- {{ item.title }} -->
-                              </p>
-                              <p class="text-slate-500 text-[11px] m-0 mt-0.5">
-                                <!-- {{ item.organisationName }} | Advt No: {{ item.advtNo }} -->
-                              </p>
-                            </td>
-                            <td class="px-3 py-2.5 text-slate-600 text-xs whitespace-nowrap">
-                              <!-- {{ item.openingDate }} -->
-                            </td>
-                            <td
-                              class="px-3 py-2.5 text-slate-600 text-xs whitespace-nowrap font-medium text-red-600"
-                            >
-                              <!-- {{ item.closingDate }} -->
-                            </td>
-                            <td class="px-3 py-2.5 text-right whitespace-nowrap">
-                              <button
-                                type="button"
-                                (click)="viewDetails(item)"
-                                class="px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold transition-colors cursor-pointer bg-white"
-                              >
-                                View
-                              </button>
-                            </td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                  </div>
-                }
-              }
-
-              <!-- TAB 2: ARCHIVES -->
-              @if (activeTab() === 'archive') {
-              @if (archives().length === 0) {
-              <div class="text-center py-12 text-slate-400 text-sm font-medium">
-                No archived notifications.
-              </div>
-              } @else {
-              <div class="overflow-x-auto rounded-xl border border-slate-200">
-                <table class="w-full text-sm border-collapse">
-                  <thead>
-                    <tr class="bg-[#18181b] text-[#FF9933] text-xs">
-                      <th class="text-left px-3 py-2.5 font-semibold w-8">Sr. No.</th>
-                      <th class="text-left px-3 py-2.5 font-semibold">Title</th>
-                      <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
-                        Organisation
-                      </th>
-                      <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
-                        Opening Date
-                      </th>
-                      <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
-                        Closing Date
-                      </th>
-                      <th class="text-right px-3 py-2.5 font-semibold">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (item of archives(); track item.id; let idx = $index) {
-                    <tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
-                      <td class="px-3 py-2.5 text-slate-800 text-xs font-medium">
-                        {{ idx + 1 }}
-                      </td>
-                      <td class="px-3 py-2.5">
-                        <p class="text-slate-800 font-bold text-xs leading-snug m-0">
-                          {{ item.title }}
-                        </p>
-                      </td>
-                      <td class="px-3 py-2.5 text-slate-700 text-xs whitespace-nowrap">
-                        {{ item.organisationName }}
-                      </td>
-                      <td class="px-3 py-2.5 text-slate-600 text-xs whitespace-nowrap">
-                        {{ item.openingDate }}
-                      </td>
-                      <td class="px-3 py-2.5 text-slate-600 text-xs whitespace-nowrap">
-                        {{ item.closingDate }}
-                      </td>
-                      <td class="px-3 py-2.5 text-right whitespace-nowrap">
-                        <button type="button" (click)="viewDetails(item)"
-                          class="px-2.5 py-1 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold transition-colors cursor-pointer bg-white">
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-              }
-              }
+            </div>
 
               <!-- TAB 3: GAZETTE NOTIFICATIONS -->
               <!-- @if (activeTab() === 'gazette') {
@@ -409,7 +223,6 @@
                   </div>
                 }
               } -->
-            </div>
           </div>
         </div>
       </div>
