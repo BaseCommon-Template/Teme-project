@@ -38,7 +38,7 @@
                   d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
                 />
               </svg>
-              <span>AGNIVEER STATISTICS</span>
+              <span>LOREM IPSUM STATISTICS</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -51,7 +51,7 @@
               >
                 <div class="flex items-center justify-between gap-2">
                   <span class="text-xs font-bold text-slate-800 tracking-tight uppercase">
-                    TOTAL AGNIVEERS
+                    TOTAL LOREM IPSUM
                   </span>
                   <div
                     class="w-8 h-8 rounded-xl bg-white/90 text-sky-600 flex items-center justify-center shadow-2xs"
@@ -160,7 +160,7 @@
                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            <span>AGNIVEER PART B STATUS</span>
+            <span>LOREM IPSUM PART B STATUS</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -257,7 +257,7 @@
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
               />
             </svg>
-            <span>AGNIVEER PART C STATUS</span>
+            <span>LOREM IPSUM PART C STATUS</span>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -636,7 +636,7 @@
         >
           <div>
             <div class="flex items-center gap-2.5 mb-4">
-              <div class="w-1 h-5 bg-[#162f6a] rounded-full"></div>
+              <div class="w-1.5 h-6 bg-[#FF9933] rounded-full"></div>
               <h2
                 class="text-base sm:text-lg font-bold text-slate-900 m-0 uppercase tracking-tight"
               >
@@ -647,11 +647,7 @@
             <div class="flex flex-wrap items-center gap-2 mb-4">
               <button
                 (click)="setActiveTab('notification')"
-                [class]="
-                  activeTab() === 'notification'
-                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
-                "
+                class="bg-[#18181b] text-[#FF9933] font-bold text-xs py-1.5 px-4 rounded-xl flex items-center gap-1.5 shadow-2xs cursor-pointer border-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -669,223 +665,75 @@
                 </svg>
                 <span>Notifications</span>
               </button>
-
-              <button
-                (click)="setActiveTab('openings')"
-                [class]="
-                  activeTab() === 'openings'
-                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
-                "
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
-                <span>Current Openings</span>
-              </button>
-
-              <button
-                (click)="setActiveTab('archives')"
-                [class]="
-                  activeTab() === 'archives'
-                    ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'
-                "
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M5 8h14M5 8a2 2 0 012-2h10a2 2 0 012 2m-14 0v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                  />
-                </svg>
-                <span>Archives</span>
-              </button>
-
-              <!-- <button (click)="setActiveTab('gazette')"
-                [class]="activeTab() === 'gazette'
-                ? 'bg-[#162f6a] text-white font-semibold text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 shadow-2xs cursor-pointer border-none'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium text-xs py-1.5 px-3 rounded-lg flex items-center gap-1.5 cursor-pointer border-none transition-colors'">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <span>Gazette Notifications</span>
-              </button> -->
             </div>
 
-            <!-- Table Container -->
             <!-- Table Container -->
             <div class="rounded-xl border border-slate-200 overflow-hidden mb-4 shadow-2xs">
               <div class="overflow-x-auto">
                 <!-- ================= NOTIFICATIONS ================= -->
-                @if (activeTab() === 'notification') {
-                  <table class=" notifications-table-wrapper w-full text-xs text-left border-collapse">
-                    <thead class="bg-[#162f6a] text-white font-bold">
-                      <tr>
-                        <th class="py-2.5 px-3 w-12 text-center border-r border-white/10">
-                          Sr. No.
-                        </th>
+                <table class="notifications-table-wrapper w-full text-xs text-left border-collapse">
+                  <thead class="bg-[#18181b] text-[#FF9933] font-bold">
+                    <tr>
+                      <th class="py-2.5 px-3 w-12 text-center border-r border-white/10">
+                        Sr. No.
+                      </th>
 
-                        <th class="py-2.5 px-3 border-r border-white/10">Title</th>
+                      <th class="py-2.5 px-3 border-r border-white/10">Title</th>
 
-                        <th class="py-2.5 px-3 text-center">Action</th>
-                      </tr>
-                    </thead>
+                      <th class="py-2.5 px-3 text-center">Action</th>
+                    </tr>
+                  </thead>
 
-                    <tbody class="divide-y divide-slate-200 bg-white">
-                      @if (notifications().length > 0) {
-                        @for (
-                          notification of notifications();
-                          track notification.id;
-                          let i = $index
-                        ) {
-                          <tr class="hover:bg-slate-50 transition-colors">
-                            <!-- Sr No -->
-                            <td
-                              class="py-2.5 px-3 text-center font-medium text-slate-600 border-r border-slate-100"
-                            >
-                              {{ i + 1 }}
-                            </td>
-
-                            <!-- Title -->
-                            <td
-                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
-                            >
-                              {{ notification.title }}
-                            </td>
-
-                            <!-- Action -->
-                            <td class="py-2.5 px-3 text-center">
-                              @if (notification.attachmentPath) {
-                                <button
-                                  type="button"
-                                  (click)="viewDetails(notification)"
-                                  class="inline-block bg-[#162f6a] hover:bg-[#122452] text-white text-xs font-semibold px-4 py-1 rounded-full transition-colors shadow-2xs border-0 cursor-pointer"
-                                >
-                                  View
-                                </button>
-                              } @else {
-                                <span class="text-slate-400 text-xs"> N/A </span>
-                              }
-                            </td>
-                          </tr>
-                        }
-                      } @else {
-                        <tr>
+                  <tbody class="divide-y divide-slate-200 bg-white">
+                    @if (notifications().length > 0) {
+                      @for (
+                        notification of notifications();
+                        track notification.id;
+                        let i = $index
+                      ) {
+                        <tr class="hover:bg-slate-50 transition-colors">
+                          <!-- Sr No -->
                           <td
-                            colspan="3"
-                            class="py-8 text-center text-slate-400 font-medium text-xs"
+                            class="py-2.5 px-3 text-center font-medium text-slate-600 border-r border-slate-100"
                           >
-                            No published notifications found.
+                            {{ i + 1 }}
+                          </td>
+
+                          <!-- Title -->
+                          <td
+                            class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
+                          >
+                            {{ notification.title }}
+                          </td>
+
+                          <!-- Action -->
+                          <td class="py-2.5 px-3 text-center">
+                            @if (notification.attachmentPath) {
+                              <button
+                                type="button"
+                                (click)="viewDetails(notification)"
+                                class="inline-block bg-[#18181b] hover:bg-[#27272a] text-[#FF9933] text-xs font-bold px-4 py-1 rounded-full transition-colors shadow-2xs border-0 cursor-pointer"
+                              >
+                                View
+                              </button>
+                            } @else {
+                              <span class="text-slate-400 text-xs"> N/A </span>
+                            }
                           </td>
                         </tr>
                       }
-                    </tbody>
-                  </table>
-                }
-
-                <!-- ================= CURRENT OPENINGS / ARCHIVES ================= -->
-                @if (activeTab() === 'openings' || activeTab() === 'archives') {
-                  <table class="notifications-table-wrapper w-full text-xs text-left border-collapse">
-                    <thead class="bg-[#162f6a] text-white font-bold">
+                    } @else {
                       <tr>
-                        <th class="py-2.5 px-3 w-12 text-center border-r border-white/10">
-                          Sr. No.
-                        </th>
-
-                        <th class="py-2.5 px-3 border-r border-white/10">Title</th>
-
-                        <th class="py-2.5 px-3 border-r border-white/10">Advt No.</th>
-
-                        <th class="py-2.5 px-3 border-r border-white/10">Organisation Type</th>
-
-                        <th class="py-2.5 px-3 text-center">Action</th>
+                        <td
+                          colspan="3"
+                          class="py-8 text-center text-slate-400 font-medium text-xs"
+                        >
+                          No published notifications found.
+                        </td>
                       </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-slate-200 bg-white">
-                      @if (openingNotifications().length > 0) {
-                        @for (noti of openingNotifications(); track noti.id ?? noti.srNo) {
-                          <tr class="hover:bg-slate-50 transition-colors">
-                            <!-- Sr No -->
-                            <td
-                              class="py-2.5 px-3 text-center font-medium text-slate-600 border-r border-slate-100"
-                            >
-                              {{ noti.srNo }}
-                            </td>
-
-                            <!-- Title -->
-                            <td
-                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
-                            >
-                              {{ noti.title || 'N/A' }}
-                            </td>
-
-                            <!-- Advt No -->
-                            <td
-                              class="py-2.5 px-3 font-semibold text-slate-800 border-r border-slate-100"
-                            >
-                              {{ noti.advtNo || 'N/A' }}
-                            </td>
-
-                            <!-- Organisation -->
-                            <td class="py-2.5 px-3 text-slate-600 border-r border-slate-100">
-                              {{ noti.organisationName || 'N/A' }}
-                            </td>
-
-                            <!-- Action -->
-                            <td class="py-2.5 px-3 text-center">
-                              @if (noti.documentPath) {
-                                <button
-                                  type="button"
-                                  (click)="viewDocument(noti.documentPath)"
-                                  class="inline-block bg-[#162f6a] hover:bg-[#122452] text-white text-xs font-semibold px-4 py-1 rounded-full transition-colors shadow-2xs border-0 cursor-pointer"
-                                >
-                                  View
-                                </button>
-                              } @else {
-                                <span class="text-slate-400 text-xs"> N/A </span>
-                              }
-                            </td>
-                          </tr>
-                        }
-                      } @else {
-                        <tr>
-                          <td
-                            colspan="5"
-                            class="py-8 text-center text-slate-400 font-medium text-xs"
-                          >
-                            No
-                            {{
-                              activeTab() === 'openings' ? 'current openings' : 'archived openings'
-                            }}
-                            found.
-                          </td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                }
+                    }
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

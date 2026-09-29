@@ -406,22 +406,66 @@ textarea.ng-invalid.ng-touched {
   color: #ffffff !important;
 }
 
-/* AG Grid Header Global Theme (Matching Sleek Dark Charcoal) */
-.ag-header,
-.ag-header-row,
-.ag-header-cell,
-.role-management-grid .ag-header,
-.role-management-grid .ag-header-row,
-.role-management-grid .ag-header-cell {
+/* AG Grid Header Global Theme (Matching Sleek Dark Charcoal & Orange) */
+html body .ag-header,
+html body .ag-header-row,
+html body .ag-header-cell,
+html body div .ag-header,
+html body div .ag-header-row,
+html body div .ag-header-cell,
+html body [class*="grid"] .ag-header,
+html body [class*="grid"] .ag-header-row,
+html body [class*="grid"] .ag-header-cell {
   background-color: #18181b !important;
   background: #18181b !important;
-  color: #ffffff !important;
+  color: #FF9933 !important;
+  border-right-color: #27272a !important;
+  border-bottom-color: #27272a !important;
 }
 
-.ag-header-cell-label,
-.ag-header-cell-text,
-.role-management-grid .ag-header-cell-label,
-.role-management-grid .ag-header-cell-text {
-  color: #ffffff !important;
+html body .ag-header-cell-label,
+html body .ag-header-cell-text,
+html body .ag-header-icon,
+html body .ag-header-cell-menu-button,
+html body div .ag-header-cell-label,
+html body div .ag-header-cell-text,
+html body div .ag-header-icon,
+html body div .ag-header-cell-menu-button,
+html body [class*="grid"] .ag-header-cell-label,
+html body [class*="grid"] .ag-header-cell-text,
+html body [class*="grid"] .ag-header-icon,
+html body [class*="grid"] .ag-header-cell-menu-button {
+  color: #FF9933 !important;
   font-weight: 700 !important;
+}
+
+html body .ag-header-cell-menu-button:hover,
+html body div .ag-header-cell-menu-button:hover,
+html body [class*="grid"] .ag-header-cell-menu-button:hover {
+  background: rgba(255, 153, 51, 0.15) !important;
+}
+
+/* HTML Standard Tables (thead & th) */
+html body table thead,
+html body table thead tr,
+html body table thead th {
+  background-color: #18181b !important;
+  color: #FF9933 !important;
+  font-weight: 700 !important;
+}
+
+/* Table Toolbar Primary Buttons (Add Organization, etc.) */
+html body .publish-btn,
+html body .add-btn,
+html body [class*="publish-btn"] {
+  background-color: #18181b !important;
+  color: #FF9933 !important;
+  border: 1px solid #27272a !important;
+}
+
+html body .publish-btn:hover,
+html body .add-btn:hover,
+html body [class*="publish-btn"]:hover {
+  background-color: #27272a !important;
+  color: #FF9933 !important;
 }
