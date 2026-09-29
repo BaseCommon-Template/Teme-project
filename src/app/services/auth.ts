@@ -783,6 +783,16 @@ export class AuthService {
   // CLEAR LOCAL DATA
   // =====================================================
 
+  // Add this inside your AuthService
+forceLocalLogout(): void {
+  const user = this.commonService.userdata || {};
+  const userId = user && user.userautoId ? user.userautoId : 'unknown';
+  
+  // Call your existing robust cleanup method!
+  this.clearLocalData(userId);
+}
+
+
   private clearLocalData(userId: string): void {
     const idleService = this.injector.get(IdleService);
     idleService.stopWatching();
