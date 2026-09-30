@@ -448,10 +448,30 @@ html body [class*="grid"] .ag-header-cell-menu-button:hover {
 /* HTML Standard Tables (thead & th) */
 html body table thead,
 html body table thead tr,
-html body table thead th {
+html body table thead th,
+html body table th,
+html body .role-table thead,
+html body .role-table th,
+html body .access-role-header,
+html body .access-role-header > div {
   background-color: #18181b !important;
+  background: #18181b !important;
   color: #FF9933 !important;
   font-weight: 700 !important;
+  border-color: #27272a !important;
+}
+
+html body table tbody td,
+html body .role-table td,
+html body .access-role-row:not(.access-role-header) > div {
+  background-color: #ffffff !important;
+  color: #18181b !important;
+}
+
+html body table tbody tr:hover td,
+html body .role-table tbody tr:hover td,
+html body .access-role-row:not(.access-role-header):hover {
+  background-color: #fff7ed !important;
 }
 
 /* Table Toolbar Primary Buttons (Add Organization, etc.) */
