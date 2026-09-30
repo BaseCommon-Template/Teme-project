@@ -89,47 +89,62 @@ export class AuthCallbackComponent implements OnInit {
               sameSite: (isHttps ? 'None' : 'Lax') as 'None' | 'Lax',
             };
 
+            // if (loginData.token) {
+            //   this.cookieService.set(
+            //     'token',
+            //     loginData.token,
+            //     1,
+            //     cookieOptions.path,
+            //     undefined,
+            //     cookieOptions.secure,
+            //     cookieOptions.sameSite,
+            //   );
+            //   this.authService.setToken(loginData.token);
+            // }
             if (loginData.token) {
-              this.cookieService.set(
-                'token',
-                loginData.token,
-                1,
-                cookieOptions.path,
-                undefined,
-                cookieOptions.secure,
-                cookieOptions.sameSite,
-              );
+              // 2. Delegate strictly to your secure AuthService
               this.authService.setToken(loginData.token);
             }
+            // if (loginData.refreshToken) {
+            //   this.cookieService.set(
+            //     'refreshToken',
+            //     loginData.refreshToken,
+            //     1,
+            //     cookieOptions.path,
+            //     undefined,
+            //     cookieOptions.secure,
+            //     cookieOptions.sameSite,
+            //   );
+            //   this.authService.setRefreshToken(loginData.refreshToken);
+            // }
+
             if (loginData.refreshToken) {
-              this.cookieService.set(
-                'refreshToken',
-                loginData.refreshToken,
-                1,
-                cookieOptions.path,
-                undefined,
-                cookieOptions.secure,
-                cookieOptions.sameSite,
-              );
               this.authService.setRefreshToken(loginData.refreshToken);
             }
-            if (loginData?.janPar && (loginData?.roles?.[0]?.RoleId === 11 || loginData?.roles?.[0]?.roleId === 11)) {
+            // if (loginData?.janPar && (loginData?.roles?.[0]?.RoleId === 11 || loginData?.roles?.[0]?.roleId === 11)) {
+            //   const jpToken = loginData?.janPar?.AccessToken || loginData?.janPar?.accessToken;
+            //   if (jpToken) {
+            //     this.cookieService.set(
+            //       'jpAccessToken',
+            //       jpToken,
+            //       1,
+            //       cookieOptions.path,
+            //       undefined,
+            //       cookieOptions.secure,
+            //       cookieOptions.sameSite,
+            //     );
+            //     this.authService.setJpAccessToken(jpToken);
+            //   }
+            // }
+
+            // Normalize user data and store in AuthService and Storage
+          
+          if (loginData?.janPar && (loginData?.roles?.[0]?.RoleId === 11 || loginData?.roles?.[0]?.roleId === 11)) {
               const jpToken = loginData?.janPar?.AccessToken || loginData?.janPar?.accessToken;
               if (jpToken) {
-                this.cookieService.set(
-                  'jpAccessToken',
-                  jpToken,
-                  1,
-                  cookieOptions.path,
-                  undefined,
-                  cookieOptions.secure,
-                  cookieOptions.sameSite,
-                );
                 this.authService.setJpAccessToken(jpToken);
               }
             }
-
-            // Normalize user data and store in AuthService and Storage
             const normalizedUser = {
               ...loginData,
               name: loginData.userName || loginData.name || '',
@@ -210,15 +225,15 @@ export class AuthCallbackComponent implements OnInit {
               this.cookieService.delete('roles');
             } catch (e) {}
 
-            this.cookieService.set(
-              'roleId',
-              String(roleIdToSet),
-              1,
-              cookieOptions.path,
-              undefined,
-              cookieOptions.secure,
-              cookieOptions.sameSite,
-            );
+            // this.cookieService.set(
+            //   'roleId',
+            //   String(roleIdToSet),
+            //   1,
+            //   cookieOptions.path,
+            //   undefined,
+            //   cookieOptions.secure,
+            //   cookieOptions.sameSite,
+            // );
             this.authService.setRoles(effectiveRoles);
             this.authService.setRoleId(roleIdToSet, roleNameToSet);
             sessionStorage.setItem('role', String(roleIdToSet));

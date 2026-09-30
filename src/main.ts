@@ -172,39 +172,39 @@ if (typeof window !== 'undefined' && typeof Storage !== 'undefined') {
     try {
       let cookieStr = `${encKey}=${encVal}`;
       if (cookieStr.length <= 4000) {
-        const usePath = path || '/';
-        cookieStr += `; path=${usePath}`;
+        // const usePath = path || '/';
+        // cookieStr += `; path=${usePath}`;
 
-        if (expires !== undefined) {
-          if (typeof expires === 'number') {
-            const d = new Date();
-            d.setTime(d.getTime() + expires * 24 * 60 * 60 * 1000);
-            cookieStr += `; expires=${d.toUTCString()}`;
-          } else if (expires instanceof Date) {
-            cookieStr += `; expires=${expires.toUTCString()}`;
-          }
-        } else {
-          cookieStr += `; max-age=86400`;
-        }
+        // if (expires !== undefined) {
+        //   if (typeof expires === 'number') {
+        //     const d = new Date();
+        //     d.setTime(d.getTime() + expires * 24 * 60 * 60 * 1000);
+        //     cookieStr += `; expires=${d.toUTCString()}`;
+        //   } else if (expires instanceof Date) {
+        //     cookieStr += `; expires=${expires.toUTCString()}`;
+        //   }
+        // } else {
+        //   cookieStr += `; max-age=86400`;
+        // }
 
-        if (domain) {
-          cookieStr += `; domain=${domain}`;
-        }
+        // if (domain) {
+        //   cookieStr += `; domain=${domain}`;
+        // }
 
-        const isHttps = typeof location !== 'undefined' && location.protocol === 'https:';
-        const useSecure = secure !== undefined ? secure : isHttps;
-        let useSameSite = sameSite || (isHttps ? 'None' : 'Lax');
+        // const isHttps = typeof location !== 'undefined' && location.protocol === 'https:';
+        // const useSecure = secure !== undefined ? secure : isHttps;
+        // let useSameSite = sameSite || (isHttps ? 'None' : 'Lax');
 
-        if (useSameSite === 'None' && !useSecure) {
-          useSameSite = 'Lax';
-        }
+        // if (useSameSite === 'None' && !useSecure) {
+        //   useSameSite = 'Lax';
+        // }
 
-        cookieStr += `; SameSite=${useSameSite}`;
-        if (useSecure) {
-          cookieStr += '; Secure';
-        }
+        // cookieStr += `; SameSite=${useSameSite}`;
+        // if (useSecure) {
+        //   cookieStr += '; Secure';
+        // }
 
-        document.cookie = cookieStr;
+        // document.cookie = cookieStr;
       }
     } catch (e) {}
   }

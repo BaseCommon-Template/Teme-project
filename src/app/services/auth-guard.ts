@@ -24,6 +24,17 @@ export class AuthGuard implements CanActivate {
     const token =
       this.authService.getToken() ||
       (typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('token') : null);
+
+
+
+      if (!token) {
+      this.clearSessionAndCookies();
+      this.router.navigate(['/auth/userlogin'], {
+        queryParams: state?.url ? { returnUrl: state?.url } : undefined,
+      });
+      return false;
+    }
+    
     const user = this.authService.getCurrentUser();
     const role = typeof window !== 'undefined' ? sessionStorage.getItem('role') : null;
 

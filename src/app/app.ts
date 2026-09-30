@@ -126,42 +126,44 @@ export class App implements OnInit {
               sameSite: (isHttps ? 'None' : 'Lax') as 'None' | 'Lax',
             };
 
-            if (loginData.token) {
-              this.cookieService.set(
-                'token',
-                loginData.token,
-                1,
-                cookieOptions.path,
-                undefined,
-                cookieOptions.secure,
-                cookieOptions.sameSite,
-              );
-              this.authService.setToken(loginData.token);
-            }
-            if (loginData.refreshToken) {
-              this.cookieService.set(
-                'refreshToken',
-                loginData.refreshToken,
-                1,
-                cookieOptions.path,
-                undefined,
-                cookieOptions.secure,
-                cookieOptions.sameSite,
-              );
-              this.authService.setRefreshToken(loginData.refreshToken);
-            }
-            if (loginData?.janPar && loginData?.roles[0].RoleId === 11) {
-              this.cookieService.set(
-                'jpAccessToken',
-                loginData?.janPar?.AccessToken,
-                1,
-                cookieOptions.path,
-                undefined,
-                cookieOptions.secure,
-                cookieOptions.sameSite,
-              );
-              this.authService.setJpAccessToken(loginData?.janPar?.AccessToken);
-            }
+            // if (loginData.token) {
+            //   this.cookieService.set(
+            //     'token',
+            //     loginData.token,
+            //     1,
+            //     cookieOptions.path,
+            //     undefined,
+            //     cookieOptions.secure,
+            //     cookieOptions.sameSite,
+            //   );
+            //   this.authService.setToken(loginData.token);
+            // }
+            // if (loginData.refreshToken) {
+            //   this.cookieService.set(
+            //     'refreshToken',
+            //     loginData.refreshToken,
+            //     1,
+            //     cookieOptions.path,
+            //     undefined,
+            //     cookieOptions.secure,
+            //     cookieOptions.sameSite,
+            //   );
+            //   this.authService.setRefreshToken(loginData.refreshToken);
+            // }
+            // if (loginData?.janPar && loginData?.roles[0].RoleId === 11) {
+            //   this.cookieService.set(
+            //     'jpAccessToken',
+            //     loginData?.janPar?.AccessToken,
+            //     1,
+            //     cookieOptions.path,
+            //     undefined,
+            //     cookieOptions.secure,
+            //     cookieOptions.sameSite,
+            //   );
+            //   this.authService.setJpAccessToken(loginData?.janPar?.AccessToken);
+            // }
+
+
 
             // Normalize user data and store in AuthService and Storage
             const normalizedUser = {
@@ -238,15 +240,15 @@ export class App implements OnInit {
               this.cookieService.delete('roles');
             } catch (e) {}
 
-            this.cookieService.set(
-              'roleId',
-              String(roleIdToSet),
-              1,
-              cookieOptions.path,
-              undefined,
-              cookieOptions.secure,
-              cookieOptions.sameSite,
-            );
+            // this.cookieService.set(
+            //   'roleId',
+            //   String(roleIdToSet),
+            //   1,
+            //   cookieOptions.path,
+            //   undefined,
+            //   cookieOptions.secure,
+            //   cookieOptions.sameSite,
+            // );
             this.authService.setRoles(effectiveRoles);
             this.authService.setRoleId(roleIdToSet, roleNameToSet);
             sessionStorage.setItem('role', String(roleIdToSet));

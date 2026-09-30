@@ -123,37 +123,55 @@ export class IdleService {
               let decrypted = CryptoHelper.decrypt(encryptData);
               let parsedData = JSON.parse(decrypted);
 
+              // if (parsedData.token) {
+              //   this.authService.setToken(parsedData.token);
+              //   if (typeof window !== 'undefined') {
+              //     const isHttps = location.protocol === 'https:';
+              //     this.cookieService.set(
+              //       'token',
+              //       parsedData.token,
+              //       1,
+              //       '/',
+              //       undefined,
+              //       isHttps,
+              //       isHttps ? 'None' : 'Lax',
+              //     );
+              //   }
+              // }
+
               if (parsedData.token) {
+                // 2. Just use AuthService. It will save to sessionStorage automatically.
                 this.authService.setToken(parsedData.token);
-                if (typeof window !== 'undefined') {
-                  const isHttps = location.protocol === 'https:';
-                  this.cookieService.set(
-                    'token',
-                    parsedData.token,
-                    1,
-                    '/',
-                    undefined,
-                    isHttps,
-                    isHttps ? 'None' : 'Lax',
-                  );
-                }
+                
+                // REMOVED: this.cookieService.set('token', ...)
               }
+
+              // if (parsedData.refreshToken || parsedData.RefreshToken) {
+              //   let newRefresh = parsedData.refreshToken || parsedData.RefreshToken;
+              //   this.authService.setRefreshToken(newRefresh);
+              //   if (typeof window !== 'undefined') {
+              //     const isHttps = location.protocol === 'https:';
+              //     this.cookieService.set(
+              //       'refreshToken',
+              //       newRefresh,
+              //       1,
+              //       '/',
+              //       undefined,
+              //       isHttps,
+              //       isHttps ? 'None' : 'Lax',
+              //     );
+              //   }
+              // }
+
               if (parsedData.refreshToken || parsedData.RefreshToken) {
                 let newRefresh = parsedData.refreshToken || parsedData.RefreshToken;
+                
+                // 3. Just use AuthService. It will save to sessionStorage automatically.
                 this.authService.setRefreshToken(newRefresh);
-                if (typeof window !== 'undefined') {
-                  const isHttps = location.protocol === 'https:';
-                  this.cookieService.set(
-                    'refreshToken',
-                    newRefresh,
-                    1,
-                    '/',
-                    undefined,
-                    isHttps,
-                    isHttps ? 'None' : 'Lax',
-                  );
-                }
+                
+                // REMOVED: this.cookieService.set('refreshToken', ...)
               }
+              
             } catch (e) {}
           }
         },

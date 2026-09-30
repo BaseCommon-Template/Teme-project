@@ -56,7 +56,7 @@ export class AuthService {
 
     const isHttps = typeof location !== 'undefined' && location.protocol === 'https:';
 
-    this.cookieService.set(name, value, days, '/', undefined, isHttps, isHttps ? 'None' : 'Lax');
+    // this.cookieService.set(name, value, days, '/', undefined, isHttps, isHttps ? 'None' : 'Lax');
   }
 
   // =====================================================
@@ -428,7 +428,7 @@ export class AuthService {
       } catch (e) {}
     }
 
-    this.setCookie('jpAccessToken', token);
+    // this.setCookie('jpAccessToken', token);
   }
 
   // =====================================================
