@@ -222,9 +222,6 @@ export class LandingComponent implements OnInit, OnDestroy {
               }));
 
             this.notifications.set(activeNotifications);
-            if (activeNotifications.length === 0 && this.activeTab() === 'notification') {
-              this.activeTab.set('openings');
-            }
           } catch (error) {
             this.notifications.set([]);
           }

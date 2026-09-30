@@ -479,20 +479,20 @@
    ========================================================= */
 
 :host ::ng-deep .postmapping-grid .ag-header {
-  background: #4285d4 !important;
-  color: #fff !important;
-  border-bottom: 1px solid #286bb7 !important;
+  background: #18181b !important;
+  color: #FF9933 !important;
+  border-bottom: 1px solid #27272a !important;
 }
 
 :host ::ng-deep .postmapping-grid .ag-header-row {
-  background: #4285d4 !important;
+  background: #18181b !important;
 }
 
 :host ::ng-deep .postmapping-grid .ag-header-cell {
-  background: #4285d4 !important;
-  color: #fff !important;
+  background: #18181b !important;
+  color: #FF9933 !important;
 
-  border-right: 1px solid #76a5d6 !important;
+  border-right: 1px solid #27272a !important;
 
   padding: 7px !important;
 
@@ -500,13 +500,13 @@
 }
 
 :host ::ng-deep .postmapping-grid .ag-header-cell-label {
-  color: #fff !important;
+  color: #FF9933 !important;
   font-size: 13px !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .postmapping-grid .ag-header-cell-text {
-  color: #fff !important;
+  color: #FF9933 !important;
 }
 
 

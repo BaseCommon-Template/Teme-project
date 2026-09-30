@@ -240,21 +240,21 @@
 ========================================================= */
 
 :host ::ng-deep .role-management-grid .ag-header {
-  background: #4285d4 !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid #286bb7 !important;
+  background: #18181b !important;
+  color: #FF9933 !important;
+  border-bottom: 1px solid #27272a !important;
   height: 30px !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-row {
   height: 30px !important;
-  background: #4285d4 !important;
+  background: #18181b !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-cell {
-  background: #4285d4 !important;
-  color: #ffffff !important;
-  border-right: 1px solid #76a5d6 !important;
+  background: #18181b !important;
+  color: #FF9933 !important;
+  border-right: 1px solid #27272a !important;
   padding-left: 7px !important;
   padding-right: 7px !important;
   height: 30px !important;
@@ -262,23 +262,23 @@
 }
 
 :host ::ng-deep .role-management-grid .ag-header-cell-label {
-  color: #ffffff !important;
+  color: #FF9933 !important;
   font-size: 12px !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-cell-text {
-  color: #ffffff !important;
+  color: #FF9933 !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-icon,
 :host ::ng-deep .role-management-grid .ag-header-cell-menu-button {
-  color: #ffffff !important;
+  color: #FF9933 !important;
 }
 
 :host ::ng-deep .role-management-grid .ag-header-cell-menu-button:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 153, 51, 0.15) !important;
 }
 
 /* =========================================================

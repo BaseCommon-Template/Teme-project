@@ -389,13 +389,13 @@
 
   padding: 0 15px;
 
-  border: none;
+  border: 1px solid #27272a;
 
   border-radius: 4px;
 
-  background: #1c4587;
+  background: #18181b;
 
-  color: #ffffff;
+  color: #FF9933;
 
   font-size: 12px;
 
@@ -413,7 +413,7 @@
 }
 
 .organization-page .publish-btn:hover {
-  background: #153d78;
+  background: #27272a;
 
   box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 }
@@ -582,11 +582,11 @@
 ========================================================= */
 
 :host ::ng-deep .organization-grid .ag-header {
-  background: #4285d4 !important;
+  background: #18181b !important;
 
-  color: #ffffff !important;
+  color: #FF9933 !important;
 
-  border-bottom: 1px solid #286bb7 !important;
+  border-bottom: 1px solid #27272a !important;
 
   height: 30px !important;
 }
@@ -594,15 +594,15 @@
 :host ::ng-deep .organization-grid .ag-header-row {
   height: 30px !important;
 
-  background: #4285d4 !important;
+  background: #18181b !important;
 }
 
 :host ::ng-deep .organization-grid .ag-header-cell {
-  background: #4285d4 !important;
+  background: #18181b !important;
 
-  color: #ffffff !important;
+  color: #FF9933 !important;
 
-  border-right: 1px solid #76a5d6 !important;
+  border-right: 1px solid #27272a !important;
 
   padding-left: 7px !important;
 
@@ -614,7 +614,7 @@
 }
 
 :host ::ng-deep .organization-grid .ag-header-cell-label {
-  color: #ffffff !important;
+  color: #FF9933 !important;
 
   font-size: 14px !important;
 
@@ -622,13 +622,13 @@
 }
 
 :host ::ng-deep .organization-grid .ag-header-cell-text {
-  color: #ffffff !important;
+  color: #FF9933 !important;
 
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .organization-grid .ag-header-icon {
-  color: #ffffff !important;
+  color: #FF9933 !important;
 }
 
 :host ::ng-deep .organization-grid .ag-header-cell-menu-button {
