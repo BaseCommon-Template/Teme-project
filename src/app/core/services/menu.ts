@@ -467,16 +467,26 @@ export class MenuService {
     // Check cached menudata or public_menus for instant render without flickering
     if (typeof window !== 'undefined') {
       const cached = sessionStorage.getItem('menudata');
+
       if (cached) {
         try {
-          this.patchMenus(cached);
-        } catch {}
+          const parsedMenu = JSON.parse(cached);
+
+          this.patchMenus(parsedMenu);
+        } catch (error) {
+          console.error('❌ Failed to parse menudata:', error);
+        }
       } else {
         const cachedPublic = sessionStorage.getItem('public_menus');
+
         if (cachedPublic) {
           try {
-            this.patchMenus(JSON.parse(cachedPublic));
-          } catch {}
+            const parsedPublicMenu = JSON.parse(cachedPublic);
+
+            this.patchMenus(parsedPublicMenu);
+          } catch (error) {
+            console.error('❌ Failed to parse public_menus:', error);
+          }
         }
       }
     }
@@ -499,61 +509,113 @@ export class MenuService {
   }
 
   patchMenus(rawData: any, roleId?: number): Menu[] {
-    let data = rawData;
-    if (typeof data === 'string') {
-      try {
-        const decrypted = CryptoHelper.decrypt(data);
-        data = JSON.parse(decrypted || data);
-      } catch (e) {
+    try {
+      let data = rawData;
+
+      // 1. Decrypt API response
+      if (typeof data === 'string') {
         try {
-          data = JSON.parse(data);
-        } catch {
-          console.error('Failed to parse decrypted menus:', e);
+          const decrypted = CryptoHelper.decrypt(data);
+
+          data = JSON.parse(decrypted);
+        } catch (e) {
+          console.error('❌ Menu decrypt/parse failed:', e);
+
+          try {
+            data = JSON.parse(data);
+          } catch {
+            console.error('❌ Invalid menu data');
+
+            this.allMenusSignal.set([]);
+            this.navbarMenusSignal.set([]);
+
+            return [];
+          }
         }
       }
-    }
 
-    if (data && typeof data === 'object' && !Array.isArray(data)) {
-      if (typeof data.data === 'string') {
-        try {
-          const dec = CryptoHelper.decrypt(data.data);
-          data = JSON.parse(dec || data.data);
-        } catch {}
+      // 2. 🔥 IMPORTANT
+      // API response is:
+      //
+      // {
+      //   roleId: 10,
+      //   Menus: [...]
+      // }
+
+      let rawList: any[] = [];
+
+      if (Array.isArray(data)) {
+        rawList = data;
+      } else if (data && typeof data === 'object') {
+        // 🔥 Find "Menus" / "menus" case-insensitively
+        const menuKey = Object.keys(data).find((key) => key.toLowerCase() === 'menus');
+
+        if (menuKey) {
+          const menuValue = data[menuKey];
+
+          if (Array.isArray(menuValue)) {
+            rawList = menuValue;
+          }
+          // In case menus is wrapped inside another object
+          else if (menuValue && typeof menuValue === 'object') {
+            const nestedArray = Object.values(menuValue).find((value) => Array.isArray(value));
+
+            if (Array.isArray(nestedArray)) {
+              rawList = nestedArray;
+            }
+          }
+        }
+
+        // Other possible formats
+        if (rawList.length === 0 && Array.isArray(data.records)) {
+          rawList = data.records;
+        }
+
+        if (rawList.length === 0 && Array.isArray(data.data)) {
+          rawList = data.data;
+        }
       }
+
+      // 3. No menu
+      if (rawList.length === 0) {
+        this.allMenusSignal.set([]);
+        this.navbarMenusSignal.set([]);
+
+        return [];
+      }
+
+      // 4. Normalize
+      const normalized: Menu[] = rawList.map((m: any) => normalizeMenuItem(m, roleId));
+
+      // 5. Sort
+      const sortedNormalized = normalized.slice().sort(compareMenusByPriority);
+
+      // 6. Visible menus
+      const visibleMenus = sortedNormalized.filter((m: any) => m.is_visible_in_navbar !== false);
+
+      // 7. Update signals
+      this.allMenusSignal.set(sortedNormalized);
+      this.navbarMenusSignal.set(visibleMenus);
+
+      this.isLoading.set(false);
+
+      // 8. Update CommonService
+      try {
+        this.commonService.menuList = this.commonService.buildMenuTree(rawList);
+      } catch (e) {
+        console.warn('Could not update CommonService.menuList:', e);
+      }
+
+      return sortedNormalized;
+    } catch (error) {
+      console.error('❌ patchMenus failed:', error);
+
+      this.allMenusSignal.set([]);
+      this.navbarMenusSignal.set([]);
+      this.isLoading.set(false);
+
+      return [];
     }
-
-    const rawList: any[] = Array.isArray(data)
-      ? data
-      : Array.isArray(data?.menus)
-        ? data.menus
-        : Array.isArray(data?.records)
-          ? data.records
-          : Array.isArray(data?.data)
-            ? data.data
-            : [];
-
-    const effectiveRoleId =
-      roleId ??
-      this.authService.getRoleId() ??
-      (typeof window !== 'undefined' && sessionStorage.getItem('role')
-        ? parseInt(sessionStorage.getItem('role')!, 10)
-        : undefined);
-
-    const normalized: Menu[] = rawList.map((m) => normalizeMenuItem(m, effectiveRoleId));
-    const sortedNormalized = normalized.slice().sort(compareMenusByPriority);
-    const visibleMenus = sortedNormalized.filter((m) => m.is_visible_in_navbar !== false);
-
-    this.allMenusSignal.set(sortedNormalized);
-    this.navbarMenusSignal.set(visibleMenus);
-    this.isLoading.set(false);
-
-    try {
-      this.commonService.menuList = this.commonService.buildMenuTree(rawList);
-    } catch (e) {
-      console.warn('Could not update CommonService.menuList:', e);
-    }
-
-    return sortedNormalized;
   }
 
   loadDefaultMenus(): void {
@@ -573,11 +635,21 @@ export class MenuService {
     if (this.isUserLoggedIn() && !force) {
       if (this.allMenusSignal().length === 0 && typeof window !== 'undefined') {
         const cached = sessionStorage.getItem('menudata');
+
         if (cached) {
           try {
-            this.patchMenus(cached);
-            return;
-          } catch {}
+            const parsedMenu = JSON.parse(cached);
+
+            if (Array.isArray(parsedMenu) && parsedMenu.length > 0) {
+              this.patchMenus(parsedMenu);
+              return;
+            }
+          } catch (error) {
+            console.error('❌ Invalid menudata in sessionStorage:', error);
+
+            // corrupted cache remove kar do
+            sessionStorage.removeItem('menudata');
+          }
         }
       }
       if (this.allMenusSignal().length > 0) {
@@ -598,12 +670,16 @@ export class MenuService {
     this.error.set(null);
     const endpoint = this.getApiUrl(API_ENDPOINTS.GET_ALL_MENUS);
 
-    const roleId = this.authService.getRoleId() || 0;
+    const roleId = Number(this.authService.getRoleId() || 0);
+
+    if (!roleId) {
+      console.warn('⚠️ Role ID missing. GetByRole API not called.');
+      this.isLoading.set(false);
+      return;
+    }
 
     let payload: any = {
-      roleId: roleId,
       roleid: roleId,
-      langId: 1,
     };
 
     // Encrypt
@@ -611,20 +687,41 @@ export class MenuService {
     payload = CryptoHelper.encrypt(payload);
     payload = JSON.stringify(payload);
 
-    const headers = new HttpHeaders({
+    let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
+    const token = this.authService.getToken();
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
     this.http.post<any>(endpoint, payload, { headers }).subscribe({
       next: (res) => {
+        // console.log('🔥 FULL MENU API RESPONSE:', res);
+
         let rawData = res?.data ?? res?.menus ?? res;
-        this.patchMenus(rawData, roleId);
+
+        // console.log('🔥 ROLE ID SENT:', roleId);
+        // console.log('🔥 RAW DATA BEFORE PATCH:', rawData);
+
+        // Decrypt + normalize menu
+        const menus = this.patchMenus(rawData, roleId);
+
+        // console.log('🔥 FINAL MENUS:', menus);
+
+        // Store DECRYPTED/NORMALIZED menus in sessionStorage
         if (this.isUserLoggedIn() && typeof window !== 'undefined') {
           try {
-            const dataToStore = typeof rawData === 'string' ? rawData : JSON.stringify(rawData);
             sessionStorage.removeItem('menudata');
-            sessionStorage.setItem('menudata', dataToStore);
-          } catch {}
+
+            sessionStorage.setItem('menudata', JSON.stringify(menus));
+
+            // console.log('✅ Menu saved in sessionStorage:', menus);
+          } catch (error) {
+            console.error('❌ Failed to cache menus:', error);
+          }
         }
       },
 

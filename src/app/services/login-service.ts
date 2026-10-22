@@ -37,10 +37,23 @@ export class LoginService {
       .pipe(catchError(this.handleError));
   }
 
-  logoutAPI() {
-    return this.http
-      .post(this.apiURL + 'Users/logout', {}, this.options)
-      .pipe(catchError(this.handleError));
+  logoutAPI(token?: string) {
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.post(
+      this.apiURL + 'Users/logout',
+      {},
+      {
+        headers,
+        withCredentials: true,
+      },
+    );
   }
 
   janParichayLogoutAPI(param: any) {
@@ -79,20 +92,20 @@ export class LoginService {
       .pipe(catchError(this.handleError));
   }
 
-  validateSessionAPI(param: any = {}, options?: any) {
-    let reqOptions = this.options;
-    if (options instanceof HttpHeaders) {
-      reqOptions = { headers: options };
-    } else if (options && options.headers) {
-      reqOptions = options;
-    } else if (options) {
-      reqOptions = { headers: new HttpHeaders(options) };
-    }
+  // validateSessionAPI(param: any = {}, options?: any) {
+  //   let reqOptions = this.options;
+  //   if (options instanceof HttpHeaders) {
+  //     reqOptions = { headers: options };
+  //   } else if (options && options.headers) {
+  //     reqOptions = options;
+  //   } else if (options) {
+  //     reqOptions = { headers: new HttpHeaders(options) };
+  //   }
 
-    return this.http
-      .get(this.apiURL + 'Users/ValidateSession', reqOptions)
-      .pipe(catchError(this.handleError));
-  }
+  //   return this.http
+  //     .get(this.apiURL + 'Users/ValidateSession', reqOptions)
+  //     .pipe(catchError(this.handleError));
+  // }
 
   getMenuByRoleAPI(param: any) {
     return this.http

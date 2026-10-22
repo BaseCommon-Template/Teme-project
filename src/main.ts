@@ -95,15 +95,8 @@ const COOKIE_KEYS = [
   'userId',
   'user_id',
   'userautoId',
-  'agniveer_autoid',
-  'agniveerAutoid',
-  'agniveerId',
-  'forceTypeId',
-  'forceType',
   'userType',
   'login_type',
-  'agniveer_profile_id',
-  'agniveer_profile',
   'languagedata',
   'langId',
   'codeVerifier',
@@ -120,7 +113,6 @@ const COOKIE_KEYS = [
   'grid_filter',
   'returnUrl',
   'state',
-  'agniveer_session',
 ];
 
 function isSecureKey(key: string): boolean {

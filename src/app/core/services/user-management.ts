@@ -162,21 +162,9 @@ export class UserManagementService {
     const encryptedPayload = this.encryptPayload(payload);
 
     return this.http
-      .post<any>(this.apiURL + 'Users/GetALLRole', encryptedPayload, this.options)
-      .pipe(catchError(this.handleError.bind(this)));
-  }
-
-  getAllOrganizations(pageNumber: number = 1, recordPerPage: number = 20) {
-    const payload = {
-      is_draft: false,
-      page_number: pageNumber,
-      record_per_page: recordPerPage,
-    };
-
-    const encryptedPayload = this.encryptPayload(payload);
-
-    return this.http
-      .post<any>(this.apiURL + 'OrganisationMaster/GetAll', encryptedPayload, this.options)
+      .post<any>(this.apiURL + 'Users/GetALLRole', 
+        encryptedPayload, 
+        this.options)
       .pipe(catchError(this.handleError.bind(this)));
   }
 

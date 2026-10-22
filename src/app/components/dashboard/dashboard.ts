@@ -7,7 +7,6 @@ import { ScheduleItem, ScheduleService } from '../../services/schedule/schedule'
 import { JobNotificationService } from '../../services/notification/notification';
 import { CryptoHelper } from '../../helpers/crypto-helper';
 import { environment } from '../../../environments/environment';
-import { NewnotificationService } from '../../core/services/newnotification';
 
 export interface OpeningNotification {
   srNo: number;
@@ -62,7 +61,6 @@ export class Dashboard implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly scheduleService = inject(ScheduleService);
   private readonly jobNotificationService = inject(JobNotificationService);
-  readonly notificationService = inject(NewnotificationService);
   private readonly authService = inject(AuthService);
 
   readonly isInitialLoading = signal<boolean>(true);
@@ -115,218 +113,168 @@ export class Dashboard implements OnInit {
 
   ngOnInit(): void {
     // 1. Fetch Dashboard Stats Count
-    this.fetchDashboardCounts();
+    // this.fetchDashboardCounts();
 
     // 2. Fetch Schedule first, then Job Notifications
-    this.loadScheduleAndNotifications();
-    this.loadNotifications();
+    // this.loadScheduleAndNotifications();
   }
 
-  loadNotifications(): void {
-    this.notificationService.getAll().subscribe({
-      next: (response: any) => {
-        try {
-          let encryptedData = response;
+  // fetchDashboardCounts(): void {
+  //   this.dashboardService.getDashboardData().subscribe({
+  //     next: (res: any) => {
+  //       // console.log('Dashboard Count API Response:', res);
+  //       if (res && res.code === 1 && res.data) {
+  //         try {
+  //           const dec = CryptoHelper.decrypt(res.data);
+  //           let data = typeof dec === 'string' ? JSON.parse(dec) : dec;
+  //           if (typeof data === 'string') {
+  //             data = JSON.parse(data);
+  //           }
+  //           // console.log('Dashboard Count API Decrypted Response:', data);
 
-          if (typeof response === 'object') {
-            encryptedData = response?.data ?? response?.result ?? response?.response ?? response;
-          }
+  //           const raw = Array.isArray(data)
+  //             ? data[0]
+  //             : data?.Table && Array.isArray(data.Table)
+  //               ? data.Table[0]
+  //               : (data?.data ?? data);
 
-          const decryptedData = CryptoHelper.decrypt(encryptedData);
+  //           const hitCount = Number(raw.website_hit_count ?? raw.websiteHitCount ?? 0);
 
-          let finalData: any = decryptedData;
+  //           const departmentCount = Number(
+  //             raw.DepartmentSessionCount ?? raw.departmentSessionCount ?? 0,
+  //           );
 
-          if (typeof decryptedData === 'string') {
-            try {
-              finalData = JSON.parse(decryptedData);
-            } catch {
-              finalData = {};
-            }
-          }
+  //           const allAgniveersSession = Number(
+  //             raw.AgniveerSessionCount ?? raw.agniveerSessionCount ?? 0,
+  //           );
 
-          const records = Array.isArray(finalData?.records) ? finalData.records : [];
+  //           if (raw && typeof raw === 'object') {
+  //             const allAgniveers = Number(
+  //               raw.all_agniveers_count ??
+  //                 raw.AllAgniveersCount ??
+  //                 raw.allAgniveersCount ??
+  //                 raw.total_agniveers_count ??
+  //                 raw.total_agniveers ??
+  //                 this.stats().agniveerCount,
+  //             );
 
-          const activeNotifications: DashboardNotificationItem[] = records
-            .filter((item: any) => item.IsActive === true)
-            .map((item: any) => ({
-              id: String(item.Id),
-              title: item.NotificationTitle ?? '',
-              description: item.Description ?? '',
-              attachmentPath: item.AttachmentPath ?? '',
-              createdAt: item.CreatedAt ?? '',
-              isActive: item.IsActive === true,
-            }));
+  //             const rehab = Number(
+  //               raw.rehabilitated_agniveers_count ??
+  //                 raw.RehabilitatedAgniveersCount ??
+  //                 raw.rehabilitatedAgniveersCount ??
+  //                 raw.rehab_count ??
+  //                 this.stats().rehabCount,
+  //             );
 
-          this.notifications.set(activeNotifications);
-        } catch (error) {
-          console.error('Notification processing error:', error);
-          this.notifications.set([]);
-        }
-      },
+  //             const orgTypeCount = Number(
+  //               raw.organisation_type_count ??
+  //                 raw.OrganisationTypeCount ??
+  //                 raw.organisationTypeCount ??
+  //                 raw.sub_entity_count ??
+  //                 this.stats().subEntityCount,
+  //             );
 
-      error: (error: any) => {
-        console.error('Dashboard Notification API Error:', error);
-        this.notifications.set([]);
-      },
-    });
-  }
+  //             const orgCount = Number(
+  //               raw.organisation_count ??
+  //                 raw.OrganisationCount ??
+  //                 raw.organisationCount ??
+  //                 raw.entity_count ??
+  //                 this.stats().entityCount,
+  //             );
 
-  fetchDashboardCounts(): void {
-    this.dashboardService.getDashboardData().subscribe({
-      next: (res: any) => {
-        // console.log('Dashboard Count API Response:', res);
-        if (res && res.code === 1 && res.data) {
-          try {
-            const dec = CryptoHelper.decrypt(res.data);
-            let data = typeof dec === 'string' ? JSON.parse(dec) : dec;
-            if (typeof data === 'string') {
-              data = JSON.parse(data);
-            }
-            // console.log('Dashboard Count API Decrypted Response:', data);
+  //             const jobNotifCount = Number(
+  //               raw.job_notification_count ??
+  //                 raw.JobNotificationCount ??
+  //                 raw.jobNotificationCount ??
+  //                 raw.opening_count ??
+  //                 this.stats().openingCount,
+  //             );
 
-            const raw = Array.isArray(data)
-              ? data[0]
-              : data?.Table && Array.isArray(data.Table)
-                ? data.Table[0]
-                : (data?.data ?? data);
+  //             const toBeRehab = allAgniveers - rehab;
 
-            const hitCount = Number(raw.website_hit_count ?? raw.websiteHitCount ?? 0);
+  //             const partBFill = Number(
+  //               raw.Agniveer_partB_countfill ??
+  //                 raw.Agniveer_partB_countFill ??
+  //                 raw.agniveer_partB_countfill ??
+  //                 raw.agniveer_partb_countfill ??
+  //                 raw.Agniveer_partb_countfill ??
+  //                 raw.Agniveer_partB_count_fill ??
+  //                 raw.agniveer_partb_count_fill,
+  //             );
 
-            const departmentCount = Number(
-              raw.DepartmentSessionCount ?? raw.departmentSessionCount ?? 0,
-            );
+  //             const partBNotFill = Number(
+  //               raw.Agniveer_partB_countNotfill ??
+  //                 raw.Agniveer_partB_countnotfill ??
+  //                 raw.Agniveer_partB_countNotFill ??
+  //                 raw.agniveer_partB_countNotfill ??
+  //                 raw.agniveer_partb_countnotfill ??
+  //                 raw.Agniveer_partb_countnotfill ??
+  //                 raw.Agniveer_partB_count_notfill ??
+  //                 raw.agniveer_partb_count_notfill,
+  //             );
 
-            const allAgniveersSession = Number(
-              raw.AgniveerSessionCount ?? raw.agniveerSessionCount ?? 0,
-            );
+  //             const partCFill = Number(
+  //               raw.Agniveer_partC_countfill ??
+  //                 raw.Agniveer_partC_countFill ??
+  //                 raw.agniveer_partC_countfill ??
+  //                 raw.agniveer_partc_countfill ??
+  //                 raw.Agniveer_partc_countfill ??
+  //                 raw.Agniveer_partC_count_fill ??
+  //                 raw.agniveer_partc_count_fill,
+  //             );
 
-            if (raw && typeof raw === 'object') {
-              const allAgniveers = Number(
-                raw.all_agniveers_count ??
-                  raw.AllAgniveersCount ??
-                  raw.allAgniveersCount ??
-                  raw.total_agniveers_count ??
-                  raw.total_agniveers ??
-                  this.stats().agniveerCount,
-              );
+  //             const agniveerPreferenceDraftCount = Number(
+  //               raw.AgniveerPreferenceDraftCount ?? raw.agniveerPreferenceDraftCount ?? 0,
+  //             );
 
-              const rehab = Number(
-                raw.rehabilitated_agniveers_count ??
-                  raw.RehabilitatedAgniveersCount ??
-                  raw.rehabilitatedAgniveersCount ??
-                  raw.rehab_count ??
-                  this.stats().rehabCount,
-              );
+  //             const partCNotFill = Number(
+  //               raw.Agniveer_partC_countnotfill ??
+  //                 raw.Agniveer_partC_countNotfill ??
+  //                 raw.Agniveer_partC_countNotFill ??
+  //                 raw.agniveer_partC_countnotfill ??
+  //                 raw.agniveer_partc_countnotfill ??
+  //                 raw.Agniveer_partc_countnotfill ??
+  //                 raw.Agniveer_partC_count_notfill ??
+  //                 raw.agniveer_partc_count_notfill,
+  //             );
 
-              const orgTypeCount = Number(
-                raw.organisation_type_count ??
-                  raw.OrganisationTypeCount ??
-                  raw.organisationTypeCount ??
-                  raw.sub_entity_count ??
-                  this.stats().subEntityCount,
-              );
-
-              const orgCount = Number(
-                raw.organisation_count ??
-                  raw.OrganisationCount ??
-                  raw.organisationCount ??
-                  raw.entity_count ??
-                  this.stats().entityCount,
-              );
-
-              const jobNotifCount = Number(
-                raw.job_notification_count ??
-                  raw.JobNotificationCount ??
-                  raw.jobNotificationCount ??
-                  raw.opening_count ??
-                  this.stats().openingCount,
-              );
-
-              const toBeRehab = allAgniveers - rehab;
-
-              const partBFill = Number(
-                raw.Agniveer_partB_countfill ??
-                  raw.Agniveer_partB_countFill ??
-                  raw.agniveer_partB_countfill ??
-                  raw.agniveer_partb_countfill ??
-                  raw.Agniveer_partb_countfill ??
-                  raw.Agniveer_partB_count_fill ??
-                  raw.agniveer_partb_count_fill,
-              );
-
-              const partBNotFill = Number(
-                raw.Agniveer_partB_countNotfill ??
-                  raw.Agniveer_partB_countnotfill ??
-                  raw.Agniveer_partB_countNotFill ??
-                  raw.agniveer_partB_countNotfill ??
-                  raw.agniveer_partb_countnotfill ??
-                  raw.Agniveer_partb_countnotfill ??
-                  raw.Agniveer_partB_count_notfill ??
-                  raw.agniveer_partb_count_notfill,
-              );
-
-              const partCFill = Number(
-                raw.Agniveer_partC_countfill ??
-                  raw.Agniveer_partC_countFill ??
-                  raw.agniveer_partC_countfill ??
-                  raw.agniveer_partc_countfill ??
-                  raw.Agniveer_partc_countfill ??
-                  raw.Agniveer_partC_count_fill ??
-                  raw.agniveer_partc_count_fill,
-              );
-
-              const agniveerPreferenceDraftCount = Number(
-                raw.AgniveerPreferenceDraftCount ?? raw.agniveerPreferenceDraftCount ?? 0,
-              );
-
-              const partCNotFill = Number(
-                raw.Agniveer_partC_countnotfill ??
-                  raw.Agniveer_partC_countNotfill ??
-                  raw.Agniveer_partC_countNotFill ??
-                  raw.agniveer_partC_countnotfill ??
-                  raw.agniveer_partc_countnotfill ??
-                  raw.Agniveer_partc_countnotfill ??
-                  raw.Agniveer_partC_count_notfill ??
-                  raw.agniveer_partc_count_notfill,
-              );
-
-              this.stats.update((s) => ({
-                ...s,
-                agniveerCount: allAgniveers,
-                rehabCount: rehab,
-                toBeRehabCount: toBeRehab >= 0 ? toBeRehab : 0,
-                subEntityCount: orgTypeCount,
-                entityCount: orgCount,
-                agniveerSessionCount: allAgniveersSession,
-                hitCount,
-                departmentCount,
-                openingCount: jobNotifCount,
-                currentOpeningCount: jobNotifCount,
-                agniveerPartBCountFill: partBFill,
-                agniveerPartBCountNotFill: partBNotFill,
-                agniveerPartCCountFill: partCFill,
-                agniveerPartCCountNotFill: partCNotFill,
-                agniveerPreferenceDraftCount: agniveerPreferenceDraftCount,
-              }));
-            }
-            this.isInitialLoading.set(false);
-          } catch (e) {
-            console.error('Error decrypting dashboard count data:', e);
-            // this.isInitialLoading.set(false);
-            this.router.navigate(['/']);
-          }
-        } else {
-          // this.isInitialLoading.set(false);
-          this.router.navigate(['/']);
-        }
-      },
-      error: (err: any) => {
-        console.error('Dashboard Count API Error:', err);
-        // this.isInitialLoading.set(false);
-        this.router.navigate(['/']);
-      },
-    });
-  }
+  //             this.stats.update((s) => ({
+  //               ...s,
+  //               agniveerCount: allAgniveers,
+  //               rehabCount: rehab,
+  //               toBeRehabCount: toBeRehab >= 0 ? toBeRehab : 0,
+  //               subEntityCount: orgTypeCount,
+  //               entityCount: orgCount,
+  //               agniveerSessionCount: allAgniveersSession,
+  //               hitCount,
+  //               departmentCount,
+  //               openingCount: jobNotifCount,
+  //               currentOpeningCount: jobNotifCount,
+  //               agniveerPartBCountFill: partBFill,
+  //               agniveerPartBCountNotFill: partBNotFill,
+  //               agniveerPartCCountFill: partCFill,
+  //               agniveerPartCCountNotFill: partCNotFill,
+  //               agniveerPreferenceDraftCount: agniveerPreferenceDraftCount,
+  //             }));
+  //           }
+  //           this.isInitialLoading.set(false);
+  //         } catch (e) {
+  //           console.error('Error decrypting dashboard count data:', e);
+  //           // this.isInitialLoading.set(false);
+  //           this.router.navigate(['/']);
+  //         }
+  //       } else {
+  //         // this.isInitialLoading.set(false);
+  //         this.router.navigate(['/']);
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Dashboard Count API Error:', err);
+  //       // this.isInitialLoading.set(false);
+  //       this.router.navigate(['/']);
+  //     },
+  //   });
+  // }
 
   hasNotifications(): boolean {
     return this.notifications().length > 0;
@@ -394,90 +342,90 @@ export class Dashboard implements OnInit {
    * First calls Schedule API to obtain active schedule and round,
    * and subsequently calls Job Notifications API.
    */
-  loadScheduleAndNotifications(): void {
-    const payload = {};
-    const encrypted = CryptoHelper.encrypt(JSON.stringify(payload));
-    const encryptedPayload = JSON.stringify(encrypted);
+  // loadScheduleAndNotifications(): void {
+  //   const payload = {};
+  //   const encrypted = CryptoHelper.encrypt(JSON.stringify(payload));
+  //   const encryptedPayload = JSON.stringify(encrypted);
 
-    // 1. Call Schedule API first
-    this.scheduleService.getActiveSchedule(encryptedPayload).subscribe({
-      next: (scheduleRes: any) => {
-        let activeSchedule: any = null;
-        if (scheduleRes?.code === 1 && scheduleRes?.data) {
-          try {
-            const scheduleData = JSON.parse(CryptoHelper.decrypt(scheduleRes.data));
-            const schedule = scheduleData?.Schedule ?? scheduleData?.schedule ?? scheduleData;
-            if (schedule && typeof schedule === 'object' && Object.keys(schedule).length > 0) {
-              activeSchedule = Array.isArray(schedule) ? schedule[0] : schedule;
-              this.activeScheduleData.set(activeSchedule);
-              // console.log('[DashboardComponent] Active Schedule Loaded:', activeSchedule);
-            }
-          } catch (e) {
-            console.error('[DashboardComponent] Error decrypting schedule:', e);
-          }
-        }
+  //   // 1. Call Schedule API first
+  //   this.scheduleService.getActiveSchedule(encryptedPayload).subscribe({
+  //     next: (scheduleRes: any) => {
+  //       let activeSchedule: any = null;
+  //       if (scheduleRes?.code === 1 && scheduleRes?.data) {
+  //         try {
+  //           const scheduleData = JSON.parse(CryptoHelper.decrypt(scheduleRes.data));
+  //           const schedule = scheduleData?.Schedule ?? scheduleData?.schedule ?? scheduleData;
+  //           if (schedule && typeof schedule === 'object' && Object.keys(schedule).length > 0) {
+  //             activeSchedule = Array.isArray(schedule) ? schedule[0] : schedule;
+  //             this.activeScheduleData.set(activeSchedule);
+  //             // console.log('[DashboardComponent] Active Schedule Loaded:', activeSchedule);
+  //           }
+  //         } catch (e) {
+  //           console.error('[DashboardComponent] Error decrypting schedule:', e);
+  //         }
+  //       }
 
-        // 2. Then call Job Notification List API
-        this.loadJobNotifications(activeSchedule);
-      },
-      error: (err: any) => {
-        // Call Job Notifications API even if schedule fails
-        this.loadJobNotifications(null);
-      },
-    });
-  }
+  //       // 2. Then call Job Notification List API
+  //       this.loadJobNotifications(activeSchedule);
+  //     },
+  //     error: (err: any) => {
+  //       // Call Job Notifications API even if schedule fails
+  //       this.loadJobNotifications(null);
+  //     },
+  //   });
+  // }
 
-  loadJobNotifications(activeSchedule: any): void {
-    const payload = {
-      page_number: 1,
-      record_per_page: 50,
-    };
-    const encrypted = CryptoHelper.encrypt(JSON.stringify(payload));
-    const bodyToSend = JSON.stringify(encrypted);
+  // loadJobNotifications(activeSchedule: any): void {
+  //   const payload = {
+  //     page_number: 1,
+  //     record_per_page: 50,
+  //   };
+  //   const encrypted = CryptoHelper.encrypt(JSON.stringify(payload));
+  //   const bodyToSend = JSON.stringify(encrypted);
 
-    this.jobNotificationService.getJobNotificationList(bodyToSend).subscribe({
-      next: (res: any) => {
-        // console.log('[DashboardComponent] job_notification_list Raw Response:', res);
+  //   this.jobNotificationService.getJobNotificationList(bodyToSend).subscribe({
+  //     next: (res: any) => {
+  //       // console.log('[DashboardComponent] job_notification_list Raw Response:', res);
 
-        let data: any = null;
-        const cipher = typeof res === 'string' ? res : res?.data;
-        if (cipher && typeof cipher === 'string') {
-          try {
-            const decryptedString = CryptoHelper.decrypt(cipher);
-            try {
-              data = JSON.parse(decryptedString);
-            } catch {
-              data = decryptedString;
-            }
+  //       let data: any = null;
+  //       const cipher = typeof res === 'string' ? res : res?.data;
+  //       if (cipher && typeof cipher === 'string') {
+  //         try {
+  //           const decryptedString = CryptoHelper.decrypt(cipher);
+  //           try {
+  //             data = JSON.parse(decryptedString);
+  //           } catch {
+  //             data = decryptedString;
+  //           }
 
-            // console.log('[DashboardComponent] job_notification_list Decrypted Data:', data);
-          } catch (e) {
-            console.error('[DashboardComponent] Failed to decrypt notification data:', e);
-          }
-        } else if (res && typeof res === 'object') {
-          data = res.decryptedData ?? res.data ?? res;
-        }
+  //           // console.log('[DashboardComponent] job_notification_list Decrypted Data:', data);
+  //         } catch (e) {
+  //           console.error('[DashboardComponent] Failed to decrypt notification data:', e);
+  //         }
+  //       } else if (res && typeof res === 'object') {
+  //         data = res.decryptedData ?? res.data ?? res;
+  //       }
 
-        if (data) {
-          const list = Array.isArray(data)
-            ? data
-            : data?.list ||
-              data?.records ||
-              data?.JobNotifications ||
-              data?.job_notifications ||
-              data?.JobNotificationList ||
-              data?.data;
+  //       if (data) {
+  //         const list = Array.isArray(data)
+  //           ? data
+  //           : data?.list ||
+  //             data?.records ||
+  //             data?.JobNotifications ||
+  //             data?.job_notifications ||
+  //             data?.JobNotificationList ||
+  //             data?.data;
 
-          if (Array.isArray(list)) {
-            this.partitionNotifications(list, activeSchedule);
-          }
-        }
-      },
-      error: (err: any) => {
-        console.error('[DashboardComponent] Error fetching job notifications:', err);
-      },
-    });
-  }
+  //         if (Array.isArray(list)) {
+  //           this.partitionNotifications(list, activeSchedule);
+  //         }
+  //       }
+  //     },
+  //     error: (err: any) => {
+  //       console.error('[DashboardComponent] Error fetching job notifications:', err);
+  //     },
+  //   });
+  // }
 
   private isItemPublished(item: any): boolean {
     const val =

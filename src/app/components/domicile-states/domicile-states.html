@@ -80,7 +80,7 @@
       <div class="ag-theme-quartz domicile-states-grid">
         <ag-grid-angular style="width: 100%; height: 100%" [rowData]="rowData" [columnDefs]="colDefs"
           [defaultColDef]="defaultColDef" [rowHeight]="rowHeight" [headerHeight]="headerHeight" [pagination]="false"
-          (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)" />
+          (gridReady)="onGridReady($event)"  />
       </div>
 
       <!-- SERVER SIDE PAGINATION FOOTER -->
@@ -154,9 +154,6 @@
           </div>
         </div>
 
-        <button type="button" class="publish-btn" (click)="openCategoryAddModal()">
-          ADD CATEGORY
-        </button>
       </div>
 
       <!-- CATEGORY TABLE -->
@@ -330,195 +327,6 @@
         </button>
       </div>
     </form>
-  </div>
-</div>
-}
-
-<!-- ===================================================== -->
-<!-- ADD CATEGORY MODAL -->
-<!-- ===================================================== -->
-
-@if (isCategoryModalOpen()) {
-<div class="modal-overlay">
-  <div class="category-add-modal">
-    <!-- HEADER -->
-    <div class="category-modal-header">
-      <div>
-        <h3>Add New Category</h3>
-        <p>
-          Add category for
-          <strong>
-            {{ selectedStateForCategory()?.state_name }}
-          </strong>
-        </p>
-      </div>
-
-      <button type="button" class="category-modal-close" (click)="closeCategoryAddModal()">
-        ×
-      </button>
-    </div>
-
-    <!-- BODY -->
-    <div class="category-modal-body">
-      <!-- CATEGORY TYPE -->
-      <div class="category-type-section">
-        <label class="category-radio-card">
-          <input type="radio" name="categoryType" value="central" [checked]="categoryType === 'central'"
-            (change)="onCategoryTypeChange('central')" />
-
-          <span class="category-radio"></span>
-
-          <span class="category-radio-content">
-            <strong>Central Category</strong>
-          </span>
-        </label>
-
-        <label class="category-radio-card">
-          <input type="radio" name="categoryType" value="new" [checked]="categoryType === 'new'"
-            (change)="onCategoryTypeChange('new')" />
-
-          <span class="category-radio"></span>
-
-          <span class="category-radio-content">
-            <strong>New Category</strong>
-          </span>
-        </label>
-      </div>
-
-      <!-- CENTRAL CATEGORY -->
-      @if (categoryType === 'central') {
-      <div class="category-form-group">
-        <!-- CENTRAL CATEGORY -->
-        @if (categoryType === 'central') {
-        <div class="category-form-group">
-          <label>
-            Central Category
-            <span>*</span>
-          </label>
-
-          <!-- CUSTOM MULTI SELECT -->
-          <div class="custom-multi-select">
-            <!-- SELECT BOX -->
-            <div class="multi-select-control" [class.multi-select-invalid]="
-                      centralCategorySubmitted && selectedCentralCategoryIds.length === 0
-                    " (click)="toggleCategoryDropdown()">
-              <div class="selected-category-content">
-                @if (selectedCentralCategoryIds.length === 0) {
-                <span class="multi-select-placeholder"> Select Central Category </span>
-                } @else {
-                <div class="selected-category-chips">
-                  @for (
-                  category of getSelectedCentralCategories();
-                  track category.autocategory_id
-                  ) {
-                  <span class="category-chip">
-                    {{ category.category }}
-
-                    <button type="button" class="category-chip-remove" (click)="
-                                  removeCentralCategory(category.autocategory_id);
-                                  $event.stopPropagation()
-                                ">
-                      ×
-                    </button>
-                  </span>
-                  }
-                </div>
-                }
-              </div>
-
-              <span class="multi-select-arrow" [class.arrow-up]="categoryDropdownOpen">
-                ▾
-              </span>
-            </div>
-
-            <!-- DROPDOWN -->
-            @if (categoryDropdownOpen) {
-            <div class="multi-select-dropdown" (click)="$event.stopPropagation()">
-              <!-- SEARCH -->
-              <div class="category-search-wrapper">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-
-                <input type="text" [ngModel]="categorySearchText" (ngModelChange)="onCategorySearchChange($event)"
-                  name="categorySearch" placeholder="Search category..." autocomplete="off" />
-              </div>
-
-              <div class="category-options">
-                @for (
-                category of filteredCentralCategories;
-                track category.autocategory_id
-                ) {
-                <div class="category-option" [class.category-option-selected]="
-                              isCentralCategorySelected(category.autocategory_id)
-                            " (click)="toggleCentralCategory(category.autocategory_id)">
-                  <span class="category-option-name">
-                    {{ category.category }}
-                  </span>
-
-                  @if (isCentralCategorySelected(category.autocategory_id)) {
-                  <span class="selected-check">✓</span>
-                  }
-                </div>
-                } @empty {
-                <div class="no-category-found">No category found</div>
-                }
-              </div>
-            </div>
-            }
-          </div>
-
-          <!-- VALIDATION -->
-          @if (centralCategorySubmitted && selectedCentralCategoryIds.length === 0) {
-          <div class="validation-error">Please select at least one Central Category.</div>
-          }
-        </div>
-        }
-      </div>
-      }
-
-      <!-- NEW CATEGORY -->
-      @if (categoryType === 'new') {
-      <div class="category-form-group">
-        <label>
-          Category Name
-          <span>*</span>
-        </label>
-
-        <input type="text" [(ngModel)]="categoryFormData.category" name="category_name" #categoryNameCtrl="ngModel"
-          required minlength="2" maxlength="100" pattern="^[A-Za-z0-9 _()/-]+$" placeholder="e.g., OBC-ASS"
-          (keydown)="preventCategoryNameInvalidCharacters($event)" (input)="sanitizeCategoryName()" />
-
-        @if (categoryNameCtrl.invalid && (categoryNameCtrl.touched || newCategorySubmitted)) {
-        <div class="validation-error">
-          @if (categoryNameCtrl.errors?.['required']) {
-          Category Name is required.
-          } @else if (categoryNameCtrl.errors?.['minlength']) {
-          Category Name must be at least 2 characters.
-          } @else if (categoryNameCtrl.errors?.['pattern']) {
-          Only letters, numbers, spaces, underscore (_), hyphen (-), slash (/), and parentheses are allowed.
-          }
-        </div>
-        }
-      </div>
-      }
-    </div>
-
-    <!-- FOOTER -->
-    <div class="category-modal-footer">
-      <button type="button" class="category-cancel-btn" (click)="closeCategoryAddModal()">
-        CANCEL
-      </button>
-
-      <button type="button" class="category-save-btn" [disabled]="isAddingCategory()" (click)="addCategoryToState()">
-        @if (isAddingCategory()) {
-        Adding...
-        } @else {
-        ADD CATEGORY
-        }
-      </button>
-    </div>
   </div>
 </div>
 }

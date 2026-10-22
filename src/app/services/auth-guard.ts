@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth';
-import { LoginService } from './login-service';
-import { firstValueFrom } from 'rxjs';
 
 export interface ValidateSessionResponse {
   success?: boolean;
@@ -17,7 +14,6 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private loginService: LoginService,
   ) {}
 
   async canActivate(route?: ActivatedRouteSnapshot, state?: RouterStateSnapshot): Promise<boolean> {
@@ -27,33 +23,7 @@ export class AuthGuard implements CanActivate {
     const user = this.authService.getCurrentUser();
     const role = typeof window !== 'undefined' ? sessionStorage.getItem('role') : null;
 
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`).set('token', token);
-    }
-
-    try {
-      const response: ValidateSessionResponse = await firstValueFrom(
-        this.loginService.validateSessionAPI(token ? { token } : {}, { headers }),
-      );
-      const { success } = response;
-
-      // console.log('[AuthGuard] validateSessionAPI response:', response);
-
-      if (!success) {
-        this.clearSessionAndCookies();
-        this.router.navigate(['/unauthrize']);
-        return false;
-      }
-    } catch (error) {
-      // console.error('[AuthGuard] validateSessionAPI error:', error);
-      this.clearSessionAndCookies();
-      this.router.navigate(['/unauthrize']);
-      return false;
-    }
+    
 
     // Check role restrictions if defined on route data (e.g., data: { roles: [1, 13] })
     const rawRoles = route?.data?.['roles'] ?? route?.data?.['role'];
@@ -103,49 +73,62 @@ export class AuthGuard implements CanActivate {
   }
 
   private getActiveRoleId(user: any, sessionRole: string | null): number {
-    // 1. Check AuthService getRoleId (memory, session, cookie)
+    // 1. AuthService
     const serviceRoleId = Number(this.authService.getRoleId());
+
     if (!isNaN(serviceRoleId) && serviceRoleId > 0) {
       return serviceRoleId;
     }
 
-    // 2. Check sessionStorage 'role'
+    // 2. sessionStorage
     if (sessionRole) {
       const parsedSession = Number(sessionRole);
+
       if (!isNaN(parsedSession) && parsedSession > 0) {
         return parsedSession;
       }
     }
 
-    // 3. Check current user object
+    // 3. Current user object
     if (user) {
       const userRoleId = Number(
-        user.roleId ??
-          user.roleid ??
-          user.role_id ??
-          user.rolId ??
-          user.rolid ??
-          user.rol_id ??
-          user.currentRoleId ??
-          user.activeRoleId,
+        user?.RoleId ??
+          user?.roleId ??
+          user?.roleid ??
+          user?.role_id ??
+          user?.rolId ??
+          user?.rolid ??
+          user?.rol_id ??
+          user?.currentRoleId ??
+          user?.activeRoleId,
       );
+
       if (!isNaN(userRoleId) && userRoleId > 0) {
         return userRoleId;
       }
 
-      if (Array.isArray(user.roles) && user.roles.length > 0) {
-        const firstRole = user.roles[0];
-        const rId = Number(
-          typeof firstRole === 'object'
-            ? (firstRole?.roleId ??
-                firstRole?.roleid ??
-                firstRole?.role_id ??
-                firstRole?.rolId ??
-                firstRole?.rolid)
-            : firstRole,
-        );
-        if (!isNaN(rId) && rId > 0) {
-          return rId;
+      // 4. Roles array
+      if (Array.isArray(user?.roles) && user.roles.length > 0) {
+        const roleIds = user.roles
+          .map((role: any) => {
+            if (typeof role === 'number') {
+              return Number(role);
+            }
+
+            return Number(
+              role?.RoleId ??
+                role?.roleId ??
+                role?.roleid ??
+                role?.role_id ??
+                role?.rolId ??
+                role?.rolid ??
+                role?.rol_id,
+            );
+          })
+          .filter((id: number) => !isNaN(id) && id > 0);
+
+        if (roleIds.length > 0) {
+          return roleIds[0];
         }
       }
     }

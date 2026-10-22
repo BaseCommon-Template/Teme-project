@@ -5,7 +5,6 @@ import { Observable, tap } from 'rxjs';
 import { API_ENDPOINTS } from './api-config';
 import { Session, SessionUser } from '../models/user.model';
 
-const SESSION_KEY = 'agniveer_session';
 const USER_SESSION_KEY = 'user_session';
 const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -108,12 +107,6 @@ export class AuthService {
     return false;
   }
 
-  getLoginType(): 'direct' | 'SSO' | 'agniveer' | null {
-    if (typeof window === 'undefined') return null;
-    const type = sessionStorage.getItem('login_type');
-    if (type === 'direct' || type === 'SSO' || type === 'agniveer') return type;
-    return null;
-  }
 
   getSession(): Session | null {
     if (typeof window === 'undefined') return null;
@@ -132,19 +125,6 @@ export class AuthService {
       }
     }
 
-    const sessionStr = sessionStorage.getItem(SESSION_KEY);
-    if (sessionStr) {
-      try {
-        const session: Session = JSON.parse(sessionStr);
-        if (Date.now() - session.loginTime > SESSION_TIMEOUT) {
-          this.logout();
-          return null;
-        }
-        return session;
-      } catch (e) {
-        console.error('Error parsing agniveer_session:', e);
-      }
-    }
     return null;
   }
 
@@ -176,15 +156,6 @@ export class AuthService {
       }
     }
 
-    if (loginType === 'agniveer') {
-      const agniveerSessionStr = sessionStorage.getItem(SESSION_KEY);
-      if (agniveerSessionStr) {
-        try {
-          const parsed = JSON.parse(agniveerSessionStr);
-          return parsed.user ?? null;
-        } catch {}
-      }
-    }
 
     // Fallback: Check direct cookie / storage
     if (this.getAccessToken()) {
@@ -288,19 +259,6 @@ export class AuthService {
     );
   }
 
-  setAgniveerSession(userOrSession: any, profileId?: string, profileData?: any): void {
-    const user: SessionUser = userOrSession.user ? userOrSession.user : userOrSession;
-    const session: Session = { user, loginTime: Date.now() };
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    if (profileId) {
-      sessionStorage.setItem('agniveer_profile_id', profileId);
-    }
-    if (profileData) {
-      sessionStorage.setItem('agniveer_profile', JSON.stringify(profileData));
-    }
-    sessionStorage.setItem('login_type', 'agniveer');
-    this.syncUserFromStorage();
-  }
 
   updateUserRole(roleId: number, roleName: string): Observable<any> {
     return this.http.post<any>(API_ENDPOINTS.UPDATE_USER_ROLE, { role_id: roleId }).pipe(

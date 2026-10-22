@@ -1,10 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 import { MyProfileService } from '../../services/myprofile/myprofile';
+import { PublicMenuService } from '../../services/public-menu';
 import { CryptoHelper } from '../../helpers/crypto-helper';
 
 @Component({
@@ -14,14 +15,39 @@ import { CryptoHelper } from '../../helpers/crypto-helper';
   templateUrl: './update-website-status.html',
   styleUrl: './update-website-status.css',
 })
-export class UpdateWebsiteStatusComponent {
+export class UpdateWebsiteStatusComponent implements OnInit {
   private readonly myProfileService = inject(MyProfileService);
+  private readonly publicMenuService = inject(PublicMenuService);
 
-  readonly isWebsiteOpen = signal<boolean>(true);
+  readonly isWebsiteOpen = signal<boolean>(false);
   readonly isSubmitting = signal<boolean>(false);
 
   toggleWebsiteStatus(): void {
     this.isWebsiteOpen.update((val) => !val);
+  }
+
+  ngOnInit(): void {
+    this.getWebsiteStatus();
+  }
+
+  private getWebsiteStatus(): void {
+    this.publicMenuService.checkWebsiteAccess().subscribe({
+      next: (response: any) => {
+        const status = response?.data?.iswebsiteopen;
+
+        const isOpen =
+          status === true ||
+          status === 1 ||
+          status === '1' ||
+          String(status).toLowerCase() === 'true';
+
+        this.isWebsiteOpen.set(isOpen);
+      },
+
+      error: (error: any) => {
+        console.error('❌ Failed to get website status:', error);
+      },
+    });
   }
 
   onSubmitStatus(event?: Event): void {
@@ -47,11 +73,26 @@ export class UpdateWebsiteStatusComponent {
             const rawDecrypted = CryptoHelper.decrypt(response.data);
             decryptedData =
               typeof rawDecrypted === 'string' ? JSON.parse(rawDecrypted) : rawDecrypted;
+            // console.log('[UpdateWebsiteStatusComponent] Decrypted response data:', decryptedData);
+            const savedStatus =
+              decryptedData?.iswebsiteopen === true ||
+              decryptedData?.iswebsiteopen === 1 ||
+              decryptedData?.iswebsiteopen === '1' ||
+              String(decryptedData?.iswebsiteopen).toLowerCase() === 'true';
+
+            this.isWebsiteOpen.set(savedStatus);
           } catch (e) {
             decryptedData = response.data;
           }
         } else {
           decryptedData = response;
+          const savedStatus =
+            decryptedData?.iswebsiteopen === true ||
+            decryptedData?.iswebsiteopen === 1 ||
+            decryptedData?.iswebsiteopen === '1' ||
+            String(decryptedData?.iswebsiteopen).toLowerCase() === 'true';
+
+          this.isWebsiteOpen.set(savedStatus);
         }
 
         const statusLabel = this.isWebsiteOpen() ? 'OPEN (Active)' : 'CLOSED (Inactive)';

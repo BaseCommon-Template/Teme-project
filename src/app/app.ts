@@ -170,11 +170,9 @@ export class App implements OnInit {
               userName: loginData.userName || loginData.userId || '',
               username: loginData.userName || loginData.userId || '',
               userautoId: loginData.userautoId,
-              agniveer_autoid: loginData.userautoId,
               autoid: loginData.userautoId,
               id: loginData.userautoId,
               userId: loginData.userId,
-              agniveerId: loginData.agniveerId || loginData.userId,
               forceTypeId: loginData.forceTypeId,
               forceType: loginData.forceType,
               userType: loginData.userType || '',
@@ -187,14 +185,9 @@ export class App implements OnInit {
             if (typeof sessionStorage !== 'undefined') {
               if (loginData.userautoId != null) {
                 sessionStorage.setItem('userautoId', String(loginData.userautoId));
-                sessionStorage.setItem('agniveer_autoid', String(loginData.userautoId));
-                sessionStorage.setItem('agniveerAutoid', String(loginData.userautoId));
               }
               if (loginData.userId != null) {
                 sessionStorage.setItem('userId', String(loginData.userId));
-              }
-              if (loginData.agniveerId != null) {
-                sessionStorage.setItem('agniveerId', String(loginData.agniveerId));
               }
               if (loginData.forceTypeId != null) {
                 sessionStorage.setItem('forceTypeId', String(loginData.forceTypeId));
@@ -213,7 +206,6 @@ export class App implements OnInit {
 
             localStorage.removeItem('codeVerifier');
 
-            // Handle roles (fallback for Agniveer where roles is empty array [])
             let effectiveRoles: any[] = loginData?.roles;
 
             const lowestRole = effectiveRoles[0];
@@ -334,13 +326,6 @@ export class App implements OnInit {
 
   private navigateAfterLogin(lowestRole: any, loginData?: any): void {
     const roleName = String(lowestRole?.RoleName || loginData?.userType).toLowerCase();
-    const isAgniveer = lowestRole?.RoleId === 11 || loginData?.userType === 'Agniveer';
 
-    if (isAgniveer) {
-      // this.router.navigate(['/dashboard-agniveer'], { replaceUrl: true });
-      this.router.navigate(['/career-progression/apply'], { replaceUrl: true });
-    } else {
-      this.router.navigate(['/'], { replaceUrl: true });
-    }
   }
 }

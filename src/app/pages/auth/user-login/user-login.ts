@@ -44,6 +44,16 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
   password = '';
   showPassword = false;
 
+  otp = '';
+  otpDigits: string[] = ['', '', '', '', '', ''];
+  otpRequired = false;
+
+  readonly otpTimer = signal(60);
+  otpTimerInterval: any = null;
+  readonly otpCancelEnabled = signal(false);
+
+  uniqueOtpRefId = 0;
+
   readonly isChangePasswordModalOpen = signal<boolean>(false);
 
   oldPassword = '';
@@ -174,12 +184,12 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
             if (typeof dec === 'string') {
               try {
                 dec = JSON.parse(dec);
-              } catch (e) { }
+              } catch (e) {}
             }
             if (typeof dec === 'string') {
               try {
                 dec = JSON.parse(dec);
-              } catch (e) { }
+              } catch (e) {}
             }
             decryptedData = dec;
           } catch (e) {
@@ -193,17 +203,13 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
 
         const key = decryptedData?.key || decryptedData?.Key || decryptedData?.key_code || '';
         const captcha =
-          decryptedData?.captcha ||
-          decryptedData?.Captcha ||
-          decryptedData?.captcha_code ||
-          '';
+          decryptedData?.captcha || decryptedData?.Captcha || decryptedData?.captcha_code || '';
 
         if (key || captcha) {
           this.captchaKey = String(key || Date.now());
           this.captchaCode = String(captcha || '');
         }
       },
-
     });
   }
 
@@ -335,9 +341,7 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     // =====================================================
 
     let menuReqParam: any = {
-      roleId: extractedRoleId,
       roleid: extractedRoleId,
-      langId: 1,
     };
 
     // console.log('Calling Get Menu By Role API with payload:', menuReqParam);
@@ -348,61 +352,122 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
 
     this.loginService.getMenuByRoleAPI(encryptedMenuParam).subscribe({
       next: (menuRes: any) => {
-        // console.log('Get Menu By Role API Response:', menuRes);
-        if (menuRes && menuRes.code === 1 && menuRes.data) {
-          try {
-            sessionStorage.removeItem('menudata');
-            sessionStorage.setItem('menudata', menuRes.data);
-            const decrypted = CryptoHelper.decrypt(menuRes.data);
-            const parsed = JSON.parse(decrypted);
-            // console.log('Decrypted Menu Response:', parsed);
+        try {
+          // =====================================================
+          // CHECK API RESPONSE
+          // =====================================================
+          if (!menuRes || menuRes.code !== 1 || !menuRes.data) {
+            console.warn('Get Menu By Role API returned no valid menu data.');
 
-            // Patch menus in MenuService and CommonService
-            this.menuService.patchMenus(parsed, extractedRoleId);
-          } catch (e) {
-            console.error('Failed to parse decrypted menus:', e);
-            this.menuService.refresh(false);
+            this.loading.set(false);
+
+            // No valid menu response = Unauthorized
+            this.router.navigate(['/unauthrize']);
+            return;
           }
-        } else if (menuRes?.data || Array.isArray(menuRes)) {
-          this.menuService.patchMenus(menuRes.data || menuRes, extractedRoleId);
-        } else {
-          this.menuService.refresh(false);
-        }
 
-        this.loading.set(false);
+          // =====================================================
+          // DECRYPT MENU RESPONSE
+          // =====================================================
+          sessionStorage.removeItem('menudata');
 
-        const dashboardRoute = extractedRoleId === 11 ? '/dashboard-agniveer' : '/dashboard';
+          const decrypted = CryptoHelper.decrypt(menuRes.data);
+          const parsed = JSON.parse(decrypted);
 
-        if (loginData?.ispasswordchange === false) {
+          // =====================================================
+          // GET MENU LIST
+          // =====================================================
+          const menuContainer = parsed?.menus;
+          const menuList = menuContainer?.Menus ?? [];
+
+          // console.log('Get Menu By Role - Menu List:', menuList);
+
+          // Store role menus
+          sessionStorage.setItem('menudata', JSON.stringify(menuList));
+
+          // Patch menus in MenuService
+          if (Array.isArray(menuList)) {
+            this.menuService.patchMenus(menuList, extractedRoleId);
+          }
+
+          if (loginData?.ispasswordchange === false) {
+            this.loading.set(false);
+            this.openChangePasswordModal();
+            return;
+          }
+
+          // =====================================================
+          // FIND FIRST LANDING MENU
+          // =====================================================
+          const landingMenu = Array.isArray(menuList)
+            ? menuList.find((menu: any) => {
+                const isLanding =
+                  menu?.IsLanding === true ||
+                  Number(menu?.IsLanding) === 1 ||
+                  String(menu?.IsLanding).toLowerCase() === 'true' ||
+                  String(menu?.IsLanding) === '1';
+
+                const isActive =
+                  menu?.Active !== false &&
+                  String(menu?.Active).toLowerCase() !== 'false' &&
+                  Number(menu?.Active) !== 0;
+
+                const controllerName = String(menu?.ControllerName ?? '').trim();
+
+                return isLanding && isActive && !!controllerName;
+              })
+            : null;
+
+          // console.log('First Landing Menu:', landingMenu);
+
+          // =====================================================
+          // NO LANDING MENU = UNAUTHORIZED
+          // =====================================================
+          if (!landingMenu?.ControllerName) {
+            // console.warn('No IsLanding=true menu found for current role.');
+
+            this.loading.set(false);
+
+            this.router.navigate(['/unauthrize']);
+            return;
+          }
+
+          // =====================================================
+          // LANDING MENU FOUND
+          // NAVIGATE TO FIRST LANDING MENU
+          // =====================================================
+          const landingUrl = String(landingMenu.ControllerName).trim();
+
+          // console.log('Navigating to first landing menu:', landingUrl);
+
           this.loading.set(false);
 
-          this.openChangePasswordModal();
+          // =====================================================
+          // NAVIGATE FIRST
+          // =====================================================
+          this.router.navigateByUrl(landingUrl);
+        } catch (e) {
+          console.error('❌ Failed to parse/decrypt Get Menu By Role response:', e);
 
-          return;
+          this.menuService.refresh(false);
+          this.loading.set(false);
+
+          // Any menu parsing/decryption failure = Unauthorized
+          this.router.navigate(['/unauthrize']);
         }
-
-        this.router.navigate([dashboardRoute]).then(
-          (success) => {
-            // console.log('Dashboard navigation:', success);
-          },
-          (error) => {
-            console.error('Dashboard navigation error:', error);
-          },
-        );
       },
+
+      // =====================================================
+      // GET MENU API ERROR
+      // =====================================================
       error: (menuErr: any) => {
-        console.error('Get Menu By Role API Error:', menuErr);
+        console.error('❌ Get Menu By Role API Error:', menuErr);
+
         this.menuService.refresh(false);
         this.loading.set(false);
 
-        this.router.navigate(['/dashboard']).then(
-          (success) => {
-            // console.log('Dashboard navigation:', success);
-          },
-          (error) => {
-            console.error('Dashboard navigation error:', error);
-          },
-        );
+        // 401 / 403 OR any menu API failure
+        this.router.navigate(['/unauthrize']);
       },
     });
   }
@@ -719,6 +784,335 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // =====================================================
+  // OTP POPUP
+  // =====================================================
+
+  openOtpPopup(): void {
+    this.otpRequired = true;
+
+    this.otpDigits = ['', '', '', '', '', ''];
+    this.otp = '';
+
+    this.otpTimer.set(60);
+    this.otpCancelEnabled.set(false);
+
+    this.startOtpTimer();
+
+    setTimeout(() => {
+      document.getElementById('otp0')?.focus();
+    }, 100);
+  }
+
+  // =====================================================
+  // OTP TIMER
+  // =====================================================
+
+  startOtpTimer(): void {
+    this.clearOtpTimer();
+
+    this.otpTimer.set(60);
+    this.otpCancelEnabled.set(false);
+
+    this.otpTimerInterval = setInterval(() => {
+      const remaining = this.otpTimer() - 1;
+
+      if (remaining <= 0) {
+        this.otpTimer.set(0);
+        this.otpCancelEnabled.set(true);
+
+        this.clearOtpTimer();
+        return;
+      }
+
+      this.otpTimer.set(remaining);
+    }, 1000);
+  }
+
+  clearOtpTimer(): void {
+    if (this.otpTimerInterval) {
+      clearInterval(this.otpTimerInterval);
+      this.otpTimerInterval = null;
+    }
+  }
+
+  // =====================================================
+  // OTP INPUT
+  // =====================================================
+
+  onOtpInput(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+
+    input.value = input.value.replace(/\D/g, '').slice(0, 1);
+
+    this.otpDigits[index] = input.value;
+    this.otp = this.otpDigits.join('');
+
+    if (input.value && index < 5) {
+      document.getElementById(`otp${index + 1}`)?.focus();
+    }
+  }
+
+  // =====================================================
+  // OTP BACKSPACE
+  // =====================================================
+
+  onOtpKeydown(event: KeyboardEvent, index: number): void {
+    const input = event.target as HTMLInputElement;
+
+    if (event.key === 'Backspace' && !input.value && index > 0) {
+      this.otpDigits[index - 1] = '';
+      this.otp = this.otpDigits.join('');
+
+      document.getElementById(`otp${index - 1}`)?.focus();
+    }
+  }
+
+  // =====================================================
+  // OTP PASTE
+  // =====================================================
+
+  onOtpPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+
+    const pasted = event.clipboardData?.getData('text').replace(/\D/g, '').slice(0, 6);
+
+    if (!pasted) {
+      return;
+    }
+
+    this.otpDigits = pasted.split('').concat(['', '', '', '', '', '']).slice(0, 6);
+
+    this.otp = this.otpDigits.join('');
+
+    setTimeout(() => {
+      const nextIndex = Math.min(pasted.length, 5);
+      document.getElementById(`otp${nextIndex}`)?.focus();
+    });
+  }
+
+  // =====================================================
+  // VERIFY INLINE OTP
+  // =====================================================
+
+  verifyInlineOtp(): void {
+    const otp = this.otpDigits.join('');
+
+    if (otp.length !== 6) {
+      this.error.set('Please enter 6-digit OTP.');
+      return;
+    }
+
+    this.error.set(null);
+
+    this.verifyOTP(otp);
+  }
+
+  // =====================================================
+  // CANCEL / RESET OTP
+  // =====================================================
+
+  cancelOtp(): void {
+    if (!this.otpCancelEnabled()) {
+      return;
+    }
+
+    this.clearOtpTimer();
+
+    this.otpRequired = false;
+
+    this.otpDigits = ['', '', '', '', '', ''];
+    this.otp = '';
+
+    this.otpTimer.set(60);
+    this.otpCancelEnabled.set(false);
+
+    this.error.set(null);
+
+    setTimeout(() => {
+      this.emailElement?.nativeElement?.focus();
+    }, 100);
+  }
+
+  // =====================================================
+  // VERIFY OTP API
+  // =====================================================
+
+  verifyOTP(otp: string): void {
+    const payload = {
+      UserId: this.username.trim(),
+      OTP: Number(otp),
+      Uniqueotprefid: Number(this.uniqueOtpRefId) || 0,
+      ForceLogin: false,
+    };
+
+    let encryptedPayload: any = CryptoHelper.encrypt(JSON.stringify(payload));
+
+    encryptedPayload = JSON.stringify(encryptedPayload);
+
+    Swal.fire({
+      title: 'Please wait...',
+      text: 'Verifying OTP...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this.loginService.verifyOTPAPI(encryptedPayload).subscribe({
+      next: (res: any) => {
+        Swal.close();
+
+        // ============================================
+        // ACTIVE SESSION
+        // ============================================
+
+        if (res?.code === 2) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Active Session',
+            text:
+              res?.message ||
+              res?.Message ||
+              'An active session already exists. Do you want to logout from the previous session?',
+            confirmButtonText: 'OK',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.resetOtpScreen();
+
+              try {
+                let data: any = CryptoHelper.decrypt(res.data);
+
+                data = JSON.parse(data);
+
+                this.performLogout(data.token);
+              } catch (error) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: 'Failed to process previous session token.',
+                });
+              }
+            }
+          });
+
+          return;
+        }
+
+        // ============================================
+        // OTP SUCCESS
+        // ============================================
+
+        if (res?.code === 1 && res?.data) {
+          try {
+            const decrypted = CryptoHelper.decrypt(res.data);
+
+            const loginData = JSON.parse(decrypted);
+
+            this.resetOtpScreen();
+
+            // IMPORTANT:
+            // Existing project ka same login success flow
+            this.handleSuccessResponse(loginData, res);
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Login Failed',
+              text: 'Unable to process OTP verification response.',
+            });
+          }
+
+          return;
+        }
+
+        // ============================================
+        // INVALID OTP
+        // ============================================
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid OTP',
+          text: res?.message || res?.Message || 'Invalid or expired OTP.',
+        });
+      },
+
+      error: (error: any) => {
+        Swal.close();
+
+        Swal.fire({
+          icon: 'error',
+          title: 'OTP Verification Failed',
+          text: error?.error?.message || error?.message || 'Unable to verify OTP.',
+        });
+      },
+    });
+  }
+
+  // =====================================================
+  // RESET OTP SCREEN
+  // =====================================================
+
+  resetOtpScreen(): void {
+    this.clearOtpTimer();
+
+    this.otpRequired = false;
+
+    this.otpDigits = ['', '', '', '', '', ''];
+    this.otp = '';
+
+    this.otpTimer.set(60);
+    this.otpCancelEnabled.set(false);
+
+    this.error.set(null);
+  }
+
+  // =====================================================
+  // RESEND OTP
+  // =====================================================
+
+  resendOTP(): void {
+    if (!this.loginReqData) {
+      return;
+    }
+
+    this.loginService.loginAPI(this.loginReqData).subscribe({
+      next: (res: any) => {
+        if (res?.code === 1) {
+          this.uniqueOtpRefId =
+            Number(res?.uniqueotprefid ?? res?.Uniqueotprefid) || this.uniqueOtpRefId;
+
+          this.startOtpTimer();
+
+          Swal.fire({
+            icon: 'success',
+            title: 'OTP Sent',
+            text: res?.message || 'OTP has been resent.',
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Resend Failed',
+            text: res?.message || 'Unable to resend OTP.',
+          });
+        }
+      },
+
+      error: (error: any) => {
+        console.error('Resend OTP Error:', error);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Resend Failed',
+          text: 'Unable to resend OTP.',
+        });
+      },
+    });
+  }
+
   private clearLoginSession(): void {
     this.isChangePasswordModalOpen.set(false);
 
@@ -789,28 +1183,68 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
         // console.log('Login Response:', res);
         if (res && res.code === 1 && res.data) {
           this.loading.set(false);
+
           try {
-            // console.log('========== LOGIN RESPONSE ==========');
-            // console.log('Full Response:', res);
-            // console.log('Response Data:', res.data);
-            // console.log('Data Type:', typeof res.data);
-
             const encryptData: any = res.data;
-
-            // console.log('Before Decrypt:', encryptData);
 
             const decrypted = CryptoHelper.decrypt(encryptData);
 
-            // console.log('After Decrypt:', decrypted);
-            // console.log('Decrypted Type:', typeof decrypted);
-
             const loginData = JSON.parse(decrypted);
+
+            // =====================================================
+            // GET OTP REFERENCE ID
+            // =====================================================
+
+            this.uniqueOtpRefId =
+              Number(
+                res?.uniqueotprefid ??
+                  res?.Uniqueotprefid ??
+                  loginData?.uniqueotprefid ??
+                  loginData?.Uniqueotprefid,
+              ) || 0;
+
+            // =====================================================
+            // CHECK OTP REQUIRED
+            // =====================================================
+
+            const isOtpRequired =
+              res?.otp === true ||
+              res?.OTP === true ||
+              res?.otp === 1 ||
+              res?.OTP === 1 ||
+              String(res?.otp).toLowerCase() === 'true' ||
+              String(res?.OTP).toLowerCase() === 'true' ||
+              loginData?.otp === true ||
+              loginData?.OTP === true ||
+              loginData?.otp === 1 ||
+              loginData?.OTP === 1 ||
+              String(loginData?.otp).toLowerCase() === 'true' ||
+              String(loginData?.OTP).toLowerCase() === 'true' ||
+              String(res?.message ?? '')
+                .toLowerCase()
+                .includes('otp verification required');
+
+            // =====================================================
+            // OTP REQUIRED
+            // =====================================================
+
+            if (isOtpRequired) {
+              this.openOtpPopup();
+
+              return;
+            }
+
+            // =====================================================
+            // OTP NOT REQUIRED
+            // NORMAL LOGIN
+            // =====================================================
 
             this.handleSuccessResponse(loginData, res);
           } catch (e) {
             this.loading.set(false);
 
             this.error.set('Failed to parse login response');
+
             this.generateCaptcha();
           }
         } else if (res && res.code === 2) {

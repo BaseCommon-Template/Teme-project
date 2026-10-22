@@ -39,6 +39,7 @@ export interface MenuRole {
   PDelete: string;
   PEdit: string;
   PView: string;
+  is_landing: boolean;
 }
 
 export interface MenuItem {
@@ -206,6 +207,8 @@ export class MenuManagement implements OnInit, AfterViewInit {
         pEdit: '1',
 
         pView: '1',
+
+        is_landing: false,
       },
     ],
   };
@@ -553,6 +556,10 @@ export class MenuManagement implements OnInit, AfterViewInit {
         try {
           if (typeof data === 'string') {
             data = CryptoHelper.decrypt(data);
+            // console.log(
+            //   'DECRYPTED API DATA JSON:',
+            //   typeof data === 'string' ? data : JSON.stringify(data, null, 2),
+            // );
           }
         } catch (error) {
           console.error('Menu decrypt error:', error);
@@ -603,20 +610,21 @@ export class MenuManagement implements OnInit, AfterViewInit {
 
           roles: Array.isArray(item.roles)
             ? item.roles.map((role: any): MenuRole => ({
-              role_id: Number(role.role_id ?? role.roleId ?? 0),
+                role_id: Number(role.role_id ?? role.roleId ?? 0),
 
-              role_name: role.role_name ?? role.roleName ?? null,
+                role_name: role.role_name ?? role.roleName ?? null,
 
-              priority: Number(role.priority ?? 0),
+                priority: Number(role.priority ?? 0),
 
-              PAdd: String(role.PAdd ?? role.pAdd ?? '0'),
+                PAdd: String(role.PAdd ?? role.pAdd ?? '0'),
 
-              PDelete: String(role.PDelete ?? role.pDelete ?? '0'),
+                PDelete: String(role.PDelete ?? role.pDelete ?? '0'),
 
-              PEdit: String(role.PEdit ?? role.pEdit ?? '0'),
+                PEdit: String(role.PEdit ?? role.pEdit ?? '0'),
 
-              PView: String(role.PView ?? role.pView ?? '0'),
-            }))
+                PView: String(role.PView ?? role.pView ?? '0'),
+                is_landing: role.is_landing === true,
+              }))
             : [],
 
           lang_labels: item.lang_labels ?? item.langLabels ?? null,
@@ -857,6 +865,7 @@ export class MenuManagement implements OnInit, AfterViewInit {
       pEdit: '1',
 
       pView: '1',
+      is_landing: false,
     });
   }
 
@@ -882,6 +891,7 @@ export class MenuManagement implements OnInit, AfterViewInit {
       pDelete: '0',
       pEdit: '1',
       pView: '1',
+      is_landing: false,
     });
 
     // Recalculate priority
@@ -916,10 +926,17 @@ export class MenuManagement implements OnInit, AfterViewInit {
   // GET ROLE PERMISSION
   // =====================================================
 
-  getRolePermission(roleId: number, permission: 'pAdd' | 'pDelete' | 'pEdit' | 'pView'): string {
+  getRolePermission(
+    roleId: number,
+    permission: 'pAdd' | 'pDelete' | 'pEdit' | 'pView' | 'is_landing',
+  ): string | boolean {
     const role = this.formData.roles.find((item) => Number(item.roleId) === Number(roleId));
 
-    return role?.[permission] ?? '0';
+    if (!role) {
+      return permission === 'is_landing' ? false : '0';
+    }
+
+    return role[permission];
   }
 
   // =====================================================
@@ -928,12 +945,18 @@ export class MenuManagement implements OnInit, AfterViewInit {
 
   updateRolePermission(
     roleId: number,
-    permission: 'pAdd' | 'pDelete' | 'pEdit' | 'pView',
+    permission: 'pAdd' | 'pDelete' | 'pEdit' | 'pView' | 'is_landing',
     checked: boolean,
   ): void {
     const role = this.formData.roles.find((item) => Number(item.roleId) === Number(roleId));
 
-    if (role) {
+    if (!role) {
+      return;
+    }
+
+    if (permission === 'is_landing') {
+      role.is_landing = checked;
+    } else {
       role[permission] = checked ? '1' : '0';
     }
   }
@@ -1100,20 +1123,42 @@ export class MenuManagement implements OnInit, AfterViewInit {
 
       active: item.active,
 
+      // roles: item.roles?.length
+      //   ? item.roles.map((role) => ({
+      //       roleId: Number(role.role_id),
+
+      //       priority: Number(role.priority),
+
+      //       pAdd: role.PAdd ?? '0',
+
+      //       pDelete: role.PDelete ?? '0',
+
+      //       pEdit: role.PEdit ?? '0',
+
+      //       pView: role.PView ?? '0',
+      //       is_landing: role.is_landing ?? false,
+      //     }))
+      //   : [],
       roles: item.roles?.length
-        ? item.roles.map((role) => ({
-          roleId: Number(role.role_id),
+        ? item.roles.map((role: any) => {
+            // console.log('🔥 RAW ROLE FROM API:', role);
+            // console.log('🔥 RAW is_landing:', role.is_landing);
+            // console.log('🔥 RAW is_landing TYPE:', typeof role.is_landing);
 
-          priority: Number(role.priority),
-
-          pAdd: role.PAdd ?? '0',
-
-          pDelete: role.PDelete ?? '0',
-
-          pEdit: role.PEdit ?? '0',
-
-          pView: role.PView ?? '0',
-        }))
+            return {
+              roleId: Number(role.role_id),
+              priority: Number(role.priority),
+              pAdd: role.PAdd ?? '0',
+              pDelete: role.PDelete ?? '0',
+              pEdit: role.PEdit ?? '0',
+              pView: role.PView ?? '0',
+              is_landing:
+                role.is_landing === true ||
+                role.is_landing === 1 ||
+                String(role.is_landing).toLowerCase() === 'true' ||
+                String(role.is_landing) === '1',
+            };
+          })
         : [],
     };
 
@@ -1137,6 +1182,7 @@ export class MenuManagement implements OnInit, AfterViewInit {
       pEdit: '1',
 
       pView: '1',
+      is_landing: false,
     });
   }
 
@@ -1311,6 +1357,7 @@ export class MenuManagement implements OnInit, AfterViewInit {
           pDelete: role.pDelete,
           pEdit: role.pEdit,
           pView: role.pView,
+          is_landing: role.is_landing,
         })),
       };
 
@@ -1386,6 +1433,7 @@ export class MenuManagement implements OnInit, AfterViewInit {
         pDelete: role.pDelete,
         pEdit: role.pEdit,
         pView: role.pView,
+        is_landing: role.is_landing,
       })),
     };
 

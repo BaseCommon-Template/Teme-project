@@ -220,7 +220,6 @@ export class Usersmanagement implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
-    this.loadOrganizations();
   }
 
   ngAfterViewInit(): void {
@@ -353,29 +352,29 @@ export class Usersmanagement implements OnInit, AfterViewInit {
       valueGetter: (params) => params.data?.phone || '-',
     },
 
-    {
-      field: 'organization_type',
-      headerName: 'ORGANIZATION TYPE',
-      flex: 1.15,
-      minWidth: 180,
-      sortable: true,
-      filter: true,
-      cellRenderer: (params: ICellRendererParams<UserItem>) => `
-        <span class="user-text ellipsis">${this.escapeHtml(params.value ?? '-')}</span>
-      `,
-    },
+    // {
+    //   field: 'organization_type',
+    //   headerName: 'ORGANIZATION TYPE',
+    //   flex: 1.15,
+    //   minWidth: 180,
+    //   sortable: true,
+    //   filter: true,
+    //   cellRenderer: (params: ICellRendererParams<UserItem>) => `
+    //     <span class="user-text ellipsis">${this.escapeHtml(params.value ?? '-')}</span>
+    //   `,
+    // },
 
-    {
-      field: 'organization',
-      headerName: 'ORGANIZATION',
-      flex: 1.2,
-      minWidth: 180,
-      sortable: true,
-      filter: true,
-      cellRenderer: (params: ICellRendererParams<UserItem>) => `
-        <span class="user-text ellipsis">${this.escapeHtml(params.value ?? '-')}</span>
-      `,
-    },
+    // {
+    //   field: 'organization',
+    //   headerName: 'ORGANIZATION',
+    //   flex: 1.2,
+    //   minWidth: 180,
+    //   sortable: true,
+    //   filter: true,
+    //   cellRenderer: (params: ICellRendererParams<UserItem>) => `
+    //     <span class="user-text ellipsis">${this.escapeHtml(params.value ?? '-')}</span>
+    //   `,
+    // },
 
     {
       field: 'is_active',
@@ -678,86 +677,6 @@ export class Usersmanagement implements OnInit, AfterViewInit {
 
   getRoleName(roleId: number): string {
     return this.roleOptions.find((role) => Number(role.roleid) === Number(roleId))?.rolename ?? '';
-  }
-
-  loadOrganizations(): void {
-    this.userService.getAllOrganizations().subscribe({
-      next: (res: any) => {
-        // console.log('========== ORGANISATION GET ALL ==========');
-        // console.log('Full Response:', res);
-
-        try {
-          const data = this.parseApiData(res);
-
-          // console.log('========== DECRYPTED ORGANISATION DATA ==========');
-          // console.log(data);
-
-          const master = data?.OrganisationMaster;
-
-          if (!master || !Array.isArray(master.records)) {
-            console.error('OrganisationMaster.records not found', data);
-
-            this.allOrganizationRecords = [];
-            this.organizationTypes = [];
-            this.organizations = [];
-            return;
-          }
-
-          const records = master.records;
-
-          // console.log('Organisation Records:', records);
-
-          // Complete API records
-          this.allOrganizationRecords = records;
-
-          // ================================
-          // ORGANIZATION TYPES
-          // ================================
-
-          this.organizationTypes = records
-            .filter((item: any) => {
-              const isActive =
-                item.IsActive ??
-                item.isActive ??
-                item.isactive ??
-                item.is_active ??
-                item.Active ??
-                item.active;
-
-              return (
-                item.organisation_type_id != null &&
-                item.organisation_type &&
-                this.toBoolean(isActive)
-              );
-            })
-            .map((item: any) => ({
-              organization_type_id: Number(item.organisation_type_id),
-              organization_type: String(item.organisation_type),
-            }));
-
-          // console.log('Organization Types:', this.organizationTypes);
-
-          // Initially organization empty
-          this.organizations = [];
-
-          this.cdr.detectChanges();
-        } catch (error) {
-          console.error('Failed to parse organisation response:', error);
-
-          this.allOrganizationRecords = [];
-          this.organizationTypes = [];
-          this.organizations = [];
-        }
-      },
-
-      error: (error: any) => {
-        console.error('Organisation GetAll API Error:', error);
-
-        this.allOrganizationRecords = [];
-        this.organizationTypes = [];
-        this.organizations = [];
-      },
-    });
   }
 
   onOrganizationTypeChange(typeId: string | number): void {

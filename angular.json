@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "careerprogress": {
+    "complaintextractor": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -19,7 +19,7 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "baseHref": "/careerprogressweb/",
+            "baseHref": "/complaintextractionweb/",
             "assets": [
               {
                 "glob": "**/*",
@@ -80,10 +80,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "careerprogress:build:production"
+              "buildTarget": "complaintextractor:build:production"
             },
             "development": {
-              "buildTarget": "careerprogress:build:development"
+              "buildTarget": "complaintextractor:build:development"
             }
           },
           "defaultConfiguration": "development"

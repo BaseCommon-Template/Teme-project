@@ -31,13 +31,6 @@ export class DashboardService {
       .pipe(catchError(this.handleError));
   }
 
-  // Agniveer Session Listing
-  getAgniveerSessionListing(param: any = {}) {
-    return this.http
-      .post(`${this.apiURL}PublicMenu/GetAgniveerSessionListing`, param, this.options)
-      .pipe(catchError(this.handleError));
-  }
-
   // Department Session Listing
   getDepartmentSessionListing(param: any = {}) {
     return this.http
@@ -51,21 +44,4 @@ export class DashboardService {
       .pipe(catchError(this.handleError));
   }
 
-  getAgniveerData(param: any = {}) {
-    return this.http
-      .post(`${this.apiURL}Agniveer/AgniveerList`, param, this.options)
-      .pipe(catchError(this.handleError));
-  }
-  getAllPreferences(param: any = {}) {
-    return this.http
-      .post(`${this.apiURL}AgniveerPreference/GetAllPreferences`, param, this.options)
-      .pipe(catchError(this.handleError));
-  }
-  getOrganizationTypes(param: any = {}) {
-    // console.log('OrganisationMaster Payload:', param);
-
-    return this.http
-      .post(`${this.apiURL}OrganisationMaster/GetAll`, param, this.options)
-      .pipe(catchError(this.handleError));
-  }
 }

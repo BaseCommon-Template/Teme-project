@@ -9,67 +9,79 @@ export interface FAQItemData {
 
 export const FAQ_DATA: FAQItemData[] = [
   {
-    title: 'What is the Theme Project?',
+    title: 'What is this portal?',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'This is a demo portal designed to provide users with easy access to information, services and important updates.',
   },
   {
-    title: 'Who can register on the Theme Project?',
+    title: 'Who can use this portal?',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'The portal can be used by registered users who have valid login credentials and access permissions.',
   },
   {
-    title: 'How can an Ex-Agniveer update personal information on the portal?',
+    title: 'How can I create an account?',
     description:
-      'Ex-Agniveers, after login can update some basic details by using their Service Number, registered mobile number and other authentication credentials provided by the concerned Service Headquarters. Following verification, users can update address, qualifications, certifications etc.',
+      'Click on the registration option, enter the required details and complete the verification process to create your account.',
   },
   {
-    title: 'What services are available through the portal?',
-    description: 'The portal provides several services, including:',
-    points: [
-      'Employment opportunities in CAPFs and Assam Rifles.',
-      'State and Central Government recruitment notifications.',
-      'Skill mapping and career counselling.',
-      'Access to training, reskilling and certification programs.',
-      'Job opportunities in private sector organizations registered under PSARA.',
-      'Document repository and verification services.',
-      'Notifications regarding reserved vacancies and special recruitment drives.',
-    ],
+    title: 'How can I update my profile?',
+    description:
+      'After logging in, open the profile section and select the edit option to update your personal information.',
   },
   {
-    title: 'How will employers benefit from the portal?',
+    title: 'How can I search for available opportunities?',
     description:
-      'Employers can access a verified pool of disciplined, trained and skilled Ex-Agniveers. The portal allows employers to post vacancies, search candidate profiles based on qualifications and skills, conduct recruitment drives and communicate directly with eligible candidates while ensuring data security and transparency.',
+      'Users can use the search and filter options available on the portal to find opportunities based on their preferences.',
   },
   {
-    title: 'Can Ex-Agniveers apply for vacancies in CAPFs and Assam Rifles through the portal?',
+    title: 'Can I apply for an opportunity through the portal?',
     description:
-      'Yes. Eligible vacancies notified by CAPFs and Assam Rifles will be published on the portal. Ex-Agniveers may view eligibility criteria, submit applications through integrated recruitment systems where available and track the status of their applications.',
+      'Yes, eligible users can view available opportunities and submit their applications through the portal.',
   },
   {
-    title: 'Will the portal provide information about reservations or relaxations available to Ex-Agniveers?',
+    title: 'How can I check my application status?',
     description:
-      'Yes. The portal will display updated information regarding age relaxations, reservation benefits, priority categories and other policy provisions announced by the MoD, MHA, State Governments, CAPFs, Assam Rifles and other participating organizations.',
+      'Go to the application section of your dashboard to view the current status and details of your submitted applications.',
   },
   {
-    title: 'What kind of skill and certification information will be available on the portal?',
+    title: 'What should I do if I forget my password?',
     description:
-      'The portal will maintain a digital record of training received during service, military-acquired skills, educational qualifications and certifications earned by Agniveers. It may also recommend suitable upskilling courses and certification programs aligned with industry requirements and career aspirations.',
+      'Use the Forgot Password option available on the login page and follow the instructions to reset your password.',
   },
   {
-    title: 'How will personal information and service records be protected?',
+    title: 'How can I contact the support team?',
     description:
-      'The portal will implement robust security measures, including role-based access controls, encryption, secure authentication mechanisms and strict compliance with applicable Government data protection and cybersecurity guidelines. Personal information will only be shared with authorized agencies and employers based on approved user consent and access policies.',
+      'You can contact the support team through the Helpdesk section for assistance with account, application or technical issues.',
   },
   {
-    title: 'Whom should I contact if I face issues while using the portal?',
+    title: 'Is my information secure?',
     description:
-      'Users can access the Helpdesk section available on the portal for technical assistance, account-related queries and grievance redressal. Support may be provided through email, telephone helplines, ticket-based support systems and designated nodal officers from the concerned Ministries, Services, CAPFs, or State/UT Governments.',
+      'The portal uses appropriate security mechanisms to protect user information and restrict access to authorized users.',
   },
   {
-    title: 'Will the portal continue to support Ex-Agniveers after they secure employment?',
+    title: 'What documents can I upload?',
     description:
-      'Yes. Subject to policy provisions, the portal will provide continued access to career development resources, advanced training opportunities and notifications of higher employment opportunities to support long-term career progression and successful reintegration into civilian life.',
+      'Depending on the service or application, users may be required to upload identification, qualification and other supporting documents.',
+  },
+  {
+    title: 'Can I update my submitted information?',
+    description:
+      'Some information can be updated after submission, depending on the application status and permissions available to the user.',
+  },
+  {
+    title: 'How can I view notifications?',
+    description:
+      'All important announcements and updates can be viewed from the Notifications section available in the user dashboard.',
+  },
+  {
+    title: 'Can I use the portal on a mobile device?',
+    description:
+      'Yes, the portal is designed to provide a responsive experience across desktops, tablets and mobile devices.',
+  },
+  {
+    title: 'What should I do if a page is not loading?',
+    description:
+      'Please check your internet connection, refresh the page and try again. If the issue continues, contact the support team.',
   },
 ];
 

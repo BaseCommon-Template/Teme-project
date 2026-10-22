@@ -1,11 +1,11 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:4200/',
-  apiUrl: 'https://mhastaging.nic.in/careerprogressapi/api/',
-  photoPath: 'https://mhastaging.nic.in/careerprogressapi',
-  signaturePath: 'https://mhastaging.nic.in/careerprogressapi/',
-  // baseUrl: 'https://careerprogression.mha.gov.in/',
-  // apiUrl: 'https://careerprogression.mha.gov.in/api/',
-  // signaturePath: 'https://careerprogression.mha.gov.in/api/',
-  // photoPath: 'https://careerprogression.mha.gov.in/api',
+  apiUrl: 'https://mhastaging.nic.in/complaintextraction/api/',
+  photoPath: 'https://mhastaging.nic.in/complaintextraction/api',
+  signaturePath: 'https://mhastaging.nic.in/complaintextraction/api/',
+  //  baseUrl: 'http://10.19.1.9/',
+  // apiUrl: 'http://10.19.1.9/',
+  // signaturePath: 'http://10.19.1.9/',
+  // photoPath: 'http://10.19.1.9/',
 };

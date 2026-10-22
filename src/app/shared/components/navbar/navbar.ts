@@ -58,20 +58,46 @@ export class NavbarComponent {
     this.authService.authVersion();
 
     const user = this.currentUser();
-    return user?.roles || user?.rols || this.authService.getRoles() || [];
+
+    const roles = user?.roles || user?.rols || this.authService.getRoles() || [];
+
+    if (!Array.isArray(roles)) {
+      return [];
+    }
+
+    return roles.map((role: any) => ({
+      ...role,
+      roleId: Number(role?.RoleId ?? role?.roleId ?? role?.roleid ?? role?.role_id ?? 0),
+      roleName: role?.RoleName ?? role?.roleName ?? role?.rolename ?? role?.role_name ?? '',
+    }));
   });
 
   readonly activeRoleId = computed<number>(() => {
-    return this.currentRoleId() || (this.userRoles()[0]?.roleId ?? 0);
+    const currentId = Number(this.currentRoleId());
+
+    if (currentId > 0) {
+      return currentId;
+    }
+
+    const roles = this.userRoles();
+
+    if (Array.isArray(roles) && roles.length > 0) {
+      return Number(roles[0]?.RoleId ?? roles[0]?.roleId ?? roles[0]?.roleid ?? 0);
+    }
+
+    return 0;
   });
 
   readonly roleName = computed(() => {
     this.authService.authVersion();
 
     const currentId = this.currentRoleId();
-    const matchedRole = this.userRoles().find((r) => r.roleId === currentId);
-    if (matchedRole?.roleName) {
-      return matchedRole.roleName;
+    const matchedRole = this.userRoles().find(
+      (r) => Number(r?.RoleId ?? r?.roleId ?? r?.roleid) === Number(currentId),
+    );
+
+    if (matchedRole) {
+      return matchedRole?.RoleName ?? matchedRole?.roleName ?? matchedRole?.rolename ?? '';
     }
 
     const roles = this.authService.getRoles();
@@ -82,40 +108,33 @@ export class NavbarComponent {
     }
 
     const user = this.currentUser();
-    return user?.roleName || user?.rolename || user?.role_name;
+    return user?.RoleName ?? user?.roleName ?? user?.rolename ?? user?.role_name ?? '';
   });
+
   onChangeRole(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const newRoleId = Number(target?.value);
+
     if (!newRoleId) return;
 
-    const matchedRole = this.userRoles().find((r) => r.roleId === newRoleId);
-    const newRoleName = matchedRole?.roleName || '';
+    const matchedRole = this.userRoles().find(
+      (r) => Number(r?.RoleId ?? r?.roleId ?? r?.roleid) === newRoleId,
+    );
 
-    // Remove older role and menu data from sessionStorage
-    if (typeof sessionStorage !== 'undefined') {
-      try {
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('role-id');
-        sessionStorage.removeItem('role_name');
-        sessionStorage.removeItem('roleId');
-        sessionStorage.removeItem('menudata');
-      } catch (e) {}
-    }
+    const newRoleName = matchedRole?.RoleName ?? matchedRole?.roleName ?? '';
 
-    // Set selected role
+    // console.log('🔄 ROLE CHANGE');
+    // console.log('New Role ID:', newRoleId);
+    // console.log('New Role Name:', newRoleName);
+
+    // Role change
     this.authService.setRoleId(newRoleId, newRoleName);
 
-    // Load menu according to selected role
+    // console.log('✅ Auth Role After Set:', this.authService.getRoleId());
+
     this.menuService.refresh(true);
 
-    if (newRoleId === 6) {
-      this.router.navigate(['/import']);
-    } else if (newRoleId === 11) {
-      this.router.navigate(['/dashboard-agniveer']);
-    } else {
-      this.router.navigate(['/dashboard']);
-    }
+    this.router.navigate(['/dashboard']);
   }
 
   // =====================================================
@@ -186,6 +205,25 @@ export class NavbarComponent {
 
     this.loginService.changePassword(payload).subscribe({
       next: (response: any) => {
+        // console.log('🔥 Change Password Response:', response);
+
+        // ============================================
+        // API HTTP 200 but BUSINESS ERROR
+        // ============================================
+        if (response?.code !== 1) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Change Failed',
+            text: response?.message || 'Unable to change password. Please try again.',
+            confirmButtonColor: '#1C4587',
+          });
+
+          return;
+        }
+
+        // ============================================
+        // SUCCESS
+        // ============================================
         Swal.fire({
           icon: 'success',
           title: 'Password Changed Successfully',
@@ -205,6 +243,7 @@ export class NavbarComponent {
             error: (logoutError: any) => {
               console.error('Logout API Error:', logoutError);
 
+              // Logout locally even if logout API fails
               this.authService.performLogout();
 
               this.isProfileDropdownOpen.set(false);
@@ -216,8 +255,11 @@ export class NavbarComponent {
         });
       },
 
+      // ============================================
+      // HTTP ERROR: 400 / 401 / 500 etc.
+      // ============================================
       error: (error: any) => {
-        console.error('Change Password Error:', error);
+        console.error('❌ Change Password HTTP Error:', error);
 
         Swal.fire({
           icon: 'error',

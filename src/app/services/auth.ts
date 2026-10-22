@@ -779,6 +779,22 @@ export class AuthService {
     });
   }
 
+  verifyOTPAPI(payload: any): Observable<any> {
+  const apiUrl = environment.apiUrl.endsWith('/')
+    ? environment.apiUrl
+    : environment.apiUrl + '/';
+
+  return this.http.post(
+    apiUrl + 'Users/VerifyLoginOTP',
+    payload,
+    {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    }
+  );
+}
+
   // =====================================================
   // CLEAR LOCAL DATA
   // =====================================================
