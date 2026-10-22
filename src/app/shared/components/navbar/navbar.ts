@@ -115,26 +115,149 @@ export class NavbarComponent {
     const target = event.target as HTMLSelectElement;
     const newRoleId = Number(target?.value);
 
-    if (!newRoleId) return;
+    if (!newRoleId) {
+      return;
+    }
+
+    // =====================================================
+    // GET SELECTED ROLE DETAILS
+    // =====================================================
 
     const matchedRole = this.userRoles().find(
-      (r) => Number(r?.RoleId ?? r?.roleId ?? r?.roleid) === newRoleId,
+      (role: any) =>
+        Number(role?.RoleId ?? role?.roleId ?? role?.roleid ?? role?.role_id ?? 0) === newRoleId,
     );
 
-    const newRoleName = matchedRole?.RoleName ?? matchedRole?.roleName ?? '';
+    const newRoleName =
+      matchedRole?.RoleName ??
+      matchedRole?.roleName ??
+      matchedRole?.rolename ??
+      matchedRole?.role_name ??
+      '';
 
-    // console.log('🔄 ROLE CHANGE');
-    // console.log('New Role ID:', newRoleId);
-    // console.log('New Role Name:', newRoleName);
+    // =====================================================
+    // SET NEW ROLE
+    // =====================================================
 
-    // Role change
     this.authService.setRoleId(newRoleId, newRoleName);
 
-    // console.log('✅ Auth Role After Set:', this.authService.getRoleId());
+    // =====================================================
+    // GET MENU BY NEW ROLE
+    // SAME LOGIC AS USER LOGIN
+    // =====================================================
 
-    this.menuService.refresh(true);
+    const menuReqParam = {
+      roleid: newRoleId,
+    };
 
-    this.router.navigate(['/dashboard']);
+    let encryptedMenuParam: any = CryptoHelper.encrypt(JSON.stringify(menuReqParam));
+
+    encryptedMenuParam = JSON.stringify(encryptedMenuParam);
+
+    this.loginService.getMenuByRoleAPI(encryptedMenuParam).subscribe({
+      next: (menuRes: any) => {
+        try {
+          // =====================================================
+          // CHECK API RESPONSE
+          // =====================================================
+
+          if (!menuRes || menuRes.code !== 1 || !menuRes.data) {
+            console.warn('Get Menu By Role API returned no valid menu data.');
+
+            this.router.navigate(['/unauthrize']);
+            return;
+          }
+
+          // =====================================================
+          // DECRYPT MENU RESPONSE
+          // =====================================================
+
+          sessionStorage.removeItem('menudata');
+
+          const decrypted = CryptoHelper.decrypt(menuRes.data);
+
+          const parsed = JSON.parse(decrypted);
+
+          // =====================================================
+          // GET MENU LIST
+          // EXACT SAME AS USER LOGIN
+          // =====================================================
+
+          const menuContainer = parsed?.menus;
+
+          const menuList = menuContainer?.Menus ?? [];
+
+          // =====================================================
+          // STORE ROLE MENUS
+          // =====================================================
+
+          sessionStorage.setItem('menudata', JSON.stringify(menuList));
+
+          // =====================================================
+          // PATCH MENU SERVICE
+          // =====================================================
+
+          if (Array.isArray(menuList)) {
+            this.menuService.patchMenus(menuList, newRoleId);
+          }
+
+          // =====================================================
+          // FIND LANDING MENU
+          // SAME LOGIC AS USER LOGIN
+          // =====================================================
+
+          const landingMenu = Array.isArray(menuList)
+            ? menuList.find((menu: any) => {
+                const isLanding =
+                  menu?.IsLanding === true ||
+                  Number(menu?.IsLanding) === 1 ||
+                  String(menu?.IsLanding).toLowerCase() === 'true' ||
+                  String(menu?.IsLanding) === '1';
+
+                const isActive =
+                  menu?.Active !== false &&
+                  String(menu?.Active).toLowerCase() !== 'false' &&
+                  Number(menu?.Active) !== 0;
+
+                const controllerName = String(menu?.ControllerName ?? '').trim();
+
+                return isLanding && isActive && !!controllerName;
+              })
+            : null;
+
+          // =====================================================
+          // NO LANDING MENU
+          // =====================================================
+
+          if (!landingMenu?.ControllerName) {
+            this.router.navigate(['/unauthrize']);
+            return;
+          }
+
+          // =====================================================
+          // NAVIGATE TO ROLE LANDING MENU
+          // =====================================================
+
+          const landingUrl = String(landingMenu.ControllerName).trim();
+
+          this.router.navigateByUrl(landingUrl);
+        } catch (error) {
+          this.menuService.refresh(false);
+
+          this.router.navigate(['/unauthrize']);
+        }
+      },
+
+      // =====================================================
+      // GET MENU API ERROR
+      // =====================================================
+
+      error: (menuErr: any) => {
+        this.menuService.refresh(false);
+
+        this.router.navigate(['/unauthrize']);
+      },
+    });
   }
 
   // =====================================================
