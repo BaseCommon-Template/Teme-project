@@ -1,0 +1,441 @@
+/* ==========================================================================
+   THEME 4: STEEL BLUE & LINEN THEME (html.theme-dark-blue)
+   Combination:
+   - Navbar: #3368A0
+   - Footer: #3368A0
+   - Buttons & Icons: #66A3BF
+   - Background: #F2EFE7
+   - Text: #585858
+   ========================================================================== */
+
+/* ── 1. Root Variables ── */
+html.theme-dark-blue {
+  color-scheme: light;
+  --theme-primary: #3368a0;
+  --theme-primary-hover: #295584;
+  --theme-accent: #66a3bf;
+  --theme-accent-hover: #528da8;
+  --theme-border: #d8d4ca;
+  --theme-border-subtle: #e5e1d7;
+  --theme-bg-body: #f2efe7;
+  --theme-bg-surface: #ffffff;
+  --theme-bg-elevated: #e8e5dd;
+  --theme-text-primary: #333333;
+  --theme-text-secondary: #585858;
+  --primary: #3368a0;
+  --primary-foreground: #ffffff;
+  --accent: #66a3bf;
+  --accent-foreground: #ffffff;
+  --ring: #3368a0;
+}
+
+/* ── 2. Canvas & Body (#F2EFE7 Background) ── */
+html.theme-dark-blue body,
+html.theme-dark-blue main,
+html.theme-dark-blue .bg-slate-50 {
+  background-color: #f2efe7 !important;
+  color: #585858 !important;
+}
+
+/* Headings (#383838 / #585858) */
+html.theme-dark-blue h1:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue h2:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue h3:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue h4:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue h5:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue h6:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-slate-900"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-slate-800"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-slate-700"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-gray-900"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-gray-800"]:not(header *):not(nav *):not(footer *) {
+  color: #383838 !important;
+}
+
+/* Paragraphs & Text (#585858) */
+html.theme-dark-blue p:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue span:not(header *):not(nav *):not(footer *):not([class*="badge"]),
+html.theme-dark-blue [class*="text-slate-600"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-slate-500"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-gray-600"]:not(header *):not(nav *):not(footer *),
+html.theme-dark-blue [class*="text-gray-500"]:not(header *):not(nav *):not(footer *) {
+  color: #585858 !important;
+}
+
+/* FAQ Active Title and Hover */
+html.theme-dark-blue .faq-title-active,
+html.theme-dark-blue h3[class*="text-[#c2410c]"],
+html.theme-dark-blue [class*="faq-title-active"] {
+  color: #3368a0 !important;
+}
+
+html.theme-dark-blue .faq-icon-active,
+html.theme-dark-blue span[class*="text-[#c2410c]"] {
+  color: #3368a0 !important;
+}
+
+html.theme-dark-blue .group:hover .faq-title-hover {
+  color: #66a3bf !important;
+}
+
+/* ── 3. Header ── */
+html.theme-dark-blue header,
+html.theme-dark-blue header .main-header {
+  background-color: #f2efe7 !important;
+  border-bottom: 1px solid #d8d4ca !important;
+}
+
+html.theme-dark-blue header .hindi-title {
+  color: #585858 !important;
+}
+
+html.theme-dark-blue header .home-affairs {
+  color: #2d3748 !important;
+}
+
+html.theme-dark-blue header .center-title {
+  color: #3368a0 !important;
+}
+
+html.theme-dark-blue header .separator {
+  color: #66a3bf !important;
+}
+
+html.theme-dark-blue header button {
+  color: #585858 !important;
+}
+
+/* ── 4. Navbar (#3368A0) ── */
+html.theme-dark-blue nav,
+html.theme-dark-blue nav div[class*="lg:hidden"] {
+  background-color: #3368a0 !important;
+  border-color: #295584 !important;
+}
+
+html.theme-dark-blue nav a,
+html.theme-dark-blue nav span,
+html.theme-dark-blue nav button {
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue nav .navbar-active-border {
+  border-bottom: 4px solid #66a3bf !important;
+  background-color: rgba(102, 163, 191, 0.25) !important;
+}
+
+html.theme-dark-blue nav div[class*="absolute"],
+html.theme-dark-blue nav ul {
+  background-color: #295584 !important;
+  border-color: #3368a0 !important;
+}
+
+html.theme-dark-blue nav div[class*="absolute"] a:hover,
+html.theme-dark-blue nav ul a:hover {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+}
+
+/* Navbar Login Button (#66A3BF) */
+html.theme-dark-blue nav [class*="bg-[#FF9933]"],
+html.theme-dark-blue nav a[routerLink="/auth/userlogin"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue nav [class*="bg-[#FF9933]"]:hover,
+html.theme-dark-blue nav a[routerLink="/auth/userlogin"]:hover {
+  background-color: #528da8 !important;
+}
+
+/* ── 5. Footer (#3368A0) ── */
+html.theme-dark-blue footer {
+  background-color: #3368a0 !important;
+  border-color: #295584 !important;
+  color: #e2ecf3 !important;
+}
+
+html.theme-dark-blue footer div[class*="border-t"] {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html.theme-dark-blue footer h3 {
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue footer [class*="text-[#FF9933]"] {
+  color: #c5dfec !important;
+}
+
+html.theme-dark-blue footer a {
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue footer a:hover {
+  color: #c5dfec !important;
+}
+
+html.theme-dark-blue footer p {
+  color: #e2ecf3 !important;
+}
+
+/* Partner Logos Strip */
+html.theme-dark-blue div[class*="mt-auto"][class*="bg-white"] {
+  background-color: #f2efe7 !important;
+  border-color: #d8d4ca !important;
+}
+
+/* ── 6. Content Buttons (#66A3BF) ── */
+html.theme-dark-blue .theme-btn-primary,
+html.theme-dark-blue [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-dark-blue [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-dark-blue a[routerLink="/about"],
+html.theme-dark-blue button[type="submit"]:not(header *):not(nav *) {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+  border-color: #528da8 !important;
+}
+
+html.theme-dark-blue .theme-btn-primary:hover,
+html.theme-dark-blue
+  [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-dark-blue
+  [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-dark-blue a[routerLink="/about"]:hover {
+  background-color: #528da8 !important;
+}
+
+/* Tab buttons */
+html.theme-dark-blue .theme-tab-btn,
+html.theme-dark-blue div[class*="border-b"] button[class*="bg-[#18181b]"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue div[class*="border-b"] button[class*="bg-[#f4f4f5]"] {
+  background-color: #e8e5dd !important;
+  color: #585858 !important;
+  border: 1px solid #d8d4ca !important;
+}
+
+/* Table action buttons & modal close */
+html.theme-dark-blue .theme-action-btn,
+html.theme-dark-blue table button,
+html.theme-dark-blue .theme-modal-close,
+html.theme-dark-blue div[class*="fixed"] button[class*="bg-[#18181b]"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue .theme-action-btn:hover,
+html.theme-dark-blue table button:hover,
+html.theme-dark-blue .theme-modal-close:hover {
+  background-color: #528da8 !important;
+}
+
+/* ── Accessibility Drawer Overrides (Steel Blue Theme) ── */
+html.theme-dark-blue .a11y-drawer-content,
+html.theme-dark-blue div[class*="fixed"] div[class*="max-w-sm"] {
+  background-color: #f2efe7 !important;
+  color: #585858 !important;
+}
+
+html.theme-dark-blue .a11y-drawer-header,
+html.theme-dark-blue div[class*="fixed"] div[class*="px-6"][class*="py-4"][class*="border-b"] {
+  background-color: #3368a0 !important;
+  border-bottom-color: #295584 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue .a11y-drawer-title,
+html.theme-dark-blue .a11y-drawer-header span {
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue .a11y-drawer-close,
+html.theme-dark-blue .a11y-drawer-header button {
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue .a11y-drawer-footer {
+  background-color: #e8e5dd !important;
+  border-top-color: #d8d4ca !important;
+}
+
+html.theme-dark-blue .a11y-done-btn,
+html.theme-dark-blue .a11y-footer-btn[class*="bg-[#18181b]"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark-blue .a11y-done-btn:hover,
+html.theme-dark-blue .a11y-footer-btn[class*="bg-[#18181b]"]:hover {
+  background-color: #528da8 !important;
+}
+
+html.theme-dark-blue .a11y-size-btn,
+html.theme-dark-blue .a11y-action-btn,
+html.theme-dark-blue .a11y-theme-btn {
+  background-color: #ffffff !important;
+  border-color: #d8d4ca !important;
+  color: #585858 !important;
+}
+
+html.theme-dark-blue .a11y-size-btn:hover,
+html.theme-dark-blue .a11y-action-btn:hover,
+html.theme-dark-blue .a11y-theme-btn:hover {
+  background-color: #faf8f5 !important;
+}
+
+html.theme-dark-blue .a11y-section-title {
+  color: #585858 !important;
+}
+
+html.theme-dark-blue .size-label,
+html.theme-dark-blue .action-text,
+html.theme-dark-blue .theme-text {
+  color: #383838 !important;
+}
+
+/* ── 7. Icons & Accents (#66A3BF) ── */
+html.theme-dark-blue .theme-accent-icon,
+html.theme-dark-blue svg[stroke="#FF9933"],
+html.theme-dark-blue svg[stroke*="FF9933"],
+html.theme-dark-blue svg[class*="text-[#FF9933]"] {
+  stroke: #66a3bf !important;
+  color: #66a3bf !important;
+}
+
+html.theme-dark-blue svg[fill="#FF9933"] {
+  fill: #66a3bf !important;
+}
+
+html.theme-dark-blue button svg,
+html.theme-dark-blue a[class*="rounded"] svg {
+  color: #ffffff !important;
+  stroke: currentColor !important;
+}
+
+/* Content orange text accents */
+html.theme-dark-blue [class*="text-[#FF9933]"]:not(header *):not(nav *):not(footer *):not(button):not(button *):not(a),
+html.theme-dark-blue .theme-accent-text {
+  color: #3368a0 !important;
+}
+
+/* ── 8. Borders & Cards ── */
+html.theme-dark-blue .theme-accent-bar,
+html.theme-dark-blue [class*="bg-[#FF9933]"]:not(button):not(a):not(span):not(header *):not(nav *):not(footer *) {
+  background-color: #3368a0 !important;
+}
+
+html.theme-dark-blue [class*="border-l-4"][class*="border-[#FF9933]"],
+html.theme-dark-blue [class*="border-l-4"][class*="border-[#18181b]"] {
+  border-left-color: #3368a0 !important;
+}
+
+html.theme-dark-blue .theme-card-box,
+html.theme-dark-blue [class*="rounded-3xl"][class*="border-slate-200"],
+html.theme-dark-blue [class*="rounded-2xl"][class*="border-slate-200"],
+html.theme-dark-blue .card {
+  border-color: #d8d4ca !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 14px -3px rgba(51, 104, 160, 0.08) !important;
+}
+
+html.theme-dark-blue [class*="border-b"][class*="border-slate-100"],
+html.theme-dark-blue [class*="divide-slate-100"] > :not([hidden]) ~ :not([hidden]) {
+  border-bottom-color: #e8e5dd !important;
+  border-color: #e8e5dd !important;
+  background-color: #ffffff !important;
+}
+
+/* ── 9. Alert Banner ── */
+html.theme-dark-blue [class*="border-y-2"][class*="border-[#FF9933]"] {
+  background-color: #e8e5dd !important;
+  border-color: #66a3bf !important;
+  color: #585858 !important;
+}
+
+html.theme-dark-blue div[class*="border-y-2"] [class*="bg-[#FF9933]"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+  border-color: #528da8 !important;
+}
+
+/* ── 10. AG-Grid & Tables Overrides ── */
+html.theme-dark-blue body .ag-header,
+html.theme-dark-blue body .ag-header-row,
+html.theme-dark-blue body .ag-header-cell,
+html.theme-dark-blue body div .ag-header,
+html.theme-dark-blue body div .ag-header-row,
+html.theme-dark-blue body div .ag-header-cell,
+html.theme-dark-blue body [class*="grid"] .ag-header,
+html.theme-dark-blue body [class*="grid"] .ag-header-row,
+html.theme-dark-blue body [class*="grid"] .ag-header-cell {
+  background-color: #3368a0 !important;
+  background: #3368a0 !important;
+  color: #ffffff !important;
+  border-right-color: #295584 !important;
+  border-bottom-color: #295584 !important;
+}
+
+html.theme-dark-blue body .ag-header-cell-label,
+html.theme-dark-blue body .ag-header-cell-text,
+html.theme-dark-blue body .ag-header-icon,
+html.theme-dark-blue body .ag-header-cell-menu-button {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html.theme-dark-blue body table thead,
+html.theme-dark-blue body table thead tr,
+html.theme-dark-blue body table thead th,
+html.theme-dark-blue body table th,
+html.theme-dark-blue body .role-table thead,
+html.theme-dark-blue body .role-table th,
+html.theme-dark-blue body .access-role-header,
+html.theme-dark-blue body .access-role-header > div {
+  background-color: #3368a0 !important;
+  background: #3368a0 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-color: #295584 !important;
+}
+
+html.theme-dark-blue table tbody tr:hover {
+  background-color: #e8e5dd !important;
+}
+
+/* ── 11. Page Titles & Toolbar Buttons ── */
+html.theme-dark-blue body .page-title,
+html.theme-dark-blue body [class*="page-title"] {
+  background: #e8e5dd !important;
+  border-left: 7px solid #3368a0 !important;
+  border-bottom: 1px solid #d8d4ca !important;
+}
+
+html.theme-dark-blue body .page-title h1,
+html.theme-dark-blue body .page-title h2,
+html.theme-dark-blue body .page-title h3,
+html.theme-dark-blue body .page-title span,
+html.theme-dark-blue body [class*="page-title"] h1,
+html.theme-dark-blue body [class*="page-title"] h2,
+html.theme-dark-blue body [class*="page-title"] h3 {
+  color: #3368a0 !important;
+  font-weight: 700 !important;
+}
+
+html.theme-dark-blue body .publish-btn,
+html.theme-dark-blue body .add-btn,
+html.theme-dark-blue body .back-btn,
+html.theme-dark-blue body [class*="publish-btn"] {
+  background-color: #66a3bf !important;
+  color: #ffffff !important;
+  border: 1px solid #528da8 !important;
+}
+
+html.theme-dark-blue body .publish-btn:hover,
+html.theme-dark-blue body .add-btn:hover,
+html.theme-dark-blue body .back-btn:hover {
+  background-color: #528da8 !important;
+  color: #ffffff !important;
+}

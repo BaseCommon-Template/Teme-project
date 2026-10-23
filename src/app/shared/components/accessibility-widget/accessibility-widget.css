@@ -1,1 +1,71 @@
 /* Custom component styles for accessibility-widget */
+
+/* Container resets */
+:host {
+  display: block;
+}
+
+/* Section Header Titles */
+.a11y-section-title {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #64748b !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Text Size Buttons */
+.a11y-size-btn {
+  padding: 8px 6px !important;
+}
+.a11y-size-btn .size-label {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  line-height: 1.2 !important;
+}
+.a11y-size-btn .size-sub {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  color: #64748b !important;
+  margin-top: 2px !important;
+}
+
+/* Display & Visual Action Buttons */
+.a11y-action-btn {
+  padding: 10px 8px !important;
+  gap: 6px !important;
+}
+.a11y-action-btn .action-icon {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+.a11y-action-btn .action-text {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  text-align: center !important;
+}
+
+/* Theme Switcher Buttons */
+.a11y-theme-btn {
+  padding: 8px 10px !important;
+  gap: 8px !important;
+}
+.a11y-theme-btn .theme-dot {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0 !important;
+}
+.a11y-theme-btn .theme-text {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+/* Footer Action Buttons */
+.a11y-footer-btn {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}

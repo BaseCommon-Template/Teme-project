@@ -1,158 +1,161 @@
 <!-- Trigger Button -->
-    <button
-      (click)="a11y.toggleWidget()"
-      type="button"
-      class="flex h-8 w-8 items-center justify-center rounded-md text-[#1a2a6c] bg-transparent border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
-      title="Accessibility Options"
-      aria-label="Open accessibility options"
-    >
-      <img src="accessibility.svg" alt="Accessibility" class="w-6 h-6 cursor-pointer" />
-    </button>
+<button (click)="a11y.toggleWidget()" type="button"
+  class="flex h-8 w-8 items-center justify-center rounded-md text-[#1a2a6c] bg-transparent border-none p-0 cursor-pointer hover:opacity-80 transition-opacity"
+  title="Accessibility Options" aria-label="Open accessibility options">
+  <img src="accessibility.svg" alt="Accessibility" class="w-6 h-6 cursor-pointer" />
+</button>
 
 
 
-    <!-- Side Drawer Modal -->
-    @if (a11y.isWidgetOpen()) {
-      <div class="fixed inset-0 z-[9999] flex justify-end">
-        <!-- Overlay -->
-        <div
-          class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
-          (click)="a11y.closeWidget()"
-        ></div>
+<!-- Side Drawer Modal -->
+@if (a11y.isWidgetOpen()) {
+<div class="fixed inset-0 z-[9999] flex justify-end">
+  <!-- Overlay -->
+  <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-xs" (click)="a11y.closeWidget()"></div>
 
-        <!-- Drawer Content -->
-        <div class="relative w-full max-w-sm bg-white shadow-2xl h-full flex flex-col z-10 overflow-y-auto">
-          <!-- Drawer Header -->
-          <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#18181b] text-[#FF9933]">
-            <div class="flex items-center gap-2">
-              <span class="text-base font-bold">Accessibility Tools</span>
-            </div>
-            <button
-              (click)="a11y.closeWidget()"
-              class="text-white/80 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors"
-            >
-              ✕
-            </button>
-          </div>
+  <!-- Drawer Content -->
+  <div class="a11y-drawer-content relative w-full max-w-sm bg-white shadow-2xl h-full flex flex-col z-10 overflow-y-auto">
+    <!-- Drawer Header -->
+    <div class="a11y-drawer-header flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#18181b] text-[#FF9933]">
+      <div class="flex items-center gap-2">
+        <span class="a11y-drawer-title text-base font-bold">Accessibility Tools</span>
+      </div>
+      <button (click)="a11y.closeWidget()"
+        class="a11y-drawer-close text-white/80 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors">
+        ✕
+      </button>
+    </div>
 
-          <!-- Drawer Body -->
-          <div class="p-6 flex-1 flex flex-col gap-6">
-            <!-- Text Size Controls -->
-            <div class="flex flex-col gap-2">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Text Size</span>
-              <div class="grid grid-cols-3 gap-2">
-                <button
-                  (click)="fontSize.increase()"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
-                >
-                  <span>A+</span>
-                  <span class="text-[10px] font-normal text-slate-500">Increase</span>
-                </button>
-                <button
-                  (click)="fontSize.reset()"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
-                >
-                  <span>A</span>
-                  <span class="text-[10px] font-normal text-slate-500">Default</span>
-                </button>
-                <button
-                  (click)="fontSize.decrease()"
-                  class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-sm"
-                >
-                  <span>A-</span>
-                  <span class="text-[10px] font-normal text-slate-500">Decrease</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Display Controls Grid -->
-            <div class="flex flex-col gap-2">
-              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Display & Visual</span>
-              <div class="grid grid-cols-2 gap-3">
-                <button
-                  (click)="a11y.toggleDarkContrast()"
-                  [class.bg-blue-50]="a11y.state().darkContrast"
-                  [class.border-blue-700]="a11y.state().darkContrast"
-                  [class.text-blue-900]="a11y.state().darkContrast"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🌓</span>
-                  <span>Dark Contrast</span>
-                </button>
-
-                <button
-                  (click)="a11y.toggleInvert()"
-                  [class.bg-blue-50]="a11y.state().invert"
-                  [class.border-blue-700]="a11y.state().invert"
-                  [class.text-blue-900]="a11y.state().invert"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🔄</span>
-                  <span>Invert Colors</span>
-                </button>
-
-                <button
-                  (click)="a11y.toggleSaturation()"
-                  [class.bg-blue-50]="a11y.state().saturation"
-                  [class.border-blue-700]="a11y.state().saturation"
-                  [class.text-blue-900]="a11y.state().saturation"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🎨</span>
-                  <span>High Saturation</span>
-                </button>
-
-                <button
-                  (click)="a11y.toggleHighlightLinks()"
-                  [class.bg-blue-50]="a11y.state().highlightLinks"
-                  [class.border-blue-700]="a11y.state().highlightLinks"
-                  [class.text-blue-900]="a11y.state().highlightLinks"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🔗</span>
-                  <span>Highlight Links</span>
-                </button>
-
-                <button
-                  (click)="a11y.toggleHideImages()"
-                  [class.bg-blue-50]="a11y.state().hideImages"
-                  [class.border-blue-700]="a11y.state().hideImages"
-                  [class.text-blue-900]="a11y.state().hideImages"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🖼️</span>
-                  <span>Hide Images</span>
-                </button>
-
-                <button
-                  (click)="a11y.toggleDefaultCursor()"
-                  [class.bg-blue-50]="a11y.state().defaultCursor"
-                  [class.border-blue-700]="a11y.state().defaultCursor"
-                  [class.text-blue-900]="a11y.state().defaultCursor"
-                  class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold"
-                >
-                  <span class="text-lg">🖱️</span>
-                  <span>Default Cursor</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Drawer Footer -->
-          <div class="p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-            <button
-              (click)="a11y.resetAll(); fontSize.reset()"
-              class="px-4 py-2 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-            >
-              Reset All
-            </button>
-            <button
-              (click)="a11y.closeWidget()"
-              class="px-4 py-2 bg-[#18181b] text-[#FF9933] text-xs font-bold rounded-lg hover:bg-[#27272a] transition-colors"
-            >
-              Done
-            </button>
-          </div>
+    <!-- Drawer Body -->
+    <div class="a11y-drawer-body p-6 flex-1 flex flex-col gap-6">
+      <!-- Text Size Controls -->
+      <div class="flex flex-col gap-2">
+        <span class="a11y-section-title">Text Size</span>
+        <div class="grid grid-cols-3 gap-2">
+          <button (click)="fontSize.increase()" type="button"
+            class="a11y-size-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer">
+            <span class="size-label">A+</span>
+            <span class="size-sub">Increase</span>
+          </button>
+          <button (click)="fontSize.reset()" type="button"
+            class="a11y-size-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer">
+            <span class="size-label">A</span>
+            <span class="size-sub">Default</span>
+          </button>
+          <button (click)="fontSize.decrease()" type="button"
+            class="a11y-size-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer">
+            <span class="size-label">A-</span>
+            <span class="size-sub">Decrease</span>
+          </button>
         </div>
       </div>
-    }
+
+      <!-- Display Controls Grid -->
+      <div class="flex flex-col gap-2">
+        <span class="a11y-section-title">Display & Visual</span>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button (click)="a11y.toggleDarkContrast()" type="button" [class.bg-blue-50]="a11y.state().darkContrast"
+            [class.border-blue-700]="a11y.state().darkContrast" [class.text-blue-900]="a11y.state().darkContrast"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🌓</span>
+            <span class="action-text">Dark Contrast</span>
+          </button>
+
+          <button (click)="a11y.toggleInvert()" type="button" [class.bg-blue-50]="a11y.state().invert"
+            [class.border-blue-700]="a11y.state().invert" [class.text-blue-900]="a11y.state().invert"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🔄</span>
+            <span class="action-text">Invert Colors</span>
+          </button>
+
+          <button (click)="a11y.toggleSaturation()" type="button" [class.bg-blue-50]="a11y.state().saturation"
+            [class.border-blue-700]="a11y.state().saturation" [class.text-blue-900]="a11y.state().saturation"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🎨</span>
+            <span class="action-text">High Saturation</span>
+          </button>
+
+          <button (click)="a11y.toggleHighlightLinks()" type="button" [class.bg-blue-50]="a11y.state().highlightLinks"
+            [class.border-blue-700]="a11y.state().highlightLinks" [class.text-blue-900]="a11y.state().highlightLinks"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🔗</span>
+            <span class="action-text">Highlight Links</span>
+          </button>
+
+          <button (click)="a11y.toggleHideImages()" type="button" [class.bg-blue-50]="a11y.state().hideImages"
+            [class.border-blue-700]="a11y.state().hideImages" [class.text-blue-900]="a11y.state().hideImages"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🖼️</span>
+            <span class="action-text">Hide Images</span>
+          </button>
+
+          <button (click)="a11y.toggleDefaultCursor()" type="button" [class.bg-blue-50]="a11y.state().defaultCursor"
+            [class.border-blue-700]="a11y.state().defaultCursor" [class.text-blue-900]="a11y.state().defaultCursor"
+            class="a11y-action-btn flex flex-col items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="action-icon">🖱️</span>
+            <span class="action-text">Default Cursor</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Color Themes Controls -->
+      <div class="flex flex-col gap-2">
+        <span class="a11y-section-title">Themes / Color Schemes</span>
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- Theme 1: Default Light -->
+          <button (click)="a11y.setTheme('default')" type="button"
+            [class.bg-blue-50]="a11y.state().currentTheme === 'default'"
+            [class.border-blue-600]="a11y.state().currentTheme === 'default'"
+            [class.text-blue-900]="a11y.state().currentTheme === 'default'"
+            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="theme-dot rounded-full border-2 border-[#18181b] bg-[#FF9933] shadow-xs"></span>
+            <span class="theme-text">Default Light</span>
+          </button>
+
+          <!-- Theme 2: Royal Blue -->
+          <button (click)="a11y.setTheme('dark')" type="button"
+            [class.bg-blue-50]="a11y.state().currentTheme === 'dark'"
+            [class.border-blue-600]="a11y.state().currentTheme === 'dark'"
+            [class.text-blue-900]="a11y.state().currentTheme === 'dark'"
+            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="theme-dot rounded-full border-2 border-[#123B73] bg-[#2563eb] shadow-xs"></span>
+            <span class="theme-text">Royal Blue</span>
+          </button>
+
+          <!-- Theme 3: Sepia / Warm -->
+          <button (click)="a11y.setTheme('sepia')" type="button"
+            [class.bg-blue-50]="a11y.state().currentTheme === 'sepia'"
+            [class.border-blue-600]="a11y.state().currentTheme === 'sepia'"
+            [class.text-blue-900]="a11y.state().currentTheme === 'sepia'"
+            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="theme-dot rounded-full border-2 border-[#949374] bg-[#C5836A] shadow-xs"></span>
+            <span class="theme-text">Sepia / Warm</span>
+          </button>
+
+          <!-- Theme 4: Steel Blue -->
+          <button (click)="a11y.setTheme('dark-blue')" type="button"
+            [class.bg-blue-50]="a11y.state().currentTheme === 'dark-blue'"
+            [class.border-blue-600]="a11y.state().currentTheme === 'dark-blue'"
+            [class.text-blue-900]="a11y.state().currentTheme === 'dark-blue'"
+            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
+            <span class="theme-dot rounded-full border-2 border-[#66A3BF] bg-[#3368A0] shadow-xs"></span>
+            <span class="theme-text">Steel Blue</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="a11y-drawer-footer p-6 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+      <button (click)="a11y.resetAll(); fontSize.reset()" type="button"
+        class="a11y-footer-btn px-4 py-2 font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer">
+        Reset All
+      </button>
+      <button (click)="a11y.closeWidget()" type="button"
+        class="a11y-footer-btn a11y-done-btn px-4 py-2 bg-[#18181b] text-[#FF9933] font-bold rounded-lg hover:bg-[#27272a] transition-colors cursor-pointer">
+        Done
+      </button>
+    </div>
+  </div>
+</div>
+}

@@ -1,6 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 
+export type AppTheme = 'default' | 'dark' | 'sepia' | 'dark-blue';
+
 export interface A11yState {
+  currentTheme: AppTheme;
   darkContrast: boolean;
   invert: boolean;
   saturation: boolean;
@@ -11,6 +14,7 @@ export interface A11yState {
 }
 
 export const DEFAULT_A11Y_STATE: A11yState = {
+  currentTheme: 'default',
   darkContrast: false,
   invert: false,
   saturation: false,
@@ -60,6 +64,11 @@ export class AccessibilityService {
     if (state.textSize === 1) root.classList.add('a11y-text-lg');
     if (state.textSize >= 2) root.classList.add('a11y-text-xl');
     if (state.textSize === -1) root.classList.add('a11y-text-sm');
+
+    root.classList.remove('theme-dark', 'theme-sepia', 'theme-dark-blue');
+    if (state.currentTheme && state.currentTheme !== 'default') {
+      root.classList.add(`theme-${state.currentTheme}`);
+    }
   }
 
   private saveAndApply(next: A11yState): void {
@@ -126,6 +135,13 @@ export class AccessibilityService {
     if (current > -1) {
       this.saveAndApply({ ...this.stateSignal(), textSize: current - 1 });
     }
+  }
+
+  setTheme(theme: AppTheme): void {
+    this.saveAndApply({
+      ...this.stateSignal(),
+      currentTheme: theme,
+    });
   }
 
   resetAll(): void {

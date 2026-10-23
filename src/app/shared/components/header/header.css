@@ -46,11 +46,18 @@
 }
 
 .center-title {
+  font-family: 'Montserrat', 'Poppins', sans-serif;
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: #1a2a6c;
   white-space: nowrap;
   margin: 0;
+  line-height: 1.2;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .right-icons {
@@ -93,6 +100,7 @@
 
   .center-title {
     font-size: 22px;
+    letter-spacing: 0.06em;
   }
 }
 
@@ -123,5 +131,6 @@
 
   .center-title {
     font-size: 20px;
+    letter-spacing: 0.05em;
   }
 }

@@ -1,0 +1,343 @@
+/* ==========================================================================
+   THEME 3: SEPIA / WARM OVERRIDES (html.theme-sepia)
+   Terracotta #C5836A & Sage #949374 Warm Earthy Harmony
+   ========================================================================== */
+
+/* ── 1. Sepia Theme Variables ── */
+html.theme-sepia {
+  color-scheme: light;
+  --theme-primary: #C5836A;
+  --theme-primary-hover: #A8674F;
+  --theme-accent: #949374;
+  --theme-accent-hover: #7E7D5E;
+  --theme-border: #DFD7CC;
+  --theme-border-subtle: #ECE5DB;
+  --theme-bg-body: #FAF6F0;
+  --theme-bg-surface: #FFFFFF;
+  --theme-bg-elevated: #F5EFE7;
+  --theme-text-primary: #2B231F;
+  --theme-text-secondary: #6B6358;
+  --primary: #C5836A;
+  --primary-foreground: #FFFFFF;
+  --accent: #949374;
+  --accent-foreground: #FFFFFF;
+  --ring: #C5836A;
+}
+
+/* ── 2. Canvas & Body ── */
+html.theme-sepia body,
+html.theme-sepia main,
+html.theme-sepia .bg-slate-50 {
+  background-color: #FAF6F0 !important;
+  color: #2B231F !important;
+}
+
+/* ── 3. Header ── */
+html.theme-sepia header,
+html.theme-sepia header .main-header {
+  background-color: #F7F1EA !important;
+  border-color: #DFD7CC !important;
+}
+
+html.theme-sepia header .center-title {
+  color: #C5836A !important;
+}
+
+/* ── 4. Navbar ── */
+html.theme-sepia nav {
+  background-color: #422E26 !important;
+  border-color: #5C4136 !important;
+}
+
+html.theme-sepia nav a,
+html.theme-sepia nav span,
+html.theme-sepia nav button {
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia nav .navbar-active-border {
+  border-bottom: 4px solid #C5836A !important;
+  background-color: rgba(197, 131, 106, 0.22) !important;
+}
+
+html.theme-sepia nav div[class*="absolute"],
+html.theme-sepia nav ul {
+  background-color: #33231D !important;
+  border-color: #5C4136 !important;
+}
+
+html.theme-sepia nav div[class*="absolute"] a:hover,
+html.theme-sepia nav ul a:hover {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia nav [class*="bg-[#FF9933]"],
+html.theme-sepia nav a[routerLink="/auth/userlogin"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia nav [class*="bg-[#FF9933]"]:hover,
+html.theme-sepia nav a[routerLink="/auth/userlogin"]:hover {
+  background-color: #A8674F !important;
+}
+
+/* ── 5. Footer ── */
+html.theme-sepia footer {
+  background-color: #33231D !important;
+  border-color: #4A352B !important;
+  color: #F7F1EA !important;
+}
+
+html.theme-sepia footer h3 {
+  color: #C5836A !important;
+}
+
+html.theme-sepia footer [class*="text-[#FF9933]"] {
+  color: #C5836A !important;
+}
+
+html.theme-sepia footer a {
+  color: #F7F1EA !important;
+}
+
+html.theme-sepia footer a:hover {
+  color: #C5836A !important;
+}
+
+/* ── 6. Content Buttons ── */
+html.theme-sepia .theme-btn-primary,
+html.theme-sepia [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-sepia [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-sepia a[routerLink="/about"],
+html.theme-sepia button[type="submit"]:not(header *):not(nav *) {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+  border-color: #B26E56 !important;
+}
+
+html.theme-sepia .theme-btn-primary:hover,
+html.theme-sepia [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-sepia [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-sepia a[routerLink="/about"]:hover {
+  background-color: #A8674F !important;
+}
+
+/* Tab buttons */
+html.theme-sepia .theme-tab-btn,
+html.theme-sepia div[class*="border-b"] button[class*="bg-[#18181b]"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia div[class*="border-b"] button[class*="bg-[#f4f4f5]"] {
+  background-color: #F5EFE7 !important;
+  color: #6E6850 !important;
+  border: 1px solid #DFD7CC !important;
+}
+
+/* Table action buttons & modal close */
+html.theme-sepia .theme-action-btn,
+html.theme-sepia table button,
+html.theme-sepia .theme-modal-close,
+html.theme-sepia div[class*="fixed"] button[class*="bg-[#18181b]"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia .theme-action-btn:hover,
+html.theme-sepia table button:hover,
+html.theme-sepia .theme-modal-close:hover {
+  background-color: #A8674F !important;
+}
+
+/* ── Accessibility Drawer Overrides (Sepia Theme) ── */
+html.theme-sepia .a11y-drawer-content,
+html.theme-sepia div[class*="fixed"] div[class*="max-w-sm"] {
+  background-color: #FAF6F0 !important;
+  color: #2B231F !important;
+}
+
+html.theme-sepia .a11y-drawer-header,
+html.theme-sepia div[class*="fixed"] div[class*="px-6"][class*="py-4"][class*="border-b"] {
+  background-color: #C5836A !important;
+  border-bottom-color: #A8674F !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia .a11y-drawer-title,
+html.theme-sepia .a11y-drawer-header span {
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia .a11y-drawer-close,
+html.theme-sepia .a11y-drawer-header button {
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia .a11y-drawer-footer {
+  background-color: #F5EFE7 !important;
+  border-top-color: #DFD7CC !important;
+}
+
+html.theme-sepia .a11y-done-btn,
+html.theme-sepia .a11y-footer-btn[class*="bg-[#18181b]"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+}
+
+html.theme-sepia .a11y-done-btn:hover,
+html.theme-sepia .a11y-footer-btn[class*="bg-[#18181b]"]:hover {
+  background-color: #A8674F !important;
+}
+
+html.theme-sepia .a11y-size-btn,
+html.theme-sepia .a11y-action-btn,
+html.theme-sepia .a11y-theme-btn {
+  background-color: #FFFFFF !important;
+  border-color: #DFD7CC !important;
+  color: #2B231F !important;
+}
+
+/* ── 7. Icons & Sage Accents ── */
+html.theme-sepia .theme-accent-icon,
+html.theme-sepia svg[stroke="#FF9933"],
+html.theme-sepia svg[stroke*="FF9933"],
+html.theme-sepia svg[class*="text-[#FF9933]"] {
+  stroke: #C5836A !important;
+  color: #C5836A !important;
+}
+
+html.theme-sepia svg[fill="#FF9933"] {
+  fill: #C5836A !important;
+}
+
+html.theme-sepia button svg,
+html.theme-sepia a[class*="rounded"] svg {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+}
+
+/* Content orange text accents */
+html.theme-sepia [class*="text-[#FF9933]"]:not(header *):not(nav *):not(footer *):not(button):not(button *):not(a),
+html.theme-sepia .theme-accent-text {
+  color: #C5836A !important;
+}
+
+/* ── 8. Borders & Cards ── */
+html.theme-sepia .theme-accent-bar,
+html.theme-sepia [class*="bg-[#FF9933]"]:not(button):not(a):not(span):not(header *):not(nav *):not(footer *) {
+  background-color: #C5836A !important;
+}
+
+html.theme-sepia [class*="border-l-4"][class*="border-[#FF9933]"],
+html.theme-sepia [class*="border-l-4"][class*="border-[#18181b]"] {
+  border-left-color: #C5836A !important;
+}
+
+html.theme-sepia .theme-card-box,
+html.theme-sepia [class*="rounded-3xl"][class*="border-slate-200"],
+html.theme-sepia [class*="rounded-2xl"][class*="border-slate-200"],
+html.theme-sepia .card {
+  border-color: #DFD7CC !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 4px 14px -3px rgba(66, 46, 38, 0.06) !important;
+}
+
+html.theme-sepia [class*="border-b"][class*="border-slate-100"],
+html.theme-sepia [class*="divide-slate-100"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #ECE5DB !important;
+}
+
+/* ── 9. Alert Banner ── */
+html.theme-sepia [class*="border-y-2"][class*="border-[#FF9933]"] {
+  background-color: #422E26 !important;
+  border-color: #C5836A !important;
+  color: #F7F1EA !important;
+}
+
+html.theme-sepia div[class*="border-y-2"] [class*="bg-[#FF9933]"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+  border-color: #A8674F !important;
+}
+
+/* ── 10. AG-Grid & Tables Overrides ── */
+html.theme-sepia body .ag-header,
+html.theme-sepia body .ag-header-row,
+html.theme-sepia body .ag-header-cell,
+html.theme-sepia body div .ag-header,
+html.theme-sepia body div .ag-header-row,
+html.theme-sepia body div .ag-header-cell,
+html.theme-sepia body [class*="grid"] .ag-header,
+html.theme-sepia body [class*="grid"] .ag-header-row,
+html.theme-sepia body [class*="grid"] .ag-header-cell {
+  background-color: #4A352B !important;
+  background: #4A352B !important;
+  color: #F7F1EA !important;
+  border-right-color: #5C4136 !important;
+  border-bottom-color: #5C4136 !important;
+}
+
+html.theme-sepia body .ag-header-cell-label,
+html.theme-sepia body .ag-header-cell-text,
+html.theme-sepia body .ag-header-icon,
+html.theme-sepia body .ag-header-cell-menu-button {
+  color: #F7F1EA !important;
+  font-weight: 700 !important;
+}
+
+html.theme-sepia body table thead,
+html.theme-sepia body table thead tr,
+html.theme-sepia body table thead th,
+html.theme-sepia body table th,
+html.theme-sepia body .role-table thead,
+html.theme-sepia body .role-table th,
+html.theme-sepia body .access-role-header,
+html.theme-sepia body .access-role-header > div {
+  background-color: #4A352B !important;
+  background: #4A352B !important;
+  color: #F7F1EA !important;
+  font-weight: 700 !important;
+  border-color: #5C4136 !important;
+}
+
+html.theme-sepia table tbody tr:hover {
+  background-color: #F5EFE7 !important;
+}
+
+/* ── 11. Page Titles & Toolbar Buttons ── */
+html.theme-sepia body .page-title,
+html.theme-sepia body [class*="page-title"] {
+  background: #C5836A !important;
+  border-left: 7px solid #422E26 !important;
+  border-bottom: 1px solid #DFD7CC !important;
+}
+
+html.theme-sepia body .page-title h1,
+html.theme-sepia body .page-title h2,
+html.theme-sepia body .page-title h3,
+html.theme-sepia body .page-title span,
+html.theme-sepia body [class*="page-title"] h1,
+html.theme-sepia body [class*="page-title"] h2,
+html.theme-sepia body [class*="page-title"] h3 {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+html.theme-sepia body .publish-btn,
+html.theme-sepia body .add-btn,
+html.theme-sepia body .back-btn,
+html.theme-sepia body [class*="publish-btn"] {
+  background-color: #C5836A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #A8674F !important;
+}
+
+html.theme-sepia body .publish-btn:hover,
+html.theme-sepia body .add-btn:hover,
+html.theme-sepia body .back-btn:hover {
+  background-color: #A8674F !important;
+  color: #FFFFFF !important;
+}

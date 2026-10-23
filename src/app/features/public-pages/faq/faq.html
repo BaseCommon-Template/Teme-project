@@ -1,6 +1,6 @@
 <div class="bg-slate-50 py-8 px-4 sm:px-8 lg:px-16 min-h-[70vh]" id="maincontent">
       <div class="max-w-5xl mx-auto">
-        <div class="border-l-4 border-blue-600 pl-4 mb-6">
+        <div class="border-l-4 border-[#FF9933] pl-4 mb-6">
           <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 m-0">
             Frequently Asked Questions (FAQs)
           </h1>
@@ -14,15 +14,17 @@
                 class="flex justify-between items-center w-full text-left bg-transparent border-none cursor-pointer p-0 group"
               >
                 <h3
-                  [class.text-blue-700]="openFaqIndex() === idx"
+                  [class.text-[#c2410c]]="openFaqIndex() === idx"
+                  [class.faq-title-active]="openFaqIndex() === idx"
                   [class.text-slate-800]="openFaqIndex() !== idx"
-                  class="text-base sm:text-lg font-bold transition-colors m-0 pr-4 leading-snug group-hover:text-blue-700"
+                  class="text-base sm:text-lg font-bold transition-colors m-0 pr-4 leading-snug group-hover:text-[#c2410c] faq-title-hover"
                 >
                   {{ faq.title }}
                 </h3>
                 <span
                   [class.rotate-45]="openFaqIndex() === idx"
-                  [class.text-blue-700]="openFaqIndex() === idx"
+                  [class.text-[#c2410c]]="openFaqIndex() === idx"
+                  [class.faq-icon-active]="openFaqIndex() === idx"
                   class="text-2xl font-bold transition-transform duration-300 text-slate-400 shrink-0"
                 >
                   +

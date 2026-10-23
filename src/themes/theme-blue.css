@@ -1,0 +1,603 @@
+/* ==========================================================================
+   THEME 2: BLUE THEME (html.theme-dark / html.theme-blue)
+   Deep Blue #123B73 & #2563EB theme across all content
+   ========================================================================== */
+
+/* ── 1. Blue Theme Variables ── */
+html.theme-dark,
+html.theme-blue {
+  color-scheme: light;
+  --theme-primary: #123b73;
+  --theme-primary-hover: #0e2e5c;
+  --theme-accent: #2563eb;
+  --theme-accent-hover: #1d4ed8;
+  --theme-border: #bfdbfe;
+  --theme-border-subtle: #dbeafe;
+  --theme-bg-body: #ffffff;
+  --theme-bg-surface: #ffffff;
+  --theme-bg-elevated: #eff6ff;
+  --theme-text-primary: #0f172a;
+  --theme-text-secondary: #334155;
+  --primary: #123b73;
+  --primary-foreground: #ffffff;
+  --accent: #2563eb;
+  --accent-foreground: #ffffff;
+  --ring: #2563eb;
+}
+
+/* ── 2. Canvas & Body ── */
+html.theme-dark body,
+html.theme-blue body {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* ── 3. Header ── */
+html.theme-dark header,
+html.theme-blue header,
+html.theme-dark header .main-header,
+html.theme-blue header .main-header {
+  background-color: #ffffff !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+html.theme-dark header .center-title,
+html.theme-blue header .center-title {
+  color: #123b73 !important;
+}
+
+html.theme-dark header .separator,
+html.theme-blue header .separator {
+  color: #2563eb !important;
+}
+
+/* ── 4. Navbar ── */
+html.theme-dark nav,
+html.theme-blue nav {
+  background-color: #0e2e5c !important;
+  border-bottom-color: #1b4277 !important;
+}
+
+html.theme-dark nav a,
+html.theme-blue nav a,
+html.theme-dark nav span,
+html.theme-blue nav span,
+html.theme-dark nav button,
+html.theme-blue nav button {
+  color: #ffffff !important;
+}
+
+html.theme-dark nav a:hover,
+html.theme-blue nav a:hover,
+html.theme-dark nav button:hover,
+html.theme-blue nav button:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark nav a:not(.navbar-active-border),
+html.theme-blue nav a:not(.navbar-active-border) {
+  border-bottom-color: transparent !important;
+  border-color: transparent !important;
+}
+
+html.theme-dark nav .navbar-active-border,
+html.theme-blue nav .navbar-active-border {
+  border-bottom: 4px solid #38bdf8 !important;
+  background-color: rgba(56, 189, 248, 0.18) !important;
+  color: #ffffff !important;
+}
+
+/* Navbar Dropdowns */
+html.theme-dark nav div[class*="absolute"],
+html.theme-blue nav div[class*="absolute"],
+html.theme-dark nav ul,
+html.theme-blue nav ul {
+  background-color: #0a2347 !important;
+  border-color: #1b4277 !important;
+}
+
+html.theme-dark nav div[class*="absolute"] a:hover,
+html.theme-blue nav div[class*="absolute"] a:hover {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark .dropdown-active-item,
+html.theme-blue .dropdown-active-item {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-left-color: #93c5fd !important;
+}
+
+/* Navbar Role Switcher & User Avatar & Login Button */
+html.theme-dark nav [class*="text-[#FF9933]"],
+html.theme-blue nav [class*="text-[#FF9933]"],
+html.theme-dark nav svg.text-\[\#FF9933\],
+html.theme-blue nav svg.text-\[\#FF9933\] {
+  color: #93c5fd !important;
+  stroke: #93c5fd !important;
+}
+
+html.theme-dark nav [class*="bg-[#FF9933]"],
+html.theme-blue nav [class*="bg-[#FF9933]"] {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark nav a[routerLink="/auth/userlogin"],
+html.theme-blue nav a[routerLink="/auth/userlogin"],
+html.theme-dark .navbar-login-btn,
+html.theme-blue .navbar-login-btn {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark nav a[routerLink="/auth/userlogin"]:hover,
+html.theme-blue nav a[routerLink="/auth/userlogin"]:hover,
+html.theme-dark .navbar-login-btn:hover,
+html.theme-blue .navbar-login-btn:hover {
+  background-color: #1d4ed8 !important;
+}
+
+html.theme-dark nav a[routerLink="/auth/userlogin"] svg,
+html.theme-blue nav a[routerLink="/auth/userlogin"] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html.theme-dark nav select,
+html.theme-blue nav select {
+  background-color: #0a2347 !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* ── 5. Footer ── */
+html.theme-dark footer,
+html.theme-blue footer {
+  background-color: #123b73 !important;
+  border-top-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark footer h3,
+html.theme-blue footer h3 {
+  color: #93c5fd !important;
+}
+
+html.theme-dark footer [class*="text-[#FF9933]"],
+html.theme-blue footer [class*="text-[#FF9933]"] {
+  color: #93c5fd !important;
+}
+
+html.theme-dark footer a,
+html.theme-blue footer a,
+html.theme-dark footer p,
+html.theme-blue footer p,
+html.theme-dark footer span,
+html.theme-blue footer span {
+  color: #ffffff !important;
+}
+
+html.theme-dark footer a:hover,
+html.theme-blue footer a:hover {
+  color: #bfdbfe !important;
+  text-decoration: underline !important;
+}
+
+html.theme-dark footer div[class*="border-t"],
+html.theme-blue footer div[class*="border-t"],
+html.theme-dark footer .border-zinc-800,
+html.theme-blue footer .border-zinc-800 {
+  border-top-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ── 6. Content Buttons ── */
+html.theme-dark .theme-btn-primary,
+html.theme-blue .theme-btn-primary,
+html.theme-dark [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-blue [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-dark [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-blue [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-dark a[routerLink="/about"],
+html.theme-blue a[routerLink="/about"],
+html.theme-dark a[routerLink="/auth/userlogin"]:not(nav):not(nav *),
+html.theme-blue a[routerLink="/auth/userlogin"]:not(nav):not(nav *),
+html.theme-dark button[type="submit"]:not(header *):not(nav *),
+html.theme-blue button[type="submit"]:not(header *):not(nav *),
+/* ── Accessibility Drawer Overrides (Royal Blue Theme) ── */
+html.theme-dark .a11y-drawer-header,
+html.theme-blue .a11y-drawer-header,
+html.theme-dark div[class*="fixed"] div[class*="px-6"][class*="py-4"][class*="border-b"],
+html.theme-blue div[class*="fixed"] div[class*="px-6"][class*="py-4"][class*="border-b"] {
+  background-color: #123b73 !important;
+  border-bottom-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark .a11y-drawer-title,
+html.theme-blue .a11y-drawer-title,
+html.theme-dark .a11y-drawer-header span,
+html.theme-blue .a11y-drawer-header span {
+  color: #ffffff !important;
+}
+
+html.theme-dark .a11y-done-btn,
+html.theme-blue .a11y-done-btn,
+html.theme-dark .a11y-footer-btn[class*="bg-[#18181b]"],
+html.theme-blue .a11y-footer-btn[class*="bg-[#18181b]"] {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #1d4ed8 !important;
+}
+
+html.theme-dark .theme-btn-primary:hover,
+html.theme-blue .theme-btn-primary:hover,
+html.theme-dark [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-blue [class*="bg-[#18181b]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-dark [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-blue [class*="bg-[#27272a]"]:not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *):hover,
+html.theme-dark a[routerLink="/about"]:hover,
+html.theme-blue a[routerLink="/about"]:hover,
+html.theme-dark a[routerLink="/auth/userlogin"]:not(nav):not(nav *):hover,
+html.theme-blue a[routerLink="/auth/userlogin"]:not(nav):not(nav *):hover,
+html.theme-dark button[type="submit"]:not(header *):not(nav *):hover,
+html.theme-blue button[type="submit"]:not(header *):not(nav *):hover {
+  background-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
+
+/* Tab buttons (Notifications tab) */
+html.theme-dark .theme-tab-btn,
+html.theme-blue .theme-tab-btn,
+html.theme-dark div[class*="border-b"] button[class*="bg-[#18181b]"],
+html.theme-blue div[class*="border-b"] button[class*="bg-[#18181b]"],
+html.theme-dark div[class*="border-b"] button[class*="bg-[#234161]"],
+html.theme-blue div[class*="border-b"] button[class*="bg-[#234161]"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark div[class*="border-b"] button[class*="bg-[#f4f4f5]"],
+html.theme-blue div[class*="border-b"] button[class*="bg-[#f4f4f5]"],
+html.theme-dark div[class*="border-b"] button[class*="bg-[#dbeafe]"],
+html.theme-blue div[class*="border-b"] button[class*="bg-[#dbeafe]"] {
+  background-color: #eff6ff !important;
+  color: #123b73 !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+html.theme-dark div[class*="border-b"] button[class*="bg-[#f4f4f5]"]:hover,
+html.theme-blue div[class*="border-b"] button[class*="bg-[#f4f4f5]"]:hover {
+  background-color: #dbeafe !important;
+  color: #0e2e5c !important;
+}
+
+/* Table action buttons (View) */
+html.theme-dark .theme-action-btn,
+html.theme-blue .theme-action-btn,
+html.theme-dark table button,
+html.theme-blue table button,
+html.theme-dark table [class*="bg-[#18181b]"],
+html.theme-blue table [class*="bg-[#18181b]"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark table button:hover,
+html.theme-blue table button:hover {
+  background-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
+
+/* Modal action buttons */
+html.theme-dark div[class*="fixed"] button[class*="bg-[#18181b]"],
+html.theme-blue div[class*="fixed"] button[class*="bg-[#18181b]"],
+html.theme-dark .theme-modal-close,
+html.theme-blue .theme-modal-close {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark div[class*="fixed"] button[class*="bg-[#18181b]"]:hover,
+html.theme-blue div[class*="fixed"] button[class*="bg-[#18181b]"]:hover,
+html.theme-dark .theme-modal-close:hover,
+html.theme-blue .theme-modal-close:hover {
+  background-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
+
+/* Accessibility drawer done button & header */
+html.theme-dark .a11y-footer-btn[class*="bg-[#18181b]"],
+html.theme-blue .a11y-footer-btn[class*="bg-[#18181b]"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark .border-b[class*="bg-[#18181b]"],
+html.theme-blue .border-b[class*="bg-[#18181b]"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+/* ── 7. Icons ── */
+html.theme-dark .theme-accent-icon,
+html.theme-blue .theme-accent-icon,
+html.theme-dark svg[stroke="#FF9933"],
+html.theme-blue svg[stroke="#FF9933"],
+html.theme-dark svg[stroke*="FF9933"],
+html.theme-blue svg[stroke*="FF9933"],
+html.theme-dark svg.text-\[\#FF9933\],
+html.theme-blue svg.text-\[\#FF9933\],
+html.theme-dark svg[class*="text-[#FF9933]"],
+html.theme-blue svg[class*="text-[#FF9933]"] {
+  stroke: #123b73 !important;
+  color: #123b73 !important;
+}
+
+html.theme-dark svg[fill="#FF9933"],
+html.theme-blue svg[fill="#FF9933"],
+html.theme-dark svg[fill*="FF9933"],
+html.theme-blue svg[fill*="FF9933"] {
+  fill: #123b73 !important;
+}
+
+html.theme-dark button svg,
+html.theme-blue button svg,
+html.theme-dark a[class*="rounded"] svg,
+html.theme-blue a[class*="rounded"] svg,
+html.theme-dark [class*="bg-[#18181b]"] svg,
+html.theme-blue [class*="bg-[#18181b]"] svg,
+html.theme-dark [class*="bg-[#123b73]"] svg,
+html.theme-blue [class*="bg-[#123b73]"] svg {
+  color: #ffffff !important;
+  stroke: currentColor !important;
+}
+
+html.theme-dark div[class*="border-b"] button[class*="bg-[#f4f4f5]"] svg,
+html.theme-blue div[class*="border-b"] button[class*="bg-[#f4f4f5]"] svg {
+  color: #123b73 !important;
+  stroke: currentColor !important;
+}
+
+/* Content orange text accents */
+html.theme-dark [class*="text-[#FF9933]"]:not(header *):not(nav *):not(footer *):not(button):not(button *):not(a),
+html.theme-blue [class*="text-[#FF9933]"]:not(header *):not(nav *):not(footer *):not(button):not(button *):not(a),
+html.theme-dark .theme-accent-text,
+html.theme-blue .theme-accent-text {
+  color: #123b73 !important;
+}
+
+/* ── 8. Borders & Accents ── */
+html.theme-dark .theme-accent-bar,
+html.theme-blue .theme-accent-bar,
+html.theme-dark [class*="bg-[#FF9933]"]:not(button):not(a):not(span):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *),
+html.theme-blue [class*="bg-[#FF9933]"]:not(button):not(a):not(span):not(header):not(header *):not(nav):not(nav *):not(footer):not(footer *) {
+  background-color: #123b73 !important;
+}
+
+html.theme-dark [class*="border-[#FF9933]"],
+html.theme-blue [class*="border-[#FF9933]"] {
+  border-color: #123b73 !important;
+}
+
+html.theme-dark [class*="border-l-4"][class*="border-[#FF9933]"],
+html.theme-blue [class*="border-l-4"][class*="border-[#FF9933]"],
+html.theme-dark [class*="border-l-4"][class*="border-[#18181b]"],
+html.theme-blue [class*="border-l-4"][class*="border-[#18181b]"] {
+  border-left-color: #123b73 !important;
+}
+
+/* Outer Card Box (WHAT'S NEW card, About card, FAQ card, etc.) */
+html.theme-dark .theme-card-box,
+html.theme-blue .theme-card-box,
+html.theme-dark [class*="rounded-3xl"][class*="border-slate-200"],
+html.theme-blue [class*="rounded-3xl"][class*="border-slate-200"],
+html.theme-dark [class*="rounded-2xl"][class*="border-slate-200"],
+html.theme-blue [class*="rounded-2xl"][class*="border-slate-200"],
+html.theme-dark [class*="rounded-xl"][class*="border-slate-200"],
+html.theme-blue [class*="rounded-xl"][class*="border-slate-200"] {
+  border-color: #bfdbfe !important;
+  box-shadow: 0 4px 14px -3px rgba(18, 59, 115, 0.1) !important;
+}
+
+html.theme-dark [class*="border-b"][class*="border-slate-100"],
+html.theme-blue [class*="border-b"][class*="border-slate-100"],
+html.theme-dark [class*="divide-slate-100"] > :not([hidden]) ~ :not([hidden]),
+html.theme-blue [class*="divide-slate-100"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #dbeafe !important;
+}
+
+/* Modal box */
+html.theme-dark div[class*="fixed"] [class*="rounded-2xl"][class*="bg-white"],
+html.theme-blue div[class*="fixed"] [class*="rounded-2xl"][class*="bg-white"] {
+  border-color: #bfdbfe !important;
+  box-shadow: 0 20px 25px -5px rgba(18, 59, 115, 0.2) !important;
+}
+
+/* ── 9. Alert Banner ── */
+html.theme-dark [class*="border-y-2"][class*="border-[#FF9933]"],
+html.theme-blue [class*="border-y-2"][class*="border-[#FF9933]"] {
+  background-color: #0e2e5c !important;
+  border-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark div[class*="border-y-2"] [class*="bg-[#FF9933]"],
+html.theme-blue div[class*="border-y-2"] [class*="bg-[#FF9933]"] {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #60a5fa !important;
+}
+
+html.theme-dark div[class*="border-y-2"] [class*="text-[#FF9933]"],
+html.theme-blue div[class*="border-y-2"] [class*="text-[#FF9933]"] {
+  color: #93c5fd !important;
+  text-decoration-color: #93c5fd !important;
+}
+
+/* ── 10. Back to Top Button ── */
+html.theme-dark button[title="Back to Top"],
+html.theme-blue button[title="Back to Top"],
+html.theme-dark button[aria-label="Back to Top"],
+html.theme-blue button[aria-label="Back to Top"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+  border-color: #60a5fa !important;
+}
+
+html.theme-dark button[title="Back to Top"]:hover,
+html.theme-blue button[title="Back to Top"]:hover {
+  background-color: #0e2e5c !important;
+}
+
+/* ── 11. Top Header Bar on Dashboard / Website Status ── */
+html.theme-dark div[class*="bg-[#FF9933]"]:has(h1),
+html.theme-blue div[class*="bg-[#FF9933]"]:has(h1) {
+  background-color: #123b73 !important;
+}
+
+html.theme-dark div[class*="bg-[#FF9933]"]:has(h1) h1,
+html.theme-blue div[class*="bg-[#FF9933]"]:has(h1) h1 {
+  color: #ffffff !important;
+}
+
+html.theme-dark div[class*="bg-[#FF9933]"]:has(h1) div[class*="bg-[#18181b]"],
+html.theme-blue div[class*="bg-[#FF9933]"]:has(h1) div[class*="bg-[#18181b]"] {
+  background-color: #2563eb !important;
+}
+
+/* Sidebar active link */
+html.theme-dark aside [class*="bg-[#18181b]"],
+html.theme-blue aside [class*="bg-[#18181b]"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark aside a:hover,
+html.theme-blue aside a:hover {
+  background-color: #eff6ff !important;
+  color: #123b73 !important;
+}
+
+/* User Login Left Column Banner */
+html.theme-dark div[class*="bg-gradient-to-br"][class*="to-[#FF9933]"],
+html.theme-blue div[class*="bg-gradient-to-br"][class*="to-[#FF9933]"] {
+  background: linear-gradient(135deg, #0a192f, #123b73, #2563eb) !important;
+}
+
+/* Form controls focus */
+html.theme-dark input:focus,
+html.theme-blue input:focus,
+html.theme-dark select:focus,
+html.theme-blue select:focus,
+html.theme-dark textarea:focus,
+html.theme-blue textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* ── 12. AG-Grid & Tables Overrides ── */
+html.theme-dark body .ag-header,
+html.theme-dark body .ag-header-row,
+html.theme-dark body .ag-header-cell,
+html.theme-dark body div .ag-header,
+html.theme-dark body div .ag-header-row,
+html.theme-dark body div .ag-header-cell,
+html.theme-dark body [class*="grid"] .ag-header,
+html.theme-dark body [class*="grid"] .ag-header-row,
+html.theme-dark body [class*="grid"] .ag-header-cell,
+html.theme-blue body .ag-header,
+html.theme-blue body .ag-header-row,
+html.theme-blue body .ag-header-cell {
+  background-color: #123b73 !important;
+  background: #123b73 !important;
+  color: #ffffff !important;
+  border-right-color: #1b4277 !important;
+  border-bottom-color: #1b4277 !important;
+}
+
+html.theme-dark body .ag-header-cell-label,
+html.theme-dark body .ag-header-cell-text,
+html.theme-dark body .ag-header-icon,
+html.theme-dark body .ag-header-cell-menu-button,
+html.theme-blue body .ag-header-cell-label,
+html.theme-blue body .ag-header-cell-text,
+html.theme-blue body .ag-header-icon,
+html.theme-blue body .ag-header-cell-menu-button {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html.theme-dark body table thead,
+html.theme-dark body table thead tr,
+html.theme-dark body table thead th,
+html.theme-dark body table th,
+html.theme-dark body .role-table thead,
+html.theme-dark body .role-table th,
+html.theme-dark body .access-role-header,
+html.theme-dark body .access-role-header > div,
+html.theme-blue body table thead,
+html.theme-blue body table thead tr,
+html.theme-blue body table thead th,
+html.theme-blue body table th {
+  background-color: #123b73 !important;
+  background: #123b73 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-color: #1b4277 !important;
+}
+
+html.theme-dark body table tbody tr:hover,
+html.theme-blue body table tbody tr:hover {
+  background-color: #eff6ff !important;
+}
+
+/* ── 13. Page Titles & Toolbar Buttons ── */
+html.theme-dark body .page-title,
+html.theme-dark body [class*="page-title"],
+html.theme-blue body .page-title,
+html.theme-blue body [class*="page-title"] {
+  background: #123b73 !important;
+  border-left: 7px solid #2563eb !important;
+  border-bottom: 1px solid #bfdbfe !important;
+}
+
+html.theme-dark body .page-title h1,
+html.theme-dark body .page-title h2,
+html.theme-dark body .page-title h3,
+html.theme-dark body .page-title span,
+html.theme-dark body [class*="page-title"] h1,
+html.theme-dark body [class*="page-title"] h2,
+html.theme-dark body [class*="page-title"] h3,
+html.theme-blue body .page-title h1,
+html.theme-blue body .page-title h2,
+html.theme-blue body .page-title h3,
+html.theme-blue body .page-title span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+html.theme-dark body .publish-btn,
+html.theme-dark body .add-btn,
+html.theme-dark body .back-btn,
+html.theme-dark body [class*="publish-btn"],
+html.theme-blue body .publish-btn,
+html.theme-blue body .add-btn,
+html.theme-blue body .back-btn,
+html.theme-blue body [class*="publish-btn"] {
+  background-color: #123b73 !important;
+  color: #ffffff !important;
+  border: 1px solid #1b4277 !important;
+}
+
+html.theme-dark body .publish-btn:hover,
+html.theme-dark body .add-btn:hover,
+html.theme-dark body .back-btn:hover,
+html.theme-blue body .publish-btn:hover,
+html.theme-blue body .add-btn:hover,
+html.theme-blue body .back-btn:hover {
+  background-color: #0e2e5c !important;
+  color: #ffffff !important;
+}
