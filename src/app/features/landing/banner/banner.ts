@@ -19,7 +19,7 @@ export class BannerComponent implements OnInit, OnDestroy {
   private timer: any;
 
   ngOnInit(): void {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && this.images.length > 1) {
       this.timer = setInterval(() => {
         this.nextSlide();
       }, 5000);

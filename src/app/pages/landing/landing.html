@@ -14,6 +14,7 @@
       }
     </div>
 
+    @if (images.length > 1) {
     <!-- Left Arrow -->
     <button type="button" (click)="prevSlide()"
       class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center text-lg sm:text-xl transition-all cursor-pointer border border-white/20 backdrop-blur-xs"
@@ -39,6 +40,7 @@
         [attr.aria-label]="'Go to slide ' + (idx + 1)"></button>
       }
     </div>
+    }
   </div>
 
   <!-- Highly Visible 1-Line Alert Banner with Marquee Auto-Scroll -->

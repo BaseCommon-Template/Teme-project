@@ -294,25 +294,52 @@ export class UserLoginComponent implements OnInit, AfterViewInit {
             role.rol_id ??
             (typeof role === 'number' ? role : 0),
         ),
+
         roleName:
           role.roleName ??
           role.rolename ??
           role.role_name ??
           role.rolName ??
           (typeof role === 'string' ? role : ''),
+
+        priority: Number(
+          role.priority ?? role.Priority ?? role.rolePriority ?? role.RolePriority ?? 999999,
+        ),
       }));
 
       // console.log('Normalized Roles from Login Response:', normalizedRoles);
 
       this.authService.setRoles(normalizedRoles);
 
-      // Pick role with highest roleId / priority
+      // =====================================================
+      // SELECT ROLE BASED ON PRIORITY
+      // Lower priority number = higher priority
+      // Example: Priority 1 will be selected before Priority 2
+      // =====================================================
+
       const selectedRole = normalizedRoles.reduce((prev: any, curr: any) => {
-        return (curr.roleId ?? 0) > (prev.roleId ?? 0) ? curr : prev;
+        const prevPriority = Number(
+          prev?.priority ??
+            prev?.Priority ??
+            prev?.rolePriority ??
+            prev?.RolePriority ??
+            Number.MAX_SAFE_INTEGER,
+        );
+
+        const currPriority = Number(
+          curr?.priority ??
+            curr?.Priority ??
+            curr?.rolePriority ??
+            curr?.RolePriority ??
+            Number.MAX_SAFE_INTEGER,
+        );
+
+        return currPriority < prevPriority ? curr : prev;
       });
 
       if (selectedRole?.roleId) {
         extractedRoleId = Number(selectedRole.roleId);
+
         this.authService.setRoleId(extractedRoleId, selectedRole?.roleName || '');
       }
     } else if (

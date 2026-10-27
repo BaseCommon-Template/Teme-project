@@ -52,8 +52,8 @@ export class LandingComponent implements OnInit, OnDestroy {
   // Banner carousel
   readonly images = [
     'assets/images/1.png',
-    'assets/images/2.png',
-    'assets/images/3.png',
+    // 'assets/images/2.png',
+    // 'assets/images/3.png',
   ];
 
   readonly currentSlide = signal<number>(0);
@@ -80,7 +80,7 @@ export class LandingComponent implements OnInit, OnDestroy {
       this.loadJobNotificationList();
     }
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && this.images.length > 1) {
       this.timer = setInterval(() => {
         this.nextSlide();
       }, 5000);
