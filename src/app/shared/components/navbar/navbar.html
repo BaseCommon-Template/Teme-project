@@ -105,7 +105,7 @@
               title="Active Role"
             >
               <!-- Role Icon in place of "Active Role:" text -->
-              <span class="flex items-center justify-center text-[#FF9933]">
+              <span class="flex items-center justify-center text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="15"
@@ -116,7 +116,7 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="w-3.5 h-3.5 text-[#FF9933] shrink-0"
+                  class="w-3.5 h-3.5 text-white shrink-0"
                   aria-hidden="true"
                 >
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -217,7 +217,7 @@
           <a
             routerLink="/auth/userlogin"
             (click)="onNavigate('/auth/userlogin', $event)"
-            class="px-4 py-1.5 rounded-md bg-[#FF9933] hover:bg-[#e68a00] text-[#18181b] text-xs sm:text-sm font-bold transition-all shadow-sm flex items-center gap-1.5 no-underline cursor-pointer border-none"
+            class="px-4 py-1.5 rounded-md navbar-login-btn bg-[#FF9933] hover:bg-[#e68a00] text-white text-xs sm:text-sm font-bold transition-all shadow-sm flex items-center gap-1.5 no-underline cursor-pointer border-none"
           >
             <span>
               <svg
@@ -230,7 +230,7 @@
                 stroke-width="2.2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="w-3.5 h-3.5 text-[#18181b]"
+                class="w-3.5 h-3.5 text-white"
                 aria-hidden="true"
               >
                 <path d="M19 11v6"></path>
@@ -268,7 +268,7 @@
                 menu.app_router_path && menu.app_router_path !== '/' ? menu.app_router_path : null
               "
               (click)="onNavigate(menu.app_router_path, $event)"
-              class="block px-3 py-2 text-xs font-bold text-[#FF9933] uppercase tracking-wider no-underline cursor-pointer hover:bg-white/5 rounded-md"
+              class="block px-3 py-2 text-xs font-bold text-white uppercase tracking-wider no-underline cursor-pointer hover:bg-white/5 rounded-md"
             >
               {{ menu.menu_name }}
             </a>

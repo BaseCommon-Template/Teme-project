@@ -1,12 +1,14 @@
 /* ==========================================================================
-   Global Multi-Theme System
-   - Default Light: Original styling (Charcoal #18181B & Saffron #FF9933 accents)
-   - Theme 2 (Blue): Deep Blue #123B73 & #2563EB theme across all content
-   - Theme 3 (Sepia / Warm): Terracotta #C5836A & Sage #949374 warm earthy theme
-   - Theme 4 (Dark Blue): Deep Midnight Navy & Mint Emerald #00B589 theme across all content
+   Centralized Theme System
+   All theme color variables and styling rules are unified in src/styles.css
+   Dynamic theme switching is controlled by ThemeService via CSS variables:
+   - --primary-color
+   - --secondary-color
+   - --accent-color
+   - --body-bg
+   - --card-bg
+   - --text-color
+   - --border-color
+   - --header-bg
+   - --sidebar-bg
    ========================================================================== */
-
-@import './themes/theme-default.css';
-@import './themes/theme-blue.css';
-@import './themes/theme-sepia.css';
-@import './themes/theme-dark-blue.css';

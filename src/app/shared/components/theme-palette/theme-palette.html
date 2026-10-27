@@ -1,0 +1,46 @@
+<div class="theme-palette-container" role="radiogroup" aria-label="Website Theme Selector">
+  <div class="theme-palette-list">
+    @for (theme of themeService.availableThemes; track theme.id) {
+      <label
+        [for]="'theme-radio-' + theme.id"
+        class="theme-palette-option"
+        [class.active]="themeService.currentTheme() === theme.id"
+        (click)="onSelectTheme(theme)"
+      >
+        <div class="theme-option-main">
+          <!-- Accessible Radio Button -->
+          <input
+            type="radio"
+            [id]="'theme-radio-' + theme.id"
+            name="portal-color-theme"
+            [value]="theme.id"
+            [checked]="themeService.currentTheme() === theme.id"
+            (change)="onSelectTheme(theme)"
+            class="theme-radio"
+            aria-label="Select theme {{ theme.name }}"
+          />
+
+          <!-- Dual Color Swatch -->
+          <div class="theme-swatch" [title]="theme.name + ' Color Swatch'">
+            <span
+              class="swatch-segment swatch-primary"
+              [style.background-color]="theme.primaryColor"
+            ></span>
+            <span
+              class="swatch-segment swatch-accent"
+              [style.background-color]="theme.accentColor"
+            ></span>
+          </div>
+
+          <!-- Theme Name -->
+          <span class="theme-title">{{ theme.name }}</span>
+        </div>
+
+        <!-- Selected Check Indicator -->
+        @if (themeService.currentTheme() === theme.id) {
+          <span class="theme-active-icon" aria-hidden="true">✓</span>
+        }
+      </label>
+    }
+  </div>
+</div>

@@ -1,1 +1,9 @@
 /* Custom component styles for about */
+:host {
+  display: block;
+  width: 100%;
+}
+
+.theme-title-bar {
+  border-left-color: var(--accent-color) !important;
+}

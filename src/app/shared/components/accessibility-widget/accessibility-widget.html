@@ -16,7 +16,7 @@
   <!-- Drawer Content -->
   <div class="a11y-drawer-content relative w-full max-w-sm bg-white shadow-2xl h-full flex flex-col z-10 overflow-y-auto">
     <!-- Drawer Header -->
-    <div class="a11y-drawer-header flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#18181b] text-[#FF9933]">
+    <div class="a11y-drawer-header flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-[#18181b] text-white">
       <div class="flex items-center gap-2">
         <span class="a11y-drawer-title text-base font-bold">Accessibility Tools</span>
       </div>
@@ -101,47 +101,7 @@
       <!-- Color Themes Controls -->
       <div class="flex flex-col gap-2">
         <span class="a11y-section-title">Themes / Color Schemes</span>
-        <div class="grid grid-cols-2 gap-2.5">
-          <!-- Theme 1: Default Light -->
-          <button (click)="a11y.setTheme('default')" type="button"
-            [class.bg-blue-50]="a11y.state().currentTheme === 'default'"
-            [class.border-blue-600]="a11y.state().currentTheme === 'default'"
-            [class.text-blue-900]="a11y.state().currentTheme === 'default'"
-            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
-            <span class="theme-dot rounded-full border-2 border-[#18181b] bg-[#FF9933] shadow-xs"></span>
-            <span class="theme-text">Default Light</span>
-          </button>
-
-          <!-- Theme 2: Royal Blue -->
-          <button (click)="a11y.setTheme('dark')" type="button"
-            [class.bg-blue-50]="a11y.state().currentTheme === 'dark'"
-            [class.border-blue-600]="a11y.state().currentTheme === 'dark'"
-            [class.text-blue-900]="a11y.state().currentTheme === 'dark'"
-            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
-            <span class="theme-dot rounded-full border-2 border-[#123B73] bg-[#2563eb] shadow-xs"></span>
-            <span class="theme-text">Royal Blue</span>
-          </button>
-
-          <!-- Theme 3: Sepia / Warm -->
-          <button (click)="a11y.setTheme('sepia')" type="button"
-            [class.bg-blue-50]="a11y.state().currentTheme === 'sepia'"
-            [class.border-blue-600]="a11y.state().currentTheme === 'sepia'"
-            [class.text-blue-900]="a11y.state().currentTheme === 'sepia'"
-            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
-            <span class="theme-dot rounded-full border-2 border-[#949374] bg-[#C5836A] shadow-xs"></span>
-            <span class="theme-text">Sepia / Warm</span>
-          </button>
-
-          <!-- Theme 4: Steel Blue -->
-          <button (click)="a11y.setTheme('dark-blue')" type="button"
-            [class.bg-blue-50]="a11y.state().currentTheme === 'dark-blue'"
-            [class.border-blue-600]="a11y.state().currentTheme === 'dark-blue'"
-            [class.text-blue-900]="a11y.state().currentTheme === 'dark-blue'"
-            class="a11y-theme-btn flex items-center rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer">
-            <span class="theme-dot rounded-full border-2 border-[#66A3BF] bg-[#3368A0] shadow-xs"></span>
-            <span class="theme-text">Steel Blue</span>
-          </button>
-        </div>
+        <app-theme-palette />
       </div>
     </div>
 
@@ -152,7 +112,7 @@
         Reset All
       </button>
       <button (click)="a11y.closeWidget()" type="button"
-        class="a11y-footer-btn a11y-done-btn px-4 py-2 bg-[#18181b] text-[#FF9933] font-bold rounded-lg hover:bg-[#27272a] transition-colors cursor-pointer">
+        class="a11y-footer-btn a11y-done-btn px-4 py-2 bg-[#18181b] text-white font-bold rounded-lg hover:bg-[#27272a] transition-colors cursor-pointer">
         Done
       </button>
     </div>

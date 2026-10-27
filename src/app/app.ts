@@ -6,6 +6,7 @@ import { FooterComponent } from './shared/components/footer/footer';
 import { BackToTopComponent } from './shared/components/back-to-top/back-to-top';
 import { UnauthorizedDialogComponent } from './shared/components/unauthorized-dialog/unauthorized-dialog';
 import { AccessibilityService } from './core/services/accessibility';
+import { ThemeService } from './core/services/theme.service';
 import { IdleService } from './services/idle-service';
 import { AuthService } from './services/auth';
 import { LoginService } from './services/login-service';
@@ -31,6 +32,7 @@ import { PublicMenuService } from './services/public-menu';
   styleUrl: './app.css',
 })
 export class App implements OnInit {
+  private readonly themeService = inject(ThemeService);
   private readonly a11y = inject(AccessibilityService);
   private readonly wordLimitService = inject(WordLimitService);
   private readonly htmlSanitizerService = inject(HtmlSanitizerService);
@@ -61,6 +63,7 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
+    this.themeService.initTheme();
     this.checkWebsiteAccess();
 
     if (typeof window === 'undefined') return;

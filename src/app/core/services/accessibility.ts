@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { ThemeService } from './theme.service';
 
 export type AppTheme = 'default' | 'dark' | 'sepia' | 'dark-blue';
 
@@ -30,6 +31,7 @@ const STORAGE_KEY = 'avrp_a11y_settings';
   providedIn: 'root',
 })
 export class AccessibilityService {
+  private readonly themeService = inject(ThemeService);
   private readonly stateSignal = signal<A11yState>({ ...DEFAULT_A11Y_STATE });
   readonly state = this.stateSignal.asReadonly();
   readonly isWidgetOpen = signal<boolean>(false);
@@ -65,10 +67,7 @@ export class AccessibilityService {
     if (state.textSize >= 2) root.classList.add('a11y-text-xl');
     if (state.textSize === -1) root.classList.add('a11y-text-sm');
 
-    root.classList.remove('theme-dark', 'theme-sepia', 'theme-dark-blue');
-    if (state.currentTheme && state.currentTheme !== 'default') {
-      root.classList.add(`theme-${state.currentTheme}`);
-    }
+    root.classList.remove('theme-dark', 'theme-sepia', 'theme-dark-blue', 'theme-blue', 'theme-default');
   }
 
   private saveAndApply(next: A11yState): void {
@@ -146,6 +145,7 @@ export class AccessibilityService {
 
   resetAll(): void {
     this.saveAndApply({ ...DEFAULT_A11Y_STATE });
+    this.themeService.setTheme('ocean-blue');
   }
 
   toggleWidget(): void {

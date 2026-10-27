@@ -1,5 +1,9 @@
 /* Custom component styles for user-login */
 
+.theme-login-banner {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 55%, var(--accent-color) 100%) !important;
+}
+
 /* OR Divider matching Extradition */
 .divider {
   text-align: center;

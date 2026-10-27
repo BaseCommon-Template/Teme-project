@@ -17,17 +17,18 @@
   display: flex;
   align-items: center;
   padding-left: 20px;
-  background: #FF9933 !important;
-  border-left: 7px solid #18181b !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  background: var(--primary-color) !important;
+  border-left: 7px solid var(--accent-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
   box-sizing: border-box;
   margin-top: 20px;
+  color: #ffffff !important;
 }
 
 .page-title h2 {
   margin: 0;
-  color: #18181b !important;
+  color: #ffffff !important;
   font-size: 24px;
   font-weight: 700;
   line-height: 44px;
@@ -266,7 +267,7 @@
 
 :host ::ng-deep .menu-management-grid .ag-header {
   background: #18181b !important;
-  color: #FF9933 !important;
+  color: #ffffff !important;
   border-bottom: 1px solid #27272a !important;
   height: 30px !important;
 }
@@ -278,7 +279,7 @@
 
 :host ::ng-deep .menu-management-grid .ag-header-cell {
   background: #18181b !important;
-  color: #FF9933 !important;
+  color: #ffffff !important;
   border-right: 1px solid #27272a !important;
   padding-left: 7px !important;
   padding-right: 7px !important;
@@ -288,14 +289,14 @@
 
 :host ::ng-deep .menu-management-grid .ag-header-cell-label,
 :host ::ng-deep .menu-management-grid .ag-header-cell-text {
-  color: #FF9933 !important;
+  color: #ffffff !important;
   font-size: 12px !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .menu-management-grid .ag-header-icon,
 :host ::ng-deep .menu-management-grid .ag-header-cell-menu-button {
-  color: #FF9933 !important;
+  color: #ffffff !important;
 }
 
 :host ::ng-deep .menu-management-grid .ag-header-cell-menu-button:hover {

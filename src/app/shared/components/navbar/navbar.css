@@ -1,27 +1,27 @@
-/* Custom component styles for navbar matching Sleek Dark Charcoal & Saffron theme */
+/* Component styles for navbar using Centralized Theme CSS Variables */
 .navbar-brand-blue {
-  background-color: #18181b;
+  background-color: var(--primary-color, #0f4c81);
 }
 
 .navbar-active-border {
-  border-bottom: 4px solid #ff9933 !important;
+  border-bottom: 4px solid var(--accent-color, #0284c7) !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  background-color: #27272a !important;
+  background-color: var(--secondary-color, #1e3a5f) !important;
 }
 
 .dropdown-active-item {
-  background-color: #ff9933 !important;
-  color: #18181b !important;
+  background-color: var(--accent-color, #0284c7) !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
-  border-left: 4px solid #18181b !important;
+  border-left: 4px solid var(--primary-color, #0f4c81) !important;
 }
 
 .navbar-login-btn {
-  background-color: #ff9933;
-  color: #18181b;
+  background-color: var(--accent-color, #0284c7);
+  color: #ffffff;
 }
 
 .navbar-login-btn:hover {
-  background-color: #e68a00;
+  background-color: var(--accent-hover, #0369a1);
 }

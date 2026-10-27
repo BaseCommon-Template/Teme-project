@@ -1,1 +1,26 @@
-/* Custom component styles for footer */
+/* Custom component styles for footer - Pure White Text on All Themes */
+:host {
+  display: block;
+  width: 100%;
+}
+
+footer,
+footer.bg-\[\#18181b\],
+footer * {
+  color: #ffffff !important;
+}
+
+footer a {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #ffffff !important;
+  opacity: 0.85;
+}
+
+footer [class*="text-[#FF9933]"],
+footer [class*="text-amber-500"] {
+  color: #ffffff !important;
+}

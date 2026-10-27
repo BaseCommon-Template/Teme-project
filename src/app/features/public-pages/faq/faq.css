@@ -1,25 +1,25 @@
-/* Custom component styles for faq */
-
-:host-context(html.theme-dark) .faq-title-active,
-:host-context(html.theme-blue) .faq-title-active,
-:host-context(html.theme-dark) .group:hover .faq-title-hover,
-:host-context(html.theme-blue) .group:hover .faq-title-hover,
-:host-context(html.theme-dark) .faq-icon-active,
-:host-context(html.theme-blue) .faq-icon-active {
-  color: #2563eb !important;
+/* Custom component styles for FAQ using centralized CSS variables */
+:host {
+  display: block;
+  width: 100%;
 }
 
-:host-context(html.theme-sepia) .faq-title-active,
-:host-context(html.theme-sepia) .group:hover .faq-title-hover,
-:host-context(html.theme-sepia) .faq-icon-active {
-  color: #C5836A !important;
+.theme-title-bar {
+  border-left-color: var(--accent-color) !important;
 }
 
-:host-context(html.theme-dark-blue) .faq-title-active,
-:host-context(html.theme-dark-blue) .faq-icon-active {
-  color: #3368A0 !important;
+.faq-title-active {
+  color: var(--primary-color) !important;
 }
 
-:host-context(html.theme-dark-blue) .group:hover .faq-title-hover {
-  color: #66A3BF !important;
+.faq-icon-active {
+  color: var(--accent-color) !important;
+}
+
+.group:hover .faq-title-hover {
+  color: var(--primary-color) !important;
+}
+
+.group:hover .faq-icon-active {
+  color: var(--accent-color) !important;
 }

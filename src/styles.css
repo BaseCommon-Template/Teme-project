@@ -1,23 +1,22 @@
-@import 'tailwindcss';
-@import 'ag-grid-community/styles/ag-grid.css';
-@import 'ag-grid-community/styles/ag-theme-quartz.css';
-@import 'ag-grid-community/styles/ag-theme-alpine.css';
-@import './theme.css';
+@import "tailwindcss";
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
 
 @theme {
   --text-xs: 0.875rem; /* 14px (default 0.75rem / 12px) */
   --text-xs--line-height: calc(1 / 0.75);
-  --text-sm: 1rem;     /* 16px (default 0.875rem / 14px) */
+  --text-sm: 1rem; /* 16px (default 0.875rem / 14px) */
   --text-sm--line-height: calc(1.25 / 0.875);
   --text-base: 1.125rem; /* 18px (default 1rem / 16px) */
   --text-base--line-height: calc(1.5 / 1);
-  --text-lg: 1.25rem;  /* 20px (default 1.125rem / 18px) */
+  --text-lg: 1.25rem; /* 20px (default 1.125rem / 18px) */
   --text-lg--line-height: calc(1.75 / 1.125);
   --text-xl: 1.375rem; /* 22px (default 1.25rem / 20px) */
   --text-xl--line-height: calc(1.75 / 1.25);
   --text-2xl: 1.625rem; /* 26px (default 1.5rem / 24px) */
   --text-2xl--line-height: calc(2 / 1.5);
-  --text-3xl: 2rem;     /* 32px (default 1.875rem / 30px) */
+  --text-3xl: 2rem; /* 32px (default 1.875rem / 30px) */
   --text-3xl--line-height: calc(2.25 / 1.875);
   --text-4xl: 2.375rem; /* 38px (default 2.25rem / 36px) */
   --text-4xl--line-height: calc(2.5 / 2.25);
@@ -31,44 +30,151 @@
   --text-8xl--line-height: 1;
   --text-9xl: 8.125rem; /* 130px (default 8rem / 128px) */
   --text-9xl--line-height: 1;
+
+  /* Centralized Theme Tokens for Utility Classes (bg-primary, text-accent, etc.) */
+  --color-primary: var(--primary-color);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary-color);
+  --color-accent: var(--accent-color);
+  --color-accent-hover: var(--accent-hover);
+  --color-theme-body: var(--body-bg);
+  --color-theme-card: var(--card-bg);
+  --color-theme-text: var(--text-color);
+  --color-theme-text-secondary: var(--text-secondary);
+  --color-theme-border: var(--border-color);
+  --color-theme-header: var(--header-bg);
+  --color-theme-sidebar: var(--sidebar-bg);
+  --color-theme-btn-bg: var(--button-primary-bg);
+  --color-theme-btn-text: var(--button-primary-text);
+  --color-theme-btn-hover: var(--button-primary-hover);
+  --color-table-header-bg: var(--table-header-bg);
+  --color-table-header-text: var(--table-header-text);
+  --color-table-hover-bg: var(--table-hover-bg);
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #1e293b;
-  --card: #ffffff;
-  --card-foreground: #1e293b;
-  --popover: #ffffff;
-  --popover-foreground: #1e293b;
-  --primary: #355f2d;
+  /* ========================================================================
+     Centralized Theme CSS Variables (Default: Ocean Blue)
+     ======================================================================== */
+  --primary-color: #0f4c81;
+  --secondary-color: #1e3a5f;
+  --accent-color: #0284c7;
+  --body-bg: #f0f7ff;
+  --card-bg: #ffffff;
+  --text-color: #0f172a;
+  --border-color: #cbd5e1;
+  --header-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+
+  /* Complementary Reusable Variables */
+  --primary-hover: #0a355c;
+  --accent-hover: #0369a1;
+  --text-secondary: #475569;
+  --header-text: #0f4c81;
+  --sidebar-text: #334155;
+  --table-header-bg: #0f4c81;
+  --table-header-text: #ffffff;
+  --table-hover-bg: #e0f2fe;
+  --button-primary-bg: #0f4c81;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #0a355c;
+  --accent-bar-bg: #0284c7;
+  --focus-ring: rgba(2, 132, 199, 0.35);
+
+  /* Legacy & Framework Compatibility Mappings */
+  --theme-primary: var(--primary-color);
+  --theme-primary-hover: var(--primary-hover);
+  --theme-accent: var(--accent-color);
+  --theme-accent-hover: var(--accent-hover);
+  --theme-border: var(--border-color);
+  --theme-bg-body: var(--body-bg);
+  --theme-bg-surface: var(--card-bg);
+  --theme-bg-elevated: var(--body-bg);
+  --theme-text-primary: var(--text-color);
+  --theme-text-secondary: var(--text-secondary);
+  --primary: var(--primary-color);
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #1e293b;
+  --secondary: var(--secondary-color);
+  --secondary-foreground: #ffffff;
+  --accent: var(--accent-color);
+  --accent-foreground: #ffffff;
+  --ring: var(--accent-color);
+  --border: var(--border-color);
+  --card: var(--card-bg);
+  --card-foreground: var(--text-color);
+  --background: var(--body-bg);
+  --foreground: var(--text-color);
   --muted: #f8fafc;
   --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #3b82f6;
+  --input: var(--border-color);
   --radius: 0.625rem;
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-family:
+    "Poppins",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    sans-serif;
+}
+
+/* Smooth color transitions for theme switches */
+body,
+header,
+header .main-header,
+nav,
+footer,
+aside,
+main,
+.page-title,
+.ag-header,
+table thead,
+.theme-card-box {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-family:
+    "Poppins",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    sans-serif;
   font-size: 18px;
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: var(--body-bg);
+  color: var(--text-color);
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-input, button, select, textarea {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+main,
+.bg-slate-50 {
+  background-color: var(--body-bg) !important;
+  color: var(--text-color);
+}
+
+input,
+button,
+select,
+textarea {
+  font-family:
+    "Poppins",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    sans-serif;
   font-size: inherit;
 }
 
@@ -96,8 +202,12 @@ input, button, select, textarea {
 
 /* Scroll Animation */
 @keyframes scroll-y {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
 }
 
 .animate-scroll-y {
@@ -324,7 +434,9 @@ textarea.ng-invalid.ng-touched {
   border-color: #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
   background-color: #fef2f2 !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .field-error-alert {
@@ -352,37 +464,63 @@ textarea.ng-invalid.ng-touched {
 }
 
 /* Arbitrary text utility font sizes (+2px) */
-[class*="text-[9px]"] { font-size: 11px !important; }
-[class*="text-[10px]"] { font-size: 12px !important; }
-[class*="text-[11px]"] { font-size: 13px !important; }
-[class*="text-[12px]"] { font-size: 14px !important; }
-[class*="text-[13px]"] { font-size: 15px !important; }
-[class*="text-[14px]"] { font-size: 16px !important; }
-[class*="text-[15px]"] { font-size: 17px !important; }
-[class*="text-[16px]"] { font-size: 18px !important; }
-[class*="text-[18px]"] { font-size: 20px !important; }
-[class*="text-[20px]"] { font-size: 22px !important; }
-[class*="text-[24px]"] { font-size: 26px !important; }
-
+[class*="text-[9px]"] {
+  font-size: 11px !important;
+}
+[class*="text-[10px]"] {
+  font-size: 12px !important;
+}
+[class*="text-[11px]"] {
+  font-size: 13px !important;
+}
+[class*="text-[12px]"] {
+  font-size: 14px !important;
+}
+[class*="text-[13px]"] {
+  font-size: 15px !important;
+}
+[class*="text-[14px]"] {
+  font-size: 16px !important;
+}
+[class*="text-[15px]"] {
+  font-size: 17px !important;
+}
+[class*="text-[16px]"] {
+  font-size: 18px !important;
+}
+[class*="text-[18px]"] {
+  font-size: 20px !important;
+}
+[class*="text-[20px]"] {
+  font-size: 22px !important;
+}
+[class*="text-[24px]"] {
+  font-size: 26px !important;
+}
 
 .bg-\[\#46584b\] {
-    background-color: #46584b !important;
+  background-color: #46584b !important;
 }
 
 .bg-\[\#447a3a\] {
-    background-color: #355f2d !important;
+  background-color: #355f2d !important;
 }
 
 .titleBg {
-    background-color: #ebebeb !important ;
+  background-color: #ebebeb !important ;
 }
 
-/* Global Page Title & Header Bar Theme: Saffron background and Black left border */
+/* ==========================================================================
+   Centralized Theme Rules Controlled via CSS Variables
+   ========================================================================== */
+
+/* Page Title & Header Bar Theme */
 .page-title,
 [class*="page-title"] {
-  background: #FF9933 !important;
-  border-left: 7px solid #18181b !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  background: var(--primary-color) !important;
+  border-left: 7px solid var(--accent-color) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: #ffffff !important;
 }
 
 .page-title h1,
@@ -392,22 +530,22 @@ textarea.ng-invalid.ng-touched {
 [class*="page-title"] h1,
 [class*="page-title"] h2,
 [class*="page-title"] h3 {
-  color: #18181b !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
 }
 
 .back-btn {
-  background: #18181b !important;
-  color: #ffffff !important;
+  background: var(--button-primary-bg) !important;
+  color: var(--button-primary-text) !important;
   border-radius: 4px;
 }
 
 .back-btn:hover {
-  background: #000000 !important;
-  color: #ffffff !important;
+  background: var(--button-primary-hover) !important;
+  color: var(--button-primary-text) !important;
 }
 
-/* AG Grid Header Global Theme (Matching Sleek Dark Charcoal & Orange) */
+/* AG Grid Header Theme */
 html body .ag-header,
 html body .ag-header-row,
 html body .ag-header-cell,
@@ -417,11 +555,11 @@ html body div .ag-header-cell,
 html body [class*="grid"] .ag-header,
 html body [class*="grid"] .ag-header-row,
 html body [class*="grid"] .ag-header-cell {
-  background-color: #18181b !important;
-  background: #18181b !important;
-  color: #FF9933 !important;
-  border-right-color: #27272a !important;
-  border-bottom-color: #27272a !important;
+  background-color: var(--table-header-bg) !important;
+  background: var(--table-header-bg) !important;
+  color: #ffffff !important;
+  border-right-color: var(--secondary-color) !important;
+  border-bottom-color: var(--secondary-color) !important;
 }
 
 html body .ag-header-cell-label,
@@ -436,14 +574,14 @@ html body [class*="grid"] .ag-header-cell-label,
 html body [class*="grid"] .ag-header-cell-text,
 html body [class*="grid"] .ag-header-icon,
 html body [class*="grid"] .ag-header-cell-menu-button {
-  color: #FF9933 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
 }
 
 html body .ag-header-cell-menu-button:hover,
 html body div .ag-header-cell-menu-button:hover,
 html body [class*="grid"] .ag-header-cell-menu-button:hover {
-  background: rgba(255, 153, 51, 0.15) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
 }
 
 /* HTML Standard Tables (thead & th) */
@@ -454,39 +592,309 @@ html body table th,
 html body .role-table thead,
 html body .role-table th,
 html body .access-role-header,
-html body .access-role-header > div {
-  background-color: #18181b !important;
-  background: #18181b !important;
-  color: #FF9933 !important;
+html body .access-role-header > div,
+.theme-table-header,
+tr.theme-table-header {
+  background-color: var(--table-header-bg) !important;
+  background: var(--table-header-bg) !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
-  border-color: #27272a !important;
+  border-color: var(--secondary-color) !important;
 }
 
 html body table tbody td,
 html body .role-table td,
 html body .access-role-row:not(.access-role-header) > div {
-  background-color: #ffffff !important;
-  color: #18181b !important;
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
 }
 
 html body table tbody tr:hover td,
 html body .role-table tbody tr:hover td,
 html body .access-role-row:not(.access-role-header):hover {
-  background-color: #fff7ed !important;
+  background-color: var(--table-hover-bg) !important;
 }
 
-/* Table Toolbar Primary Buttons (Add Organization, etc.) */
+/* Primary & Action Buttons Across All Components: Always White on All Themes */
 html body .publish-btn,
 html body .add-btn,
-html body [class*="publish-btn"] {
-  background-color: #18181b !important;
-  color: #FF9933 !important;
-  border: 1px solid #27272a !important;
+html body .save-btn,
+html body .access-submit-btn,
+html body .back-btn,
+html body .btn-primary,
+html body .navbar-login-btn,
+html body [class*="publish-btn"],
+.theme-btn-primary,
+.theme-action-btn,
+.theme-modal-close,
+.a11y-done-btn,
+button.theme-btn-primary,
+a.theme-btn-primary,
+button.save-btn,
+button.publish-btn,
+button.add-btn,
+button.btn-primary,
+button[type="submit"]:not(.bg-transparent):not(.text-slate-700):not(.text-red-600) {
+  background-color: var(--button-primary-bg) !important;
+  color: #ffffff !important;
+  border-color: var(--secondary-color) !important;
+}
+
+html body .publish-btn *,
+html body .add-btn *,
+html body .save-btn *,
+html body .access-submit-btn *,
+html body .back-btn *,
+html body .btn-primary *,
+html body .navbar-login-btn *,
+html body [class*="publish-btn"] *,
+.theme-btn-primary *,
+.theme-action-btn *,
+.theme-modal-close *,
+.a11y-done-btn *,
+button[type="submit"]:not(.bg-transparent):not(.text-slate-700):not(.text-red-600) * {
+  color: #ffffff !important;
 }
 
 html body .publish-btn:hover,
 html body .add-btn:hover,
-html body [class*="publish-btn"]:hover {
-  background-color: #27272a !important;
-  color: #FF9933 !important;
+html body .save-btn:hover,
+html body .access-submit-btn:hover,
+html body .back-btn:hover,
+html body .btn-primary:hover,
+html body [class*="publish-btn"]:hover,
+.theme-btn-primary:hover,
+.theme-action-btn:hover,
+.theme-modal-close:hover,
+.a11y-done-btn:hover,
+button[type="submit"]:not(.bg-transparent):not(.text-slate-700):not(.text-red-600):hover {
+  background-color: var(--button-primary-hover) !important;
+  color: #ffffff !important;
+}
+
+/* Navigation & Navbar Global Theme Rules */
+nav,
+nav.bg-\[\#18181b\] {
+  background-color: var(--primary-color) !important;
+  border-bottom: 1px solid var(--secondary-color) !important;
+}
+
+nav a:not(app-profile-dropdown *),
+nav span:not(app-profile-dropdown *),
+nav button:not(app-profile-dropdown *) {
+  color: #ffffff;
+}
+
+/* Profile Dropdown Action Buttons */
+app-profile-dropdown .change-password-btn,
+app-profile-dropdown .change-password-btn *,
+nav app-profile-dropdown .change-password-btn,
+nav app-profile-dropdown .change-password-btn * {
+  color: #000 !important;
+  stroke: #000 !important;
+}
+
+app-profile-dropdown .sign-out-btn,
+app-profile-dropdown .sign-out-btn *,
+nav app-profile-dropdown .sign-out-btn,
+nav app-profile-dropdown .sign-out-btn * {
+  color: #dc2626 !important;
+  stroke: #dc2626 !important;
+}
+
+nav .navbar-active-border {
+  border-bottom: 4px solid var(--accent-color) !important;
+  background-color: var(--secondary-color) !important;
+  color: #ffffff !important;
+}
+
+nav div[class*="absolute"],
+nav ul,
+nav div.bg-\[\#27272a\],
+nav div.bg-\[\#18181b\] {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.dropdown-active-item {
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-left: 4px solid var(--primary-color) !important;
+}
+
+.navbar-login-btn {
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+}
+
+.navbar-login-btn:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* Header & Portal Title */
+header,
+header .main-header {
+  background-color: var(--header-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+header .center-title {
+  color: var(--primary-color) !important;
+}
+
+header .separator {
+  color: var(--accent-color) !important;
+}
+
+/* Sidebar Navigation */
+aside {
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--border-color) !important;
+  color: var(--sidebar-text) !important;
+}
+
+aside a[routerLinkActive*="bg-"],
+aside a.router-link-active,
+aside [class*="bg-[#18181b]"] {
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+}
+
+aside a:hover {
+  background-color: var(--table-hover-bg) !important;
+  color: var(--primary-color) !important;
+}
+
+/* Cards & Elevated Containers */
+/* Global Body & Main Backgrounds controlled by CSS Variables */
+body,
+main,
+main.bg-slate-50,
+div.bg-slate-50,
+.bg-slate-50 {
+  background-color: var(--body-bg) !important;
+}
+
+/* Cards & Elevated Containers across all public pages */
+.card,
+.theme-card-box,
+main section.bg-white,
+div.bg-white.rounded-3xl,
+div.bg-white.rounded-2xl,
+.bg-white.rounded-2xl,
+.bg-white.rounded-3xl {
+  background-color: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Accent Indicators, Title Bars & Highlights */
+.theme-title-bar,
+.theme-accent-border,
+[class*="border-l-4"][class*="border-[#FF9933]"],
+[class*="border-l-4"][class*="border-[#18181b]"],
+div[class*="border-l-4"]:not(.border-red-600):not(.border-amber-500) {
+  border-left-color: var(--accent-color) !important;
+}
+
+.theme-accent-bar,
+div[class*="bg-[#0066cc]"] {
+  background-color: var(--accent-color) !important;
+}
+
+.theme-accent-icon {
+  color: var(--accent-color) !important;
+  stroke: var(--accent-color) !important;
+}
+
+.theme-accent-text {
+  color: var(--accent-color) !important;
+}
+
+/* FAQ Accordion Item Styling - Dynamic Theme Matching */
+.faq-title-active,
+h3.faq-title-active,
+[class*="faq-title-active"],
+h3[class*="text-[#c2410c]"] {
+  color: var(--primary-color) !important;
+}
+
+.faq-icon-active,
+span.faq-icon-active,
+[class*="faq-icon-active"],
+span[class*="text-[#c2410c]"] {
+  color: var(--accent-color) !important;
+}
+
+.group:hover .faq-title-hover,
+.group:hover h3.faq-title-hover {
+  color: var(--primary-color) !important;
+}
+
+.group:hover .faq-icon-active,
+.group:hover span.faq-icon-active {
+  color: var(--accent-color) !important;
+}
+
+/* Dynamic Theme Gradients (Login Banner Box, Modal Headers) */
+.theme-login-banner,
+.theme-gradient-banner,
+div[class*="from-[#0f172a]"][class*="to-[#FF9933]"],
+div[class*="from-[#1a2a6c]"][class*="to-[#1e3a8a]"] {
+  background: linear-gradient(
+    135deg,
+    var(--secondary-color) 0%,
+    var(--primary-color) 55%,
+    var(--accent-color) 100%
+  ) !important;
+}
+
+.theme-gradient-header,
+div[class*="from-[#18181b]"][class*="to-[#27272a]"] {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%) !important;
+}
+
+/* Form Controls Focus */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 2px var(--focus-ring) !important;
+}
+
+/* Footer Section - Pure White Text Across All Themes */
+footer,
+footer.bg-\[\#18181b\],
+footer * {
+  color: #ffffff !important;
+}
+
+footer {
+  background-color: var(--primary-color) !important;
+  border-top: 1px solid var(--secondary-color) !important;
+}
+
+footer h3,
+footer p,
+footer span,
+footer a,
+footer a:hover,
+footer div {
+  color: #ffffff !important;
+}
+
+footer a:hover {
+  color: #ffffff !important;
+  opacity: 0.85;
+  text-decoration: underline;
+}
+
+footer [class*="text-[#FF9933]"],
+footer [class*="text-amber-500"] {
+  color: #ffffff !important;
+}
+
+.bg-\[\#FF9933\] {
+  background-color: #d5d5d5 !important;
 }

@@ -1,6 +1,6 @@
 /* Custom component styles for header matching https://careerprogression.mha.gov.in/ */
 .main-header {
-  background: #ffffff;
+  background: var(--header-bg, #ffffff);
   justify-content: space-between;
   align-items: center;
   padding: 26px 30px;
@@ -51,7 +51,7 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1a2a6c;
+  color: var(--primary-color, #1a2a6c);
   white-space: nowrap;
   margin: 0;
   line-height: 1.2;
@@ -82,7 +82,7 @@
 }
 
 .separator {
-  color: #0056b3;
+  color: var(--accent-color, #0056b3);
   font-size: 18px;
   font-weight: 400;
   user-select: none;

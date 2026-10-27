@@ -265,7 +265,7 @@
 
 :host ::ng-deep .users-grid .ag-header {
   background: #18181b !important;
-  color: #FF9933 !important;
+  color: #ffffff !important;
   border-bottom: 1px solid #27272a !important;
   height: 30px !important;
 }
@@ -277,7 +277,7 @@
 
 :host ::ng-deep .users-grid .ag-header-cell {
   background: #18181b !important;
-  color: #FF9933 !important;
+  color: #ffffff !important;
   border-right: 1px solid #27272a !important;
   padding-left: 7px !important;
   padding-right: 7px !important;
@@ -286,19 +286,19 @@
 }
 
 :host ::ng-deep .users-grid .ag-header-cell-label {
-  color: #FF9933 !important;
+  color: #ffffff !important;
   font-size: 12px !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .users-grid .ag-header-cell-text {
-  color: #FF9933 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
 }
 
 :host ::ng-deep .users-grid .ag-header-icon,
 :host ::ng-deep .users-grid .ag-header-cell-menu-button {
-  color: #FF9933 !important;
+  color: #ffffff !important;
 }
 
 :host ::ng-deep .users-grid .ag-header-cell-menu-button:hover {

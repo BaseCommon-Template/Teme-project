@@ -89,7 +89,7 @@
           <!-- Read More Button -->
           <div class="mt-6 flex justify-end">
             <a routerLink="/about"
-              class="px-6 py-2.5 rounded-lg bg-[#18181b] hover:bg-[#27272a] text-[#FF9933] text-sm font-bold transition-colors no-underline shadow-xs cursor-pointer theme-btn-primary">
+              class="px-6 py-2.5 rounded-lg bg-[#18181b] hover:bg-[#27272a] text-white text-sm font-bold transition-colors no-underline shadow-xs cursor-pointer theme-btn-primary">
               Read More
             </a>
           </div>
@@ -120,7 +120,7 @@
                   type="button"
                   (click)="activeTab.set('notification')"
                   [class.bg-[#18181b]]="activeTab() === 'notification'"
-                  [class.text-[#FF9933]]="activeTab() === 'notification'"
+                  [class.text-white]="activeTab() === 'notification'"
                   [class.bg-[#f4f4f5]]="activeTab() !== 'notification'"
                   [class.text-[#18181b]]="activeTab() !== 'notification'"
                   class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer border-none theme-tab-btn">
@@ -147,7 +147,7 @@
                     <table class="w-full text-sm border-collapse">
                       <!-- TABLE HEADER -->
                       <thead>
-                        <tr class="bg-[#18181b] text-[#FF9933] text-xs theme-table-header">
+                        <tr class="bg-[#18181b] text-white text-xs theme-table-header">
                           <th class="text-left px-3 py-2.5 font-semibold w-20">Sr. No.</th>
 
                           <th class="text-left px-3 py-2.5 font-semibold">Title</th>
@@ -172,7 +172,7 @@
                               <button
                                 type="button"
                                 (click)="viewDetails(item)"
-                                class="px-3 py-1.5 rounded-lg bg-[#18181b] text-[#FF9933] cursor-pointer text-xs font-bold hover:bg-[#27272a] theme-action-btn"
+                                class="px-3 py-1.5 rounded-lg bg-[#18181b] text-white cursor-pointer text-xs font-bold hover:bg-[#27272a] theme-action-btn"
                               >
                                 View
                               </button>
@@ -196,7 +196,7 @@
                   <div class="overflow-x-auto rounded-xl border border-slate-200">
                     <table class="w-full text-sm border-collapse">
                       <thead>
-                        <tr class="bg-[#18181b] text-[#FF9933] text-xs">
+                        <tr class="bg-[#18181b] text-white text-xs theme-table-header">
                           <th class="text-left px-3 py-2.5 font-semibold w-8">Sr. No.</th>
                           <th class="text-left px-3 py-2.5 font-semibold">Description</th>
                           <th class="text-left px-3 py-2.5 font-semibold whitespace-nowrap">
@@ -297,7 +297,7 @@
 
       <div class="flex justify-end pt-3 border-t border-slate-100">
         <button type="button" (click)="closeModal()"
-          class="px-5 py-2 rounded-xl bg-[#18181b] text-[#FF9933] text-xs font-bold uppercase tracking-wider hover:bg-[#27272a] transition-all cursor-pointer border-none theme-btn-primary theme-modal-close">
+          class="px-5 py-2 rounded-xl bg-[#18181b] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#27272a] transition-all cursor-pointer border-none theme-btn-primary theme-modal-close">
           Close
         </button>
       </div>
